@@ -1,0 +1,43 @@
+{
+  "files": {
+    "main.css": "/static/css/main.aabf2fc3.css",
+    "main.js": "/static/js/main.d4a08604.js",
+    "static/js/5.6176828d.chunk.js": "/static/js/5.6176828d.chunk.js",
+    "static/js/806.2b92fba5.chunk.js": "/static/js/806.2b92fba5.chunk.js",
+    "static/media/coin.png": "/static/media/coin.ff15222029daa5aa647e.png",
+    "static/media/Layer.png": "/static/media/Layer.3f0559d0febd7fd58dd7.png",
+    "static/media/Safe.png": "/static/media/Safe.70c05219a7b318625e45.png",
+    "static/media/calendar.png": "/static/media/calendar.7c65d54d999b8d813e34.png",
+    "static/media/warning.png": "/static/media/warning.ef752805af0efb78d417.png",
+    "static/media/Logo.png": "/static/media/Logo.e9d0c20a90f102874237.png",
+    "static/media/withdraw.png": "/static/media/withdraw.af010dcfea7cd72038eb.png",
+    "static/media/deposit.png": "/static/media/deposit.4da714d030dd106d3397.png",
+    "static/media/chart_b.png": "/static/media/chart_b.9df4498100380a63681f.png",
+    "static/media/withdraw1.png": "/static/media/withdraw1.475d1f76fc2c727479d2.png",
+    "static/media/play_now.png": "/static/media/play_now.806f518deceff037c338.png",
+    "static/media/close_b.png": "/static/media/close_b.432613ebd80bd3e364df.png",
+    "static/media/NotFoundSVG.svg": "/static/media/NotFoundSVG.bdf1c60c297dc6528f56fe6a382dacdf.svg",
+    "static/media/connection.png": "/static/media/connection.a660559952263990c253.png",
+    "static/media/bonus.png": "/static/media/bonus.3af1bc57c428a730d286.png",
+    "static/media/game.png": "/static/media/game.48960ffaee895a6b5754.png",
+    "static/media/p_fs.png": "/static/media/p_fs.e49283ab84aa747a4bd6.png",
+    "service-worker.js": "/service-worker.js",
+    "static/media/swords.png": "/static/media/swords.488f73d8ecd128e5dd25.png",
+    "static/media/p_hs.png": "/static/media/p_hs.a6b1073faf8f43349e65.png",
+    "static/media/p_tp.png": "/static/media/p_tp.30f314b18c2fe41f8959.png",
+    "static/media/p_dp.png": "/static/media/p_dp.85d6d51b4b58c6a866c7.png",
+    "static/media/p_j.png": "/static/media/p_j.18a249e4046e630aba93.png",
+    "static/media/deposit1.png": "/static/media/deposit1.5c95fd68a79e30759548.png",
+    "static/media/p_sp.png": "/static/media/p_sp.37f26e7972379295ba91.png",
+    "static/media/p_sa.png": "/static/media/p_sa.3579d8bace9a185e7086.png",
+    "index.html": "/index.html",
+    "main.aabf2fc3.css.map": "/static/css/main.aabf2fc3.css.map",
+    "main.d4a08604.js.map": "/static/js/main.d4a08604.js.map",
+    "5.6176828d.chunk.js.map": "/static/js/5.6176828d.chunk.js.map",
+    "806.2b92fba5.chunk.js.map": "/static/js/806.2b92fba5.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.aabf2fc3.css",
+    "static/js/main.d4a08604.js"
+  ]
+}

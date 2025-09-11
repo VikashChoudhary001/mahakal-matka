@@ -4,6 +4,7 @@ import { sendLoginOtp, verifyLoginOtp } from "../repository/AuthRepository";
 import Repository from "../repository/Repository";
 import { toast } from "react-toastify";
 import Spinner from "../components/Spinner";
+import { useNavigate } from "react-router-dom";
 
 // Function to call Android app callback on login success
 function loginSuccess(userNumber) {
@@ -14,6 +15,7 @@ function loginSuccess(userNumber) {
 }
 
 const Login = () => {
+    const navigate = useNavigate();
     let [loading, setLoading] = useState();
     let [isOTPScreen, setOTPScreen] = useState(false);
     let [phone, setPhone] = useState("");
@@ -57,7 +59,7 @@ const Login = () => {
                 localStorage.setItem("authUser", JSON.stringify(user));
                 localStorage.setItem("welcomeStatus", true);
 
-                window.location.href = "/";
+                navigate("/");
             } else {
                 toast.error(data.message);
             }

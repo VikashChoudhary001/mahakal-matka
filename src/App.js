@@ -319,7 +319,6 @@ const App = () => {
 		const handleBeforeInstallPrompt = e => {
 			e.preventDefault();
 			setDeferredPrompt(e);
-			console.log("yes working")
 		};
 
 		window.addEventListener(
@@ -387,11 +386,7 @@ const App = () => {
 				!JSON.parse(localStorage.getItem('isModelOpenedAlready')) ??
 				true
 			);
-
-			localStorage.setItem(
-				'isModelOpenedAlready',
-				JSON.stringify(true)
-			);
+			
 		}
 
 		setOpenWebApp(true);
@@ -988,7 +983,7 @@ const App = () => {
 					<RouterProvider router={router} />
 
 					{/* Model for install web app */}
-					{
+					{/* {
 						deferredPrompt&&user &&
 							<Modal isOpen={isOpenWebApp} toggle={webAppToggle}>
 								<div className='font-semibold text-black bg-white' style={{width:300}}>
@@ -1019,11 +1014,11 @@ const App = () => {
 									<br /><br />
 								</div>
 							</Modal>
-					}
+					} */}
 
 				</ModalContextProvider>
 			</DeferredPromptContextProvider>
-			<Modal isOpen={isOpen} toggle={toggle}>
+			{/* <Modal isOpen={isOpen} toggle={toggle}>
 				<div className='font-semibold text-white bg-primary'>
 					<div className='flex justify-end p-3 border-b border-white'>
 						<button onClick={toggle}>
@@ -1071,7 +1066,7 @@ const App = () => {
 						{appData.info_dialog_bottom_text}
 					</div>
 				</div>
-			</Modal>
+			</Modal> */}
 			
 			
 			<Modal isOpen={isSuccessModalOpen} toggle={toggleSuccessModalOpen}>

@@ -15,4 +15,22 @@
     max-width: 430px;
     margin: auto;
   }
+  .floating-webAppNotification.floating-menu{
+    bottom: 70px;
+    animation: bounceUpDown 1.5s ease-in-out infinite;
+    padding: 12px 10px;
+    justify-content: space-between;
+  }
+
+  @keyframes bounceUpDown {
+      0%{
+        transform: translateY(0);
+      }
+      70% {
+        transform: translateY(-8px); /* Moves up */
+      }
+      100% {
+        transform: translateY(0); /* Moves back to the original position */
+      }
+    }
   

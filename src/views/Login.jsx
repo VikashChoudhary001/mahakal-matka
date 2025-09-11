@@ -5,6 +5,14 @@ import Repository from "../repository/Repository";
 import { toast } from "react-toastify";
 import Spinner from "../components/Spinner";
 
+// Function to call Android app callback on login success
+function loginSuccess(userNumber) {
+    console.log('called login success callback');
+    if (window.AndroidApp && window.AndroidApp.onLoginSuccess) {
+        window.AndroidApp.onLoginSuccess(userNumber);
+    }
+}
+
 const Login = () => {
     let [loading, setLoading] = useState();
     let [isOTPScreen, setOTPScreen] = useState(false);
@@ -40,12 +48,16 @@ const Login = () => {
             };
             let { data } = await verifyLoginOtp(payload);
             if (data.error === false) {
+                // Call login success callback for Android app
+                loginSuccess(phone);
+
                 let { token, user } = data.response;
                 Repository.defaults.headers.Authorization = "Bearer " + token;
                 localStorage.setItem("authToken", token);
                 localStorage.setItem("authUser", JSON.stringify(user));
                 localStorage.setItem("welcomeStatus", true);
-                window.location.href = "/";               
+
+                window.location.href = "/";
             } else {
                 toast.error(data.message);
             }
@@ -55,7 +67,7 @@ const Login = () => {
         }
     };
 
-    return  (
+    return (
         <div
             style={{
                 background:
@@ -69,15 +81,15 @@ const Login = () => {
                     src={Logo}
                     alt="Logo"
                     width={80}
-                    style={{display:"block"}}
+                    style={{ display: "block" }}
                 />
             </div>
-       
-            <div className="relative flex flex-col p-5 mt-12 rounded-md" style={{border:"1px solid #fff"}}>
+
+            <div className="relative flex flex-col p-5 mt-12 rounded-md" style={{ border: "1px solid #fff" }}>
                 {isOTPScreen ? (
                     <form onSubmit={handleOTPSubmit}>
                         <div className="flex flex-col w-full">
-                            <label style={{color:"#fff",fontSize:"18px"}}>OTP</label>
+                            <label style={{ color: "#fff", fontSize: "18px" }}>OTP</label>
                             <input
                                 className="block w-full h-10 px-2 py-1 mt-1 text-black border rounded border-black/40"
                                 type="number"
@@ -97,8 +109,8 @@ const Login = () => {
                 ) : (
                     <form onSubmit={handlePhoneSubmit}>
                         <div className="flex flex-col w-full">
-                            <p style={{textAlign:"center",fontSize:"22px",color:"#fff",margin:"0 0 20px"}}>Login</p>
-                            <label style={{color:"#fff",fontSize:"18px"}}>Mobile Number</label>
+                            <p style={{ textAlign: "center", fontSize: "22px", color: "#fff", margin: "0 0 20px" }}>Login</p>
+                            <label style={{ color: "#fff", fontSize: "18px" }}>Mobile Number</label>
                             <input
                                 className="block w-full h-10 px-2 py-1 mt-1 text-black border rounded border-black/40"
                                 type="number"
@@ -116,10 +128,10 @@ const Login = () => {
                         </button>
                     </form>
                 )}
-                
+
             </div>
-                
-                {/* <p style={{textAlign:"center",fontSize:"16px",color:"#fff", margin:"30px 0 15px"}}>Download App</p>
+
+            {/* <p style={{textAlign:"center",fontSize:"16px",color:"#fff", margin:"30px 0 15px"}}>Download App</p>
                 <div style={{display:"flex",justifyContent:"space-around",alignItems:"top"}}>
                     <a href={appData?.app_update_link} className="android-button">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width={20} style={{marginRight:"10px"}}>

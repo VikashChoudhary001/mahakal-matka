@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import './assets/css/Global.css';
 import Home from './views/Home';
@@ -46,7 +46,7 @@ import { DeferredPromptContextProvider } from './context/DeferredPromptContext';
 import GameRate from './views/GameRate';
 import NotFound from './views/NotFound';
 import ProtectedRoute from './utils/ProtectedRoute';
-import InstallButton from './components/InstallButton';
+import GameChart from './views/GameChart';
 
 export const routes = [
 	{
@@ -245,7 +245,7 @@ export const routes = [
 						<TripalPana />
 					</ProtectedRoute>
 				),
-				name: 'Tripal Pana',
+				name: 'Triple Pana',
 			},
 			{
 				path: '/general-sub-games/half-sangam',
@@ -284,6 +284,11 @@ export const routes = [
 				name: 'Deposit Chat',
 			},
 		],
+	},
+	{
+		element: <GameChart />,
+		path:"/game-chart",
+
 	},
 	{
 		path: '*',
@@ -361,7 +366,6 @@ const App = () => {
 					toast.error(desawarMarketsResponse.data.message);
 				}
 			} catch (err) {
-				console.log("err.message", err.message);
 				toast.error(err.message);
 			} finally {
 				setLoading(false);

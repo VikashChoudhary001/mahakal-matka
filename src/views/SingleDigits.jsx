@@ -64,7 +64,7 @@ const SingleDigits = () => {
     <div className="min-h-screen flex flex-col justify-between">
       <div className="flex-grow">
         <GameHeader dropdown={true} selectedOption={selectedOption} onSelectChange={handleSelectChange} />
-        <div className='grid grid-cols-2 gap-4 w-[92%] m-auto'>
+        <div className='grid grid-cols-2 gap-4 w-[92%] mx-auto mt-24'>
           {digitPairs.map((pair, index) => (
             <div key={pair} className='flex items-center justify-start'>
               <div className='text-[20px] font-semibold bg-[#ac407b] w-[50px] h-[40px] flex justify-center items-center text-[#fff]'>{pair}</div>
@@ -78,6 +78,7 @@ const SingleDigits = () => {
               />
             </div>
           ))}
+          <br /><br /><br /><br />
         </div>
       </div>
       <div className='max-w-[400px] m-auto mt-4 fixed bottom-0 left-0 right-0 p-4'>

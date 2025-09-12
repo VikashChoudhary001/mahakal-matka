@@ -33,9 +33,9 @@ const DesawarOnly = ({ tabBorderColor }) => {
     fetchMarkets();
   }, []);
 
-  const handleChartClick = (marketId) => {
+  const handleChartClick = (marketId,marketName) => {
     const url = `https://api.mahakalmatka.com/desawar/chart/${marketId}/hello`;
-    window.open(url, "_blank");
+    navigate("/game-chart/?gameName="+marketName+"&gameUrl=" + url);
   };
 
 
@@ -45,7 +45,7 @@ const DesawarOnly = ({ tabBorderColor }) => {
       setAuthModalOpen(true);
     } else {
       // Use navigate to redirect in the same tab
-      navigate(`/general-sub-games?gameType=desawar&market_id=${market.id}&tabType=desawar`);
+      navigate(`/general-sub-games?gameType=desawar&market_id=${market?.id}&tabType=desawar`);
     }
   };
 
@@ -63,12 +63,12 @@ const DesawarOnly = ({ tabBorderColor }) => {
         ?.filter((market) => market !== null)
         .map((market) => (
           <div
-            key={market.id}
+            key={market?.id}
             className={`flex flex-col text-white rounded-md border-2 ${tabBorderColor}`}
           >
             <div className="w-full flex justify-between items-center p-1 px-3 bg-primary">
-              <p className="text-[12px]">Open: {market.open_time}</p>
-              <p className="text-[12px]">Close: {market.close_time}</p>
+              <p className="text-[12px]">Open: {market?.open_time}</p>
+              <p className="text-[12px]">Close: {market?.close_time}</p>
             </div>
 
             <div className="p-2 w-full flex justify-between items-center">
@@ -76,23 +76,23 @@ const DesawarOnly = ({ tabBorderColor }) => {
                 src={Chart_b}
                 alt="Chart"
                 className="w-[50px] h-[50px] object-cover cursor-pointer"
-                onClick={() => handleChartClick(market.id)}
+                onClick={() => handleChartClick(market?.id,market?.name)}
               />
 
               <div className="flex flex-col justify-center items-center">
                 <span className="text-[13px] font-semibold uppercase text-[#4f4f4f]">
-                  {market.name}
+                  {market?.name}
                 </span>
                 <span className="text-[12px] font-semibold uppercase text-primary">
-                  {market.last_result
-                    ? market.last_result.result
+                  {market?.last_result
+                    ? market?.last_result.result
                     : "***-**-***"}
                 </span>
                 <span
-                  className={`text-xs ${!market.game_on ? "text-orange" : "text-greenLight"
+                  className={`text-xs ${!market?.game_on ? "text-orange" : "text-greenLight"
                     }`}
                 >
-                  {market.game_on
+                  {market?.game_on
                     ? "Market is Running"
                     : "Market is Close"}
                 </span>
@@ -100,12 +100,12 @@ const DesawarOnly = ({ tabBorderColor }) => {
               {/* <Link
                 className={`w-[50px] h-[50px] text-center font-semibold rounded-full`}
                 to={
-                  !market.game_on
+                  !market?.game_on
                     ? "#"
-                    : `/general-sub-games?gameType=${market.name}&market_id=${market.id}&tabType=desawar`
+                    : `/general-sub-games?gameType=${market?.name}&market_id=${market?.id}&tabType=desawar`
                 }
               >
-                {!market.game_on ? (
+                {!market?.game_on ? (
                   <>
                     <img
                       src={Close_b}
@@ -128,7 +128,7 @@ const DesawarOnly = ({ tabBorderColor }) => {
               <div
                 className={`w-[50px] h-[50px] text-center font-semibold rounded-full`}
               >
-                {!market.game_on ? (
+                {!market?.game_on ? (
                   <div style={{ pointerEvents: "none" }}>
                     <img
                       src={Close_b}

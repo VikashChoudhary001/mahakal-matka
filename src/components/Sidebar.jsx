@@ -40,20 +40,20 @@ const Sidebar = ({ toggleSideBar }) => {
     //   icon: require("../assets/imgs/swords.png"),
     //   iconType: "img",
     // },
-    {
-      to: "/game-posting",
-      text: "Game Posting",
-      description: "गेम की गैसिंग देखने के लिए यहां दबाए",
-      icon: require("../assets/imgs/game.png"),
-      iconType: "img",
-    },
-    {
-      to: "/bonus-report",
-      text: "Bonus Report",
-      description: "अपनी गेम का कमीशन देखने के लिए यहाँ दबाये",
-      icon: require("../assets/imgs/bonus.png"),
-      iconType: "img",
-    },
+    // {
+    //   to: "/game-posting",
+    //   text: "Game Posting",
+    //   description: "गेम की गैसिंग देखने के लिए यहां दबाए",
+    //   icon: require("../assets/imgs/game.png"),
+    //   iconType: "img",
+    // },
+    // {
+    //   to: "/bonus-report",
+    //   text: "Bonus Report",
+    //   description: "अपनी गेम का कमीशन देखने के लिए यहाँ दबाये",
+    //   icon: require("../assets/imgs/bonus.png"),
+    //   iconType: "img",
+    // },
     // {
     //   to: "/result-history",
     //   text: "Result History",
@@ -73,7 +73,7 @@ const Sidebar = ({ toggleSideBar }) => {
       onClick: async (e) => {
         e.preventDefault();
         const shareText = `कल्याण मिलन श्रीदेवी खेलने वाले भाई ये Trusted एप डाउनलोड करें और Online खेलें! Use My Refer Code: ${user?.own_code}`;
-        const shareUrl = "https://mahakalmatka.com";
+        const shareUrl = "https://app.mahakalmatka.com";
 
         if (navigator.share) {
           try {
@@ -100,7 +100,7 @@ const Sidebar = ({ toggleSideBar }) => {
           }
         }
       },
-      description: "जो भाई गली दिसावर प्ले करते है व्हाट्सअप पर शेयर करे",
+      description: "शेयर करें और कमाएं दैनिक कमीशन",
       icon: (className) => (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -193,7 +193,7 @@ const Sidebar = ({ toggleSideBar }) => {
               <button onClick={() => {
                 localStorage.clear();
                 sessionStorage.clear();
-                // window.location.href = "/auth/login";
+                window.location.href = "/auth/login";
                 document.title = "Mahakal Matka"
               }} className="py-1 px-3 bg-red-400 rounded-md">Logout</button>
               <button onClick={() => {
@@ -231,8 +231,8 @@ const Sidebar = ({ toggleSideBar }) => {
             <div className="flex flex-col">
               <div className="flex items-center">
                 <div className="relative">
-                  <div className="w-20 h-20 rounded-full">
-                    <img src={Logo} className="w-full h-full" alt="Logo" />
+                  <div className="w-16 h-16 rounded-full">
+                    <img src={Logo} className="w-full h-full object-cover" alt="Logo" />
                   </div>
                 </div>
                 <div className="ml-3 text-sm">
@@ -248,14 +248,14 @@ const Sidebar = ({ toggleSideBar }) => {
               <Link
                 to="/profile"
                 onClick={toggleSideBar}
-                className="flex items-center justify-center py-2 mt-2 text-white rounded-full shadow-lg bg-greenLight"
+                className="flex items-center justify-center py-1.5 mt-2 text-white rounded-full shadow-lg bg-greenLight"
               >
                 Edit Profile
               </Link>
-              <InstallButton />
+              {/* <InstallButton /> */}
             </div>
           </div>
-          <div className="h-[calc(100vh-240px)] overflow-auto">
+          <div className="h-[calc(100vh-272px)] overflow-auto bg-orange">
             {links.map((link, idx) =>
               link.onClick ? (
                 <a
@@ -348,7 +348,8 @@ const Sidebar = ({ toggleSideBar }) => {
                 </Link>
               )
             )}
-            <div className="p-2 text-[9px] font-semibold text-center text-black bg-white">
+          </div>
+            <div className="p-2 text-[9px] h-[100px] font-semibold text-center text-black bg-white">
               <div className="grid grid-cols-3 gap-2">
                 {/* <div onClick={() => { toggle(); toggleSideBar() }} className="flex flex-col items-center">
                   <img src={Chat} alt="Chat" className="w-14 h-14" />
@@ -407,7 +408,6 @@ const Sidebar = ({ toggleSideBar }) => {
                 {window.location.origin}
               </a> */}
             </div>
-          </div>
         </div>
       </div>
       <Modal isOpen={isOpen} toggle={toggle}>

@@ -8,7 +8,7 @@
 }
 
 table td, table th{
-  border: 1px solid rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.4);
   width: 100%;
   min-width: 80px;
 }
@@ -32,4 +32,8 @@ table td, table th{
 }
 .android-button i {
   margin-right: 10px; /* Space between icon and text */
+}
+
+.gradiantBgButton{
+  background: linear-gradient(to right, transparent 0%, #0098c7 50% , transparent 100%);
 }

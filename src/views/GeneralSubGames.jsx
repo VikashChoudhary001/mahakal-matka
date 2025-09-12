@@ -13,7 +13,7 @@ const gameTypes = [
     { name: 'Jodi Digits', path: '/general-sub-games/jodi-digits', card_img:p_j},
     { name: 'Single Pana', path: '/general-sub-games/single-pana', card_img:p_sp },
     { name: 'Double Pana', path: '/general-sub-games/double-pana', card_img:p_dp }, 
-    { name: 'Tripal Pana', path: '/general-sub-games/tripal-pana' , card_img:p_tp},
+    { name: 'Triple Pana', path: '/general-sub-games/tripal-pana' , card_img:p_tp},
     { name: 'Half Sangam', path: '/general-sub-games/half-sangam', card_img:p_hs },
     { name: 'Full Sangam', path: '/general-sub-games/full-sangam', card_img:p_fs },
 ];

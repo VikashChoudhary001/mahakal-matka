@@ -20,7 +20,8 @@ const GameRate = () => {
       setLoading(true);
       try {
         const response = await getGameRate();
-        setGameRates(response.data.response.data);
+
+        setGameRates(response?.data?.response?.data);
       } catch (error) {
         console.error("Error fetching game rate:", error);
       } finally {
@@ -33,17 +34,22 @@ const GameRate = () => {
 
   const renderGameRates = (filter) => {
     // Filter the game rates based on the filter provided
-    const filteredGameData = gameRates.filter(game =>
-      game.title.includes(filter)
-    );
+    // const filteredGameData = gameRates?.filter(game =>
+    //   game?.title?.includes(filter)
+    // );
+    const filteredGameData = gameRates
 
-    if (!filteredGameData.length) return null;
+    if (!filteredGameData?.length) return (
+      <div className="flex justify-center items-center w-full h-[300px]">
+        No data found!
+      </div>
+    );
 
     return filteredGameData.flatMap(selectedGame =>
       selectedGame.list.map((game) => (
         <div key={game.id} className="flex justify-between items-center bg-gray-200 rounded-lg overflow-hidden my-1">
-          <div className="w-[50%] text-[#fff] p-3 text-lg text-center bg-[#640138]">{game.name}</div>
-          <div className="w-[50%] text-[#fff] p-3 text-lg text-center bg-[#d87a00]">10/{game.multiply_by * 10}.0</div>
+          <div className="w-[50%] text-[#fff] p-3 text-lg text-center bg-[#640138]">{game?.name}</div>
+          <div className="w-[50%] text-[#fff] p-3 text-lg text-center bg-[#d87a00]">10/{game?.multiply_by * 10}.0</div>
         </div>
       ))
     );

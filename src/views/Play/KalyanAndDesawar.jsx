@@ -50,7 +50,7 @@ const KalyanAndDesawar = ({
     localStorage.setItem("selectedTab", selectedTab);
   }, [selectedTab]);
 
-  const handleProtectedClick = (e, marketId) => {
+  const handleProtectedClick = (e, marketId,marketName) => {
     if (!token) {
       e.preventDefault();
       localStorage.setItem("authMenu", 1);
@@ -58,7 +58,7 @@ const KalyanAndDesawar = ({
     } else {
       // Your other conditions here if the user is authenticated
       const url = `https://api.mahakalmatka.com/${marketTypeChart}/${marketTypeSlug}/${marketId}/hello`;
-      window.open(url, "_blank");
+      navigate("/game-chart/?gameName="+marketName+"&gameUrl=" + url);
     }
   };
 
@@ -69,7 +69,7 @@ const KalyanAndDesawar = ({
       setAuthModalOpen(true); // Open modal for authentication
     } else {
       // Use navigate to redirect in the same tab
-      navigate(`/general-sub-games?gameType=${market.name}&market_id=${market.id}`);
+      navigate(`/general-sub-games?gameType=${market?.name}&market_id=${market?.id}`);
     }
   };
   const handleChatClick = (market) => {
@@ -78,7 +78,7 @@ const KalyanAndDesawar = ({
       setAuthModalOpen(true); // Open modal for authentication
     } else {
       // Use navigate to redirect in the same tab
-      navigate(`/play-game?gameType=desawar&market_id=${market.id}`);
+      navigate(`/play-game?gameType=desawar&market_id=${market?.id}`);
     }
   };
   return (
@@ -126,12 +126,12 @@ const KalyanAndDesawar = ({
                   ?.filter((market) => market !== null)
                   .map((market) => (
                     <div
-                      key={market.id}
+                      key={market?.id}
                       className={`flex flex-col text-white rounded-md border-2 ${tabBorderColor}`}
                     >
                       <div className="w-full flex justify-between items-center p-1 px-3 bg-primary">
-                        <p className="text-[12px]">Open: {market.open_time}</p>
-                        <p className="text-[12px]">Close: {market.close_time}</p>
+                        <p className="text-[12px]">Open: {market?.open_time}</p>
+                        <p className="text-[12px]">Close: {market?.close_time}</p>
                       </div>
 
                       <div className="p-2 w-full flex justify-between items-center">
@@ -139,25 +139,25 @@ const KalyanAndDesawar = ({
                           src={Chart_b}
                           alt="Chart"
                           className="w-[50px] h-[50px] object-cover cursor-pointer my-[-5px]"
-                          onClick={(e) => handleProtectedClick(e, market.id)}
+                          onClick={(e) => handleProtectedClick(e, market?.id,market?.name)}
                         />
 
                         <div className="flex flex-col justify-center items-center">
                           <span className="text-[13px] font-semibold uppercase text-[#4f4f4f]">
-                            {market.name}
+                            {market?.name}
                           </span>
                           <span className="text-[12px] font-semibold uppercase text-primary">
-                            {market.last_result
-                              ? market.last_result.result
+                            {market?.last_result
+                              ? market?.last_result.result
                               : "***-**-***"}
                           </span>
                           <span
-                            className={`text-[12px] ${!market.game_on
+                            className={`text-[12px] ${!market?.game_on
                               ? "text-orange"
                               : "text-greenLight"
                               }`}
                           >
-                            {market.game_on
+                            {market?.game_on
                               ? "Market is Running"
                               : "Market is Close"}
                           </span>
@@ -165,7 +165,7 @@ const KalyanAndDesawar = ({
                         <div
                           className={`w-[50px] h-[50px] text-center font-semibold rounded-full`}
                         >
-                          {!market.game_on ? (
+                          {!market?.game_on ? (
                             <div style={{ pointerEvents: "none" }}>
                               <img
                                 src={Close_b}
@@ -191,37 +191,37 @@ const KalyanAndDesawar = ({
                   ?.filter((market) => market !== null)
                   .map((market) => (
                     <div
-                      key={market.id}
+                      key={market?.id}
                       className={`flex flex-col text-white rounded-md border-2 ${tabBorderColor}`}
                     >
                       <div className="w-full flex justify-between items-center p-1 px-3 bg-primary">
-                        <p className="text-[12px]">Open: {market.open_time}</p>
-                        <p className="text-[12px]">Close: {market.close_time}</p>
+                        <p className="text-[12px]">Open: {market?.open_time}</p>
+                        <p className="text-[12px]">Close: {market?.close_time}</p>
                       </div>
                       <div className="p-2 w-full flex justify-between items-center">
                         <img
                           src={Chart_b}
                           alt="Chart"
                           className="w-[50px] h-[50px] object-cover cursor-pointer"
-                          onClick={(e) => handleProtectedClick(e, market.id)}
+                          onClick={(e) => handleProtectedClick(e, market?.id)}
                         />
 
                         <div className="flex flex-col justify-center items-center">
                           <span className="text-[13px] font-semibold uppercase text-[#4f4f4f]">
-                            {market.name}
+                            {market?.name}
                           </span>
                           <span className="text-[12px] font-semibold uppercase text-primary">
-                            {market.last_result
-                              ? market.last_result.result
+                            {market?.last_result
+                              ? market?.last_result.result
                               : "***-**-***"}
                           </span>
                           <span
-                            className={`text-[12px] ${!market.game_on
+                            className={`text-[12px] ${!market?.game_on
                               ? "text-orange"
                               : "text-greenLight"
                               }`}
                           >
-                            {market.game_on
+                            {market?.game_on
                               ? "Market is Running"
                               : "Market is Close"}
                           </span>
@@ -229,7 +229,7 @@ const KalyanAndDesawar = ({
                         <div
                           className={`w-[50px] h-[50px] text-center font-semibold rounded-full`}
                         >
-                          {!market.game_on ? (
+                          {!market?.game_on ? (
                             <div style={{ pointerEvents: "none" }}>
                               <img
                                 src={Close_b}

@@ -1,13 +1,12 @@
-import React, { useEffect } from "react";
-import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
-import Time from "../components/Time";
+import { useEffect } from "react";
+import {useLocation, useNavigate } from "react-router-dom";
 
-const Game = () => {
+const GameChart = () => {
   let location = useLocation();
   let navigate = useNavigate();
   let params = new URLSearchParams(location.search);
-  let bidType = params.get("bidType");
-  let gameType = params.get("gameType");
+  let gameName = params.get("gameName");
+  let gameUrl = params.get("gameUrl");
 
 
   useEffect(() => {
@@ -36,18 +35,17 @@ const Game = () => {
             </svg>
           </button>
           <span className="mx-auto ml-2 font-bold text-lg uppercase leading-6" id="gameName">
-            {gameType}
-            {bidType && `, ${bidType}`}
+            {gameName} - Chart
           </span>
         </div>
         <div id="gameEndTimer" className="flex flex-col items-center ml-auto text-xs">
         </div>
       </div>
       <div className="h-[calc(100vh-45px)] overflow-auto main-wrapper">
-        <Outlet />
+        <iframe src={gameUrl} width="100%" height="100%" frameborder="0"></iframe>
       </div>
     </div>
   );
 };
 
-export default Game;
+export default GameChart;

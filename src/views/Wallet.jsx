@@ -140,7 +140,7 @@ const Wallet = () => {
   let [depositLastPage, setDepositLastPage] = useState(0);
   let [withdrawLastPage, setWithdrawLastPage] = useState(0);
   let [currentPage, setCurrentPage] = useState(1);
-  const [accountIFSCCode, setAccountIFSCCode] = useState("");
+  const [accountIFSCCode, setAccountIFSCCode] = useState(user?.withdraw_details?.account_ifsc_code || "");
 
 
   let [depositAmount, setDepositAmount] = useState();
@@ -151,20 +151,19 @@ const Wallet = () => {
   let { toggleSuccessModalOpen, setSuccessMessage } = useContext(ModalContext)
 
   let dispatch = useDispatch();
+  const storedUser = JSON.parse(localStorage.getItem("authUser")) || {};
+
+    const currentUser = user?.phone ? user : storedUser;
 
   useEffect(() => {
     setMethod(
-      appData.upi_withdraw_enable === 1
+      appData.enable_upi_withdraw === 1
         ? "upi"
-        : appData.bank_withdraw_enable === 1
+        : appData.enable_bank_withdraw === 1
           ? "bank"
           : ""
     );
   }, [appData]);
-
-  useEffect(() => {
-    setAccountIFSCCode(bankAccountType == "permanent" ? (user?.withdraw_details?.account_ifsc_code || "") : "")
-  }, [bankAccountType])
 
   const toggleDepositModal = () => {
     setDepositModal((prevState) => !prevState);
@@ -275,92 +274,92 @@ const Wallet = () => {
 
   const handleDepositSubmit = async (e) => {
     e.preventDefault();
-    if(addBalanceMethod==="upi"){
-      if(addBalanceMethodData?.upi?.length>0){
-        console.log("UPI ID : ",addBalanceMethodData?.upi)
-      }
-      else{
-        setPaymentMethodModal(true);
-        toast.error("Add a UPI ID first!")
-      }
-    }
-
-    else{
-      if(addBalanceMethodData?.bank){
-        console.log("UPI ID : ",addBalanceMethodData?.bank)
-      }
-      else{
-        setPaymentMethodModal(true);
-        toast.error("Add bank details first!")
-      }
-    }
-    // try {
-    //   setDepositLoading(true);
-    //   let payload = {
-    //     amount: depositAmount,
-    //   };
-    //   let paymentMethod = appData?.payment_method
-    //   if (paymentMethod === "auto") {
-    //     let { data } = await depositBalance(payload);
-    //     if (data.error) {
-    //       toast.error(data.message);
-    //     } else {
-    //       let aHref = document.createElement('a');
-    //       aHref.href = data.response.payment_url;
-    //       // aHref.target = "_blank";
-    //       aHref.click();
-    //       dispatch(
-    //         setAuthDataUsersSingleValue({
-    //           key: "balance",
-    //           value: data.response.balance_left,
-    //         })
-    //       );
-    //     }
+    // if(addBalanceMethod==="upi"){
+    //   if(addBalanceMethodData?.upi?.length>0){
+    //     console.log("UPI ID : ",addBalanceMethodData?.upi)
     //   }
-    //   else if (paymentMethod === "manual") {
-    //     let baseDomain = appData?.base_domain;
-    //     let url = `${baseDomain}/payment/${user?.id}/${payload?.amount}`
-    //     let aHref = document.createElement('a');
-    //     aHref.href = url;
-    //     aHref.target = "_blank";
-    //     aHref.click();
-    //   } else if (paymentMethod === "ibr_pay") {
-    //     let { data } = await ibrPayUPIPaymentUrl(payload);
-    //     if (data.error) {
-    //       toast.error(data.message);
-    //     } else {
-    //       setQRCodeModalURL(data?.response?.upiIntent)
-    //     }
-    //   } else if (paymentMethod === "payment_karo") {
-    //     let { data } = await depositBalancePaymentKaro(payload);
-    //     if (data.error) {
-    //       toast.error(data.message);
-    //     } else {
-    //       let aHref = document.createElement('a');
-    //       aHref.href = data.response.payment_url;
-    //       // aHref.target = "_blank";
-    //       aHref.click();
-    //     }
+    //   else{
+    //     setPaymentMethodModal(true);
+    //     toast.error("Add a UPI ID first!")
     //   }
-    //   else {
-    //     let { data } = await depositBalanceQRCode(payload);
-    //     if (data.error) {
-    //       toast.error(data.message);
-    //     } else {
-    //       setQRCodeModalURL(data?.response?.upiString)
-    //     }
-    //   }
-    //   setDataLoading(true);
-    //   await _getDepositHistory(currentPage);
-
-    //   e.target.reset();
-
-    // } catch (err) {
-    //   toast.error(err.message);
-    // } finally {
-    //   setDepositLoading(false);
-    //   setDataLoading(false);
     // }
+
+    // else{
+    //   if(addBalanceMethodData?.bank){
+    //     console.log("UPI ID : ",addBalanceMethodData?.bank)
+    //   }
+    //   else{
+    //     setPaymentMethodModal(true);
+    //     toast.error("Add bank details first!")
+    //   }
+    // }
+    try {
+      setDepositLoading(true);
+      let payload = {
+        amount: depositAmount,
+      };
+      let paymentMethod = appData?.payment_method
+      if (paymentMethod === "auto") {
+        let { data } = await depositBalance(payload);
+        if (data.error) {
+          toast.error(data.message);
+        } else {
+          let aHref = document.createElement('a');
+          aHref.href = data.response.payment_url;
+          // aHref.target = "_blank";
+          aHref.click();
+          dispatch(
+            setAuthDataUsersSingleValue({
+              key: "balance",
+              value: data.response.balance_left,
+            })
+          );
+        }
+      }
+      else if (paymentMethod === "manual") {
+        let baseDomain = appData?.base_domain;
+        let url = `${baseDomain}/payment/${user?.id}/${payload?.amount}`
+        let aHref = document.createElement('a');
+        aHref.href = url;
+        aHref.target = "_blank";
+        aHref.click();
+      } else if (paymentMethod === "ibr_pay") {
+        let { data } = await ibrPayUPIPaymentUrl(payload);
+        if (data.error) {
+          toast.error(data.message);
+        } else {
+          setQRCodeModalURL(data?.response?.upiIntent)
+        }
+      } else if (paymentMethod === "payment_karo") {
+        let { data } = await depositBalancePaymentKaro(payload);
+        if (data.error) {
+          toast.error(data.message);
+        } else {
+          let aHref = document.createElement('a');
+          aHref.href = data.response.payment_url;
+          // aHref.target = "_blank";
+          aHref.click();
+        }
+      }
+      else {
+        let { data } = await depositBalanceQRCode(payload);
+        if (data.error) {
+          toast.error(data.message);
+        } else {
+          setQRCodeModalURL(data?.response?.upiString)
+        }
+      }
+      setDataLoading(true);
+      await _getDepositHistory(currentPage);
+
+      e.target.reset();
+
+    } catch (err) {
+      toast.error(err.message);
+    } finally {
+      setDepositLoading(false);
+      setDataLoading(false);
+    }
   };
   const handleWithdrawSubmit = async (e) => {
     e.preventDefault();
@@ -368,19 +367,12 @@ const Wallet = () => {
       setWithdrawLoading(true);
       let payload = {
         mode: method,
-        bankAccountType,
         amount: withdrawAmount,
       };
       if (method === "upi") {
         let upiId = e.target["upi_id"].value;
         payload = { ...payload, upiId };
-        if (bankAccountType === "permanent") {
-          let withdrawDetails = {
-            ...user.withdraw_details,
-            upi_id: upiId,
-          }
-          dispatch(setAuthDataUsersSingleValue({ key: "withdraw_details", value: withdrawDetails }))
-        }
+      
       } else if (method === "bank") {
         let bankName = e.target["bank_name"].value;
         let accountHolderName = e.target["account_holder_name"].value;
@@ -393,16 +385,6 @@ const Wallet = () => {
           accountNumber,
           accountIFSCCode,
         };
-        if (bankAccountType === "permanent") {
-          let withdrawDetails = {
-            ...user.withdraw_details,
-            bank_name: bankName,
-            account_holder_name: accountHolderName,
-            account_number: accountNumber,
-            account_ifsc_code: accountIFSCCode,
-          }
-          dispatch(setAuthDataUsersSingleValue({ key: "withdraw_details", value: withdrawDetails }))
-        }
       }
       let { data } = await withdrawBalance(payload);
       if (data.error) {
@@ -473,7 +455,7 @@ const Wallet = () => {
         <div className="grid grid-cols-2 text-sm">
           <button
             className={`w-full p-2 font-semibold text-white ${activeTab === "addPoints"
-              ? "bg-greenLight border-4 border-black"
+              ? "bg-greenLight border-[1px] border-black"
               : "bg-orange"
               }`}
             onClick={async () => {
@@ -485,7 +467,7 @@ const Wallet = () => {
           </button>
           <button
             className={`w-full p-2 font-semibold text-white ${activeTab === "withdrawPoints"
-              ? "bg-greenLight border-4 border-black"
+              ? "bg-greenLight border-[1px] border-black"
               : "bg-orange"
               }`}
             onClick={() => {
@@ -509,20 +491,14 @@ const Wallet = () => {
             <p className="px-3 mt-1 text-xs text-center text-red-600">
               {/* आपका पैसा 5 से 10 मिनट मैं एड हो जाएगा */}
             </p>
-            <div className="grid items-center grid-cols-2 gap-4 px-3 mt-3">
+            <div className="flex px-3 mt-3 justify-center w-full">
               <button
                 type="submit"
-                className="h-10 py-2 text-sm font-semibold text-white rounded-3xl bg-orange"
+                className="w-full px-4 py-1 mt-2 text-white border-0 rounded-md mb-3 bg-greenLight"
               >
                 {depositLoading ? <Spinner /> : "Add Balance"}
               </button>
-              <button
-                type="button"
-                onClick={toggleDepositModal}
-                className="h-10 py-2 text-sm font-semibold text-white rounded-3xl bg-orange"
-              >
-                Transfer Balance
-              </button>
+           
             </div>
           </form>
         ) : (
@@ -542,7 +518,7 @@ const Wallet = () => {
             <p className="px-3 mt-2 text-sm font-semibold text-center text-black">
               Bank Account Details
             </p>
-            <div className="flex justify-center gap-3 px-2">
+            {/* <div className="flex justify-center gap-3 px-2">
               <label className="inline-flex items-center gap-1">
                 <input
                   type="radio"
@@ -566,23 +542,24 @@ const Wallet = () => {
                 />
                 <small>Temporary</small>
               </label>
-            </div>
-            {appData.upi_withdraw_enable === 1 &&
-              appData.bank_withdraw_enable === 1 && (
+            </div> */}
+            {appData.enable_upi_withdraw === 1 &&
+              appData.enable_bank_withdraw === 1 && (
                 <div className="flex flex-col px-3">
                   <label className="text-sm font-bold">Withdrawal Method</label>
                   <select
-                    className="px-2 py-1 mt-1 text-black border rounded h-9 border-black/30"
+                    className="w-[100%] px-2 py-1 mt-1 text-black border rounded h-9 border-black/30"
                     name="method"
                     id="method"
                     required
                     value={method}
                     onChange={(e) => setMethod(e.target.value)}
                   >
-                    {appData.upi_withdraw_enable === 1 && (
+                    <option value={""}>Select Method</option>
+                    {appData.enable_upi_withdraw === 1 && (
                       <option value={"upi"}>UPI</option>
                     )}
-                    {appData.bank_withdraw_enable === 1 && (
+                    {appData.enable_bank_withdraw === 1 && (
                       <option value={"bank"}>Bank</option>
                     )}
                   </select>
@@ -598,7 +575,7 @@ const Wallet = () => {
                     name="upi_id"
                     id="upi_id"
                     key={"upi"}
-                    defaultValue={bankAccountType == "permanent" ? user?.withdraw_details?.upi_id : ""}
+                    defaultValue={user?.withdraw_details?.upi_id ||"" }
                     required
                   />
                 </div>
@@ -613,7 +590,7 @@ const Wallet = () => {
                     name="bank_name"
                     id="bank_name"
                     key="bankName"
-                    defaultValue={bankAccountType == "permanent" ? user?.withdraw_details?.bank_name : ""}
+                    defaultValue={ user?.withdraw_details?.bank_name || ""}
                     required
                   />
                 </div>
@@ -624,7 +601,7 @@ const Wallet = () => {
                     placeholder="Enter Account Holder Name"
                     name="account_holder_name"
                     id="account_holder_name"
-                    defaultValue={bankAccountType == "permanent" ? user?.withdraw_details?.account_holder_name : ""}
+                    defaultValue={user?.withdraw_details?.account_holder_name || ""}
                     required
                   />
                 </div>
@@ -636,7 +613,7 @@ const Wallet = () => {
                     name="account_number"
                     id="account_number"
                     required
-                    defaultValue={bankAccountType == "permanent" ? user?.withdraw_details?.account_number : ""}
+                    defaultValue={user?.withdraw_details?.account_number || ""}
                   />
                 </div>
                 <div className="flex flex-col">
@@ -656,9 +633,16 @@ const Wallet = () => {
               </div>
             )}
             <div className="p-3">
+              {
+                (withdrawAmount>currentUser?.balance ) ?
+                <p className="text-red-500 text-center text-sm">Your balance is not sufficient for withdrawal.</p>
+                :null
+              }
               <button
                 type="submit"
-                className="w-full px-4 py-1 mt-2 text-white border-0 rounded-md bg-orange"
+                className={`w-full px-4 py-1 mt-2 text-white border-0 rounded-md 
+                  ${(withdrawAmount>currentUser?.balance) ? " bg-gray-500 " :"bg-greenLight"}`}
+                disabled={withdrawAmount>currentUser?.balance ? true :false}
               >
                 {withdrawLoading ? <Spinner /> : "Withdraw"}
               </button>
@@ -740,7 +724,7 @@ const Wallet = () => {
           </form>
         </Modal>
 
-        <Modal isOpen={paymentMethodModal} toggle={()=>setPaymentMethodModal(false )} >
+        {/* <Modal isOpen={paymentMethodModal} toggle={()=>setPaymentMethodModal(false )} >
           <div style={{width:"400px",margin:"0 auto",maxWidth:"90vw"}}>
              <div className="grid grid-cols-3 p-2 font-semibold text-white bg-primary">
                 <div></div>
@@ -773,10 +757,10 @@ const Wallet = () => {
                 value={addBalanceMethod}
                 onChange={(e) => {setAddBalanceMethod(e.target.value); setBalanceMethodData(null)}}
               >
-                {appData.upi_withdraw_enable === 1 && (
+                {appData.enable_upi_withdraw === 1 && (
                   <option value={"upi"}>UPI</option>
                 )}
-                {appData.bank_withdraw_enable === 1 && (
+                {appData.enable_bank_withdraw === 1 && (
                   <option value={"bank"}>Bank</option>
                 )}
               </select>
@@ -864,7 +848,7 @@ const Wallet = () => {
             )}
             <br />
           </div>
-        </Modal>
+        </Modal> */}
       </div>
     </>
   );

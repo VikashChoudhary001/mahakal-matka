@@ -28,7 +28,7 @@ const Submit_Bet_Popup = ({ show, data, onClose, onSubmitted = () => {} }) => {
         "Jodi Digits": 5,
         "Single Pana": 6,
         "Double Pana": 7,
-        "Tripal Pana": 8,
+        "Triple Pana": 8,
         "Half Sangam open": 9,
         "Half Sangam close": 10,
         "Full Sangam": 11
@@ -124,7 +124,7 @@ const Submit_Bet_Popup = ({ show, data, onClose, onSubmitted = () => {} }) => {
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
                     <div className="bg-[#eeeeee] w-full max-w-md mx-4 rounded-lg h-[90vh] overflow-auto">
                         <div className='w-full text-center bg-[#ac407b] p-1'>
-                        <h2 className="text-lg text-[#fff] font-normal">KALYAN - {new Date().toLocaleDateString('en-GB')}</h2>
+                        <h2 className="text-lg text-[#fff] font-normal">{gameType} - {new Date().toLocaleDateString('en-GB')}</h2>
                         </div>
                         <div className='p-2'>
                             <div className="w-full flex justify-between items-center text-center text-[14px] border-none">

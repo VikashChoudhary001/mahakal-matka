@@ -20,14 +20,14 @@ const KalyanOnly = ({ tabBorderColor }) => {
   const token = localStorage.getItem("authToken");
 
   useEffect(()=>{
-    if(localStorage.getItem("welcomeStatus")){
-      toast.success(appData?.appData?.home_message || 'Welcome to Mahakal Matka', {
-        position: 'top-center', 
-        hideProgressBar: true,
-        autoClose:2500,
-      });
-      localStorage.removeItem("welcomeStatus");
-    }
+    // if(localStorage.getItem("welcomeStatus")){
+    //   toast.success(appData?.appData?.home_message || 'Welcome to Mahakal Matka', {
+    //     position: 'top-center', 
+    //     hideProgressBar: true,
+    //     autoClose:2500,
+    //   });
+    //   localStorage.removeItem("welcomeStatus");
+    // }
   },[])
 
   useEffect(() => {    
@@ -69,9 +69,9 @@ const KalyanOnly = ({ tabBorderColor }) => {
     return () => clearInterval(intervalId);
   }, []);
 
-  const handleChartClick = (marketId) => {
+  const handleChartClick = (marketId,marketName) => {
     const url = `https://api.mahakalmatka.com/market/pana-chart/${marketId}/hello`;
-    window.open(url, "_blank");
+    navigate("/game-chart/?gameName="+marketName+"&gameUrl=" + url);
   };
 
 
@@ -82,7 +82,7 @@ const KalyanOnly = ({ tabBorderColor }) => {
       setAuthModalOpen(true);
     } else {
       // Use navigate to redirect in the same tab
-      navigate(`/general-sub-games?gameType=${market.name}&market_id=${market.id}`);
+      navigate(`/general-sub-games?gameType=${market?.name}&market_id=${market?.id}`);
     }
   };
 
@@ -100,12 +100,12 @@ const KalyanOnly = ({ tabBorderColor }) => {
         ?.filter((market) => market !== null)
         .map((market) => (
           <div
-            key={market.id}
+            key={market?.id}
             className={`flex flex-col text-white rounded-md border-2 ${tabBorderColor}`}
           >
             <div className="w-full flex justify-between items-center p-1 px-3 bg-primary">
-              <p className="text-[12px]">Open: {market.open_time}</p>
-              <p className="text-[12px]">Close: {market.close_time}</p>
+              <p className="text-[12px]">Open: {market?.open_time}</p>
+              <p className="text-[12px]">Close: {market?.close_time}</p>
             </div>
 
             <div className="p-2 w-full flex justify-between items-center">
@@ -113,23 +113,23 @@ const KalyanOnly = ({ tabBorderColor }) => {
                 src={Chart_b}
                 alt="Chart"
                 className="w-[60px] h-[60px] object-cover cursor-pointer"
-                onClick={() => handleChartClick(market.id)}
+                onClick={() => handleChartClick(market?.id,market?.name)}
               />
 
               <div className="flex flex-col justify-center items-center">
                 <span className="text-[13px] font-semibold uppercase text-[#4f4f4f]">
-                  {market.name}
+                  {market?.name}
                 </span>
                 <span className="text-[12px] font-semibold uppercase text-primary">
-                  {market.last_result
-                    ? market.last_result.result
+                  {market?.last_result
+                    ? market?.last_result.result
                     : "***-**-***"}
                 </span>
                 <span
-                  className={`text-[13px] ${!market.game_on ? "text-orange" : "text-greenLight"
+                  className={`text-[13px] ${!market?.game_on ? "text-orange" : "text-greenLight"
                     }`}
                 >
-                  {market.game_on
+                  {market?.game_on
                     ? "Market is Running"
                     : "Market is Close"}
                 </span>
@@ -137,12 +137,12 @@ const KalyanOnly = ({ tabBorderColor }) => {
               {/* <Link
                 className={`w-[50px] h-[50px] text-center font-semibold rounded-full`}
                 to={
-                  !market.game_on
+                  !market?.game_on
                     ? "#"
-                    : `/general-sub-games?gameType=${market.name}&market_id=${market.id}&tabType=kalyan`
+                    : `/general-sub-games?gameType=${market?.name}&market_id=${market?.id}&tabType=kalyan`
                 }
               >
-                {!market.game_on ? (
+                {!market?.game_on ? (
                   <>
                     <img
                       src={Close_b}
@@ -164,7 +164,7 @@ const KalyanOnly = ({ tabBorderColor }) => {
               <div
                 className={`w-[60px] h-[60px] text-center font-semibold rounded-full`}
               >
-                {!market.game_on ? (
+                {!market?.game_on ? (
                   <div style={{ pointerEvents: "none" }}>
                     <img
                       src={Close_b}

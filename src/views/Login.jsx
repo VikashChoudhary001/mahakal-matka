@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Logo from "../assets/imgs/Logo.png";
 import { sendLoginOtp, verifyLoginOtp } from "../repository/AuthRepository";
 import Repository from "../repository/Repository";
 import { toast } from "react-toastify";
 import Spinner from "../components/Spinner";
 import { useNavigate } from "react-router-dom";
+import BannerLogo from "../assets/imgs/banner_login_page.jpg";
 
 // Function to call Android app callback on login success
 function loginSuccess(userNumber) {
-    console.log('called login success callback');
     if (window.AndroidApp && window.AndroidApp.onLoginSuccess) {
         window.AndroidApp.onLoginSuccess(userNumber);
     }
@@ -20,6 +20,13 @@ const Login = () => {
     let [isOTPScreen, setOTPScreen] = useState(false);
     let [phone, setPhone] = useState("");
     let [otp, setOTP] = useState("");
+    
+    const phoneInputRef = useRef(null);
+    const otpInputRef = useRef(null);
+
+    useEffect(() => {
+        phoneInputRef.current?.focus();
+    }, []);
 
     const handlePhoneSubmit = async (e) => {
         e.preventDefault();
@@ -31,10 +38,14 @@ const Login = () => {
             let { data } = await sendLoginOtp(payload);
             if (data.error === false) {
                 setOTPScreen(true);
+                 setTimeout(() => {
+                    otpInputRef.current?.focus();
+                }, 100);
             } else {
                 toast.error(data.message);
             }
         } catch {
+            toast.error("Something went wrong!");
         } finally {
             setLoading(false);
         }
@@ -78,58 +89,70 @@ const Login = () => {
             className="h-[100vh] p-3 overflow-auto"
         >
 
-            <div className="flex justify-center mb-3 mt-4 h-auto">
-                <img
+
+                <p style={{ textAlign: "center", fontSize: "22px", color: "#fff", margin: "20px 0 0" }}>Login</p>
+            <div className="relative flex flex-col p-5 mt-8 rounded-md" style={{ border: "1px solid #fff" }}>
+            <div className="flex justify-center mb-3 h-auto">
+                {/* <img
                     src={Logo}
                     alt="Logo"
                     width={80}
                     style={{ display: "block" }}
-                />
-            </div>
+                /> */}
+                <img src={BannerLogo} alt="banner" style={{ display: "block",width:"100%" }} />
 
-            <div className="relative flex flex-col p-5 mt-12 rounded-md" style={{ border: "1px solid #fff" }}>
-                {isOTPScreen ? (
-                    <form onSubmit={handleOTPSubmit}>
-                        <div className="flex flex-col w-full">
-                            <label style={{ color: "#fff", fontSize: "18px" }}>OTP</label>
-                            <input
-                                className="block w-full h-10 px-2 py-1 mt-1 text-black border rounded border-black/40"
-                                type="number"
-                                value={otp}
-                                onChange={(e) => setOTP(e.target.value)}
-                                placeholder="Enter OTP"
-                            />
-                        </div>
-                        <button
-                            type="submit"
-                            disabled={loading}
-                            className="block w-full p-3 mt-2 font-semibold text-white rounded-md bg-[#006b9fd6]"
-                        >
-                            {loading ? <Spinner /> : "Login"}
-                        </button>
-                    </form>
-                ) : (
-                    <form onSubmit={handlePhoneSubmit}>
-                        <div className="flex flex-col w-full">
-                            <p style={{ textAlign: "center", fontSize: "22px", color: "#fff", margin: "0 0 20px" }}>Login</p>
-                            <label style={{ color: "#fff", fontSize: "18px" }}>Mobile Number</label>
-                            <input
-                                className="block w-full h-10 px-2 py-1 mt-1 text-black border rounded border-black/40"
-                                type="number"
-                                value={phone}
-                                onChange={(e) => setPhone(e.target.value)}
-                                placeholder="Enter Mobile Number"
-                            />
-                        </div>
-                        <button
-                            type="submit"
-                            disabled={loading}
-                            className="block w-full p-3 mt-2 font-semibold text-white rounded-md bg-[#006b9fd6]"
-                        >
-                            {loading ? <Spinner /> : "Send OTP"}
-                        </button>
-                    </form>
-                )}
+            </div>
+                
+                <form onSubmit={handlePhoneSubmit}>
+                    <div className="flex flex-col w-full">
+                        <label style={{ color: "#fff", fontSize: "18px" }}>Mobile Number</label>
+                        <input
+                            ref={phoneInputRef}
+                            className="block w-full h-10 px-2 py-1 mt-1 text-black border rounded border-black/40"
+                            type="number"
+                            value={phone}
+                            onChange={(e) => setPhone(e.target.value)}
+                            maxLength={10}
+                            max={9999999999}
+                            placeholder="Enter Mobile Number"
+                        />
+                    </div>
+                    {
+                        !isOTPScreen ?
+                            <button
+                                type="submit"
+                                disabled={loading}
+                                className="block w-full p-3 mt-2 font-semibold text-white rounded-md bg-[#006b9fd6]"
+                            >
+                                {loading ? <Spinner /> : "Send OTP"}
+                            </button>
+                        :null
+                    }
+                </form>
+                {
+                    isOTPScreen ?
+                        <form onSubmit={handleOTPSubmit} style={{marginTop:10}}>
+                            <div className="flex flex-col w-full">
+                                <label style={{ color: "#fff", fontSize: "18px" }}>OTP</label>
+                                <input
+                                    ref={otpInputRef}
+                                    className="block w-full h-10 px-2 py-1 mt-1 text-black border rounded border-black/40"
+                                    type="number"
+                                    value={otp}
+                                    onChange={(e) => setOTP(e.target.value)}
+                                    placeholder="Enter OTP"
+                                />
+                            </div>
+                            <button
+                                type="submit"
+                                disabled={loading}
+                                className="block w-full p-3 mt-2 font-semibold text-white rounded-md bg-[#006b9fd6]"
+                            >
+                                {loading ? <Spinner /> : "Login"}
+                            </button>
+                        </form>
+                    :null
+                }
 
             </div>
 

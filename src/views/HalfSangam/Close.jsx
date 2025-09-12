@@ -96,7 +96,7 @@ const Close = () => {
     };
 
     const formattedData = rows.map(row => ({
-        pair: row.pana + row.ank,
+        pair: row.pana +"x"+ row.ank,
         value: row.amount,
         type: 'close'  // Assuming 'Close' as a fixed type for this component
     }));
@@ -161,7 +161,7 @@ const Close = () => {
                 <div className="text-center">
                     <table className="min-w-full bg-white">
                         <thead>
-                            <tr className="bg-[#000] text-[#fff] w-full flex justify-between items-center py-1 text-md">
+                            <tr className="bg-[#0098c7] text-[#fff] w-full flex justify-between items-center py-1 text-md">
                                 <th className="py-1 text-[13px]">Open Ank</th>
                                 <th className="py-1 text-[13px]">Close Pana</th>
                                 <th className="py-1 text-[13px]">Amount</th>

@@ -38,7 +38,7 @@ const Default = () => {
         <span className="mx-auto font-bold">{titleObj[location.pathname]}</span>
         <div className="w-8"></div>
       </div>
-      <div className="h-[calc(100dvh-56px)] overflow-auto main-wrapper">
+      <div className="h-[calc(100vh-45px)] overflow-auto main-wrapper">
         <Outlet />
       </div>
     </div>

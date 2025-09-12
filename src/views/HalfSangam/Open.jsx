@@ -89,7 +89,7 @@ const Open = () => {
     };
 
     const formattedData = rows.map(row => ({
-        pair: row.ank + row.pana,
+        pair: row.ank +"x"+ row.pana,
         value: row.amount,
         type: 'open'  // Assuming 'Open' as a fixed type for this component
     }));
@@ -154,7 +154,7 @@ const Open = () => {
                 <div className="text-center">
                     <table className="min-w-full bg-white">
                         <thead>
-                            <tr className="bg-[#000] text-[#fff] w-full flex justify-between items-center py-1 text-md">
+                            <tr className="bg-[#0098c7] text-[#fff] w-full flex justify-between items-center py-1 text-md">
                                 <th className="py-1 text-[13px]">Open Pana</th>
                                 <th className="py-1 text-[13px]">Close Ank</th>
                                 <th className="py-1 text-[13px]">Amount</th>

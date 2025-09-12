@@ -76,10 +76,10 @@ const SinglePana = () => {
     <div className="min-h-screen flex flex-col justify-between">
       <div className="flex-grow">
         <GameHeader dropdown={true} selectedOption={selectedOption} onSelectChange={handleSelectChange} />
-        <div className='w-[100%] m-auto h-[calc(100vh-200px)] overflow-scroll shadow-inner p-2'>
+        <div className='w-[100%] m-auto h-[full] mt-20 shadow-inner p-2'>
           {[...Array(10).keys()].map(remainder => (
             <div key={remainder}>
-              <div className='py-1 text-center text-[#fff] bg-[#d12c2c] w-[100px] rounded-full my-2 ml-4 shadow-lg'>{remainder}</div>
+              <div className='gradiantBgButton py-1 text-center my-4 ml-4 text-white'>{remainder}</div>
               <div className='grid grid-cols-2 gap-4 w-[92%] m-auto'>
                 {filterSinglePanaByRemainder(remainder).map(pair => (
                   <div key={pair} className='flex items-center justify-start'>
@@ -97,6 +97,7 @@ const SinglePana = () => {
               </div>
             </div>
           ))}
+          <br /><br /><br /><br />
         </div>
       </div>
       <div className='max-w-[400px] m-auto mt-4 fixed bottom-0 left-0 right-0 p-4'>

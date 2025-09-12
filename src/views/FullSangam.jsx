@@ -133,7 +133,7 @@ const FullSangam = () => {
   };
 
   const formattedData = rows.map(row => ({
-    pair: row.pana1 + row.pana2,
+    pair: row.pana1 +"x"+ row.pana2,
     value: row.amount,
     type: ''  // Assuming 'FullSangam' as a fixed type for this component
   }));
@@ -145,8 +145,8 @@ const FullSangam = () => {
         <p className='text-[16px]'> Balance: {user?.balance}</p>
       </div>
 
-      <div className="flex justify-center py-2">
-        <div className="flex p-1 bg-white rounded-lg shadow-sm">
+      <div className="flex justify-center py-2 px-1">
+        <div className="w-full flex p-1 bg-white rounded-lg shadow-sm">
           <div className="w-full rounded-sm shadow-sm flex justify-center items-center gap-2 px-1">
             <div className="flex flex-col w-full">
               <label className="text-md font-semibold">Pana</label>
@@ -154,7 +154,7 @@ const FullSangam = () => {
                 type="number"
                 id="pana1"
                 required
-                className="w-full p-2 mt-1 border rounded border-black/40 outline-0 focus:border-primary"
+                className="w-full p-1 mt-1 border rounded border-black/40 outline-0 focus:border-primary"
                 placeholder=""
                 onChange={handlePanaInputChange}
               />
@@ -165,7 +165,7 @@ const FullSangam = () => {
                 type="number"
                 id="pana2"
                 required
-                className="w-full p-2 mt-1 border rounded border-black/40 outline-0 focus:border-primary"
+                className="w-full p-1 mt-1 border rounded border-black/40 outline-0 focus:border-primary"
                 placeholder=""
                 onChange={handlePanaInputChange}
               />
@@ -174,15 +174,15 @@ const FullSangam = () => {
         </div>
       </div>
 
-      <div className="flex justify-center bg-blue-gray-100 py-2 mx-2 p-1">
-        <div className="w-full bg-white rounded-lg shadow-sm flex justify-center items-center gap-2 p-1">
+      <div className="flex justify-center bg-blue-gray-100 py-2 mx-auto px-1">
+        <div className="w-full bg-white rounded-lg shadow-sm flex justify-center items-center gap-2 p-1 px-2">
           <div className="flex flex-col w-full">
             <label className="text-md font-semibold">Amount</label>
             <input
               type="number"
               id="amount"
               required
-              className="w-full p-2 mt-1 border rounded border-black/40 outline-0 focus:border-primary"
+              className="w-full p-1 mt-1 border rounded border-black/40 outline-0 focus:border-primary"
               placeholder=""
             />
           </div>
@@ -190,7 +190,7 @@ const FullSangam = () => {
             <button
               type="button"
               id="submit"
-              className="w-full h-[40px] bg-[#ac407b] text-white font-sans font-medium py-2 shadow-sm mt-7 rounded"
+              className="w-full h-[33px] bg-[#ac407b] text-white font-sans font-medium py-1 shadow-sm mt-7 rounded"
               onClick={handleAddRow}
             >
               Add
@@ -203,7 +203,7 @@ const FullSangam = () => {
         <div className="text-center">
           <table className="min-w-full bg-white">
             <thead>
-              <tr className="bg-[#000] text-[#fff] w-full flex justify-between items-center py-1 text-[13px]">
+              <tr className="bg-[#0098c7] text-[#fff] w-full flex justify-between items-center py-1 text-[13px]">
                 <th className="py-2">Open Pana</th>
                 <th className="py-2">Close Pana</th>
                 <th className="py-2">Amount</th>

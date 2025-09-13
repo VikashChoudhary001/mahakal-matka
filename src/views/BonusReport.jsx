@@ -3,6 +3,7 @@ import { getBonusReport } from "../repository/BonusRepository";
 import { toast } from "react-toastify";
 import Spinner from "../components/Spinner";
 import { useSelector } from "react-redux";
+import NoDataFoundImage from "../assets/imgs/noDataFound.png";
 
 const BonusReport = () => {
   let [totalPages, setTotalPages] = useState(10);
@@ -105,7 +106,11 @@ const BonusReport = () => {
       </div>
       {loading && bonusReport.length === 0 && <div className="pt-3"><Spinner /></div>}
       {!loading && bonusReport.length === 0 &&
-        <div className="w-full p-2 font-semibold text-center">No Data Found</div>
+        <div className="w-full flex py-4 flex-col items-center gap-2">
+          <img src={NoDataFoundImage} width={100} alt="" />
+          <p className="text-gray-400 font-bold text-sm">No Data Found</p>
+
+        </div>
       }
     </div>
   );

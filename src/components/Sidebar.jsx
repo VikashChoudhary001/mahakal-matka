@@ -133,6 +133,8 @@ const Sidebar = ({ toggleSideBar }) => {
     },
   ];
 
+  
+
   // Conditionally add the Game Rate link if GameRate is true
   if (GameRate) {
     links.splice(2, 0, {
@@ -142,6 +144,15 @@ const Sidebar = ({ toggleSideBar }) => {
       icon: require("../assets/imgs/swords.png"),
       iconType: "img",
     });
+  }
+  if (appData?.invite_system_enable) {
+    links.splice(1, 0, {
+      text: "Invite and Earn",
+      to: "/invite-and-earn",
+      description: `दोस्तों के खेलने पर ${appData?.invite_percentage_bet}% कमीशन पाएं।`,
+      icon: require("../assets/imgs/referral.png"),
+      iconType: "img",
+    },);
   }
 
   const handleKeyDown = (e) => {

@@ -18,7 +18,7 @@ const Default = () => {
     <div className="font-poppins overflow-hidden relative max-w-[480px] w-full mx-auto h-[100vh]">
       <div className="h-[56px] bg-primary flex items-center text-white p-3">
         <div className="flex w-8">
-          <Link to="/">
+          <Link onClick={() => navigate(-1)}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"

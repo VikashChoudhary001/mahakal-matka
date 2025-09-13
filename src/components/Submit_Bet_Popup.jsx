@@ -24,14 +24,14 @@ const Submit_Bet_Popup = ({ show, data, onClose, onSubmitted = () => {} }) => {
     const bidType = searchParams.get('bidType');
 
     const gameTypeIdMap = {
-        "Single Digits": 4,
-        "Jodi Digits": 5,
-        "Single Pana": 6,
-        "Double Pana": 7,
-        "Triple Pana": 8,
-        "Half Sangam open": 9,
-        "Half Sangam close": 10,
-        "Full Sangam": 11
+        "Single Digits": 1,
+        "Jodi Digits": 2,
+        "Single Pana": 3,
+        "Double Pana": 4,
+        "Triple Pana": 5,
+        "Half Sangam open": 6,
+        "Half Sangam close": 7,
+        "Full Sangam": 8
     };
 
     const getGameTypeId = (bidType, type) => {

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import AmountSelector from "../components/AmountSelector";
-import { Form, useLocation } from "react-router-dom";
+import { Form, useLocation, useNavigate } from "react-router-dom";
 import Modal from "../components/Modal";
 import Logo from "../assets/imgs/Logo.png";
 import { ModalContext } from '../context/ModalContext.js'
@@ -24,6 +24,7 @@ import { setAppData, setAuthDataUsersSingleValue } from "../store/features/appDa
 import QRCode from "react-qr-code";
 import { getAppData } from "../repository/DataRepository.js";
 import { ibrPayUPIPaymentUrl } from "../repository/PaymentRepository.js";
+import NoDataFoundImage from "../assets/imgs/noDataFound.png";
 
 const WalletHistoryTable = ({
   loading,
@@ -36,74 +37,101 @@ const WalletHistoryTable = ({
   return (
     <>
       <div className="overflow-auto">
-        <table className="w-full text-xs table-auto">
-          <thead className="bg-greenLight">
-            <tr>
-              <th className="p-0.5">S No</th>
-              <th className="p-0.5">Pay Mode</th>
-              <th className="p-0.5">Date</th>
-              <th className="p-0.5">Balance</th>
-              <th className="p-0.5">Status</th>
-            </tr>
-          </thead>
-          {!loading && (
-            <tbody>
-              {data.map((dataItem, dataItemIdx) => (
-                <tr key={dataItemIdx} className="text-center">
-                  <td className="p-1">
-                    {dataItemIdx + 1 + (currentPage - 1) * perPageRecords}
-                  </td>
-                  <td className="p-1">{dataItem?.deposit_mode || dataItem?.withdraw_mode  }</td>
-                  <td className="p-1">
-                    {moment(dataItem["created_at"]).format(
-                      "DD-MM-YYYY hh:mm:ss A"
-                    )}
-                  </td>
-                  <td className="p-1">{dataItem.amount}</td>
-                  <td>{dataItem.status}</td>
-                </tr>
-              ))}
-            </tbody>
-          )}
-        </table>
-        {loading && (
-          <div className="flex justify-center w-full p-4">
-            <div className="grid w-full place-items-center overflow-x-scroll rounded-lg lg:overflow-visible">
-              <svg
-                className="text-gray-300 animate-spin"
-                viewBox="0 0 64 64"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-              >
-                <path
-                  d="M32 3C35.8083 3 39.5794 3.75011 43.0978 5.20749C46.6163 6.66488 49.8132 8.80101 52.5061 11.4939C55.199 14.1868 57.3351 17.3837 58.7925 20.9022C60.2499 24.4206 61 28.1917 61 32C61 35.8083 60.2499 39.5794 58.7925 43.0978C57.3351 46.6163 55.199 49.8132 52.5061 52.5061C49.8132 55.199 46.6163 57.3351 43.0978 58.7925C39.5794 60.2499 35.8083 61 32 61C28.1917 61 24.4206 60.2499 20.9022 58.7925C17.3837 57.3351 14.1868 55.199 11.4939 52.5061C8.801 49.8132 6.66487 46.6163 5.20749 43.0978C3.7501 39.5794 3 35.8083 3 32C3 28.1917 3.75011 24.4206 5.2075 20.9022C6.66489 17.3837 8.80101 14.1868 11.4939 11.4939C14.1868 8.80099 17.3838 6.66487 20.9022 5.20749C24.4206 3.7501 28.1917 3 32 3L32 3Z"
-                  stroke="currentColor"
-                  strokeWidth="5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                ></path>
-                <path
-                  d="M32 3C36.5778 3 41.0906 4.08374 45.1692 6.16256C49.2477 8.24138 52.7762 11.2562 55.466 14.9605C58.1558 18.6647 59.9304 22.9531 60.6448 27.4748C61.3591 31.9965 60.9928 36.6232 59.5759 40.9762"
-                  stroke="currentColor"
-                  strokeWidth="5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="text-gray-600"
-                ></path>
-              </svg>
-            </div>
-          </div>
-        )}
-      </div>
-      {!loading && data.length === 0 ? (
-        <div className="w-full p-2 font-semibold text-center">
-          No Data Found
+
+        <div className="px-3">
+            {
+                loading ? (
+                    <div className="flex justify-center w-full p-4">
+                    <div className="grid w-full place-items-center overflow-x-scroll rounded-lg lg:overflow-visible">
+                        <svg
+                        className="text-gray-300 animate-spin"
+                        viewBox="0 0 64 64"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        >
+                        <path
+                            d="M32 3C35.8083 3 39.5794 3.75011 43.0978 5.20749C46.6163 6.66488 49.8132 8.80101 52.5061 11.4939C55.199 14.1868 57.3351 17.3837 58.7925 20.9022C60.2499 24.4206 61 28.1917 61 32C61 35.8083 60.2499 39.5794 58.7925 43.0978C57.3351 46.6163 55.199 49.8132 52.5061 52.5061C49.8132 55.199 46.6163 57.3351 43.0978 58.7925C39.5794 60.2499 35.8083 61 32 61C28.1917 61 24.4206 60.2499 20.9022 58.7925C17.3837 57.3351 14.1868 55.199 11.4939 52.5061C8.801 49.8132 6.66487 46.6163 5.20749 43.0978C3.7501 39.5794 3 35.8083 3 32C3 28.1917 3.75011 24.4206 5.2075 20.9022C6.66489 17.3837 8.80101 14.1868 11.4939 11.4939C14.1868 8.80099 17.3838 6.66487 20.9022 5.20749C24.4206 3.7501 28.1917 3 32 3L32 3Z"
+                            stroke="currentColor"
+                            strokeWidth="5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                        ></path>
+                        <path
+                            d="M32 3C36.5778 3 41.0906 4.08374 45.1692 6.16256C49.2477 8.24138 52.7762 11.2562 55.466 14.9605C58.1558 18.6647 59.9304 22.9531 60.6448 27.4748C61.3591 31.9965 60.9928 36.6232 59.5759 40.9762"
+                            stroke="currentColor"
+                            strokeWidth="5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className="text-gray-600"
+                        ></path>
+                        </svg>
+                    </div>
+                    </div>
+                ) :
+                data?.length>0  ?
+                data?.map((item,index)=>(
+                    <div className="mb-4 rounded-xl overflow-hidden shadow-md p-3 border-t border-black/10 " key={item?.id || index}>
+                        <div className="flex justify-between py-2">
+                            <div className="px-2 w-1/2">
+                                <p className="text-sm text-[#ffb300]">{item?.created_at?.length ? moment(item?.created_at).format("DD-MM-YYYY HH:mm A"):"N/A"}</p>
+                            </div>
+                            <div className="px-2 w-1/2 flex justify-end items-center gap-1">
+                            {
+                                item?.status === "pending" ? (
+                                    <span>⌛</span>
+                                ) : item?.status === "success" ? (
+                                    <span>✅</span>
+                                )  : item?.status === "failed" ? (
+                                    <span>❌</span>
+                                )  :""                               
+                                
+                            }
+                            {
+                                item?.status === "pending" ? (
+                                    <span className="text-md text-[#ffb300] font-semibold capitalize">{item?.status || "N/A"}</span>
+                                ) : item?.status === "success" ? (
+                                    <span className="text-md text-[#00ff5e] font-semibold capitalize">{item?.status || "N/A"}</span>
+                                )  : item?.status === "failed" ? (
+                                    <span className="text-md text-[#f50f0f] font-semibold capitalize">{item?.status || "N/A"}</span>
+                                )  :""                               
+                                
+                            }
+                                
+                            </div>
+                        </div>
+                        <div className="flex justify-between py-2">
+                            <div className="px-2 w-1/2">
+                                <h5 className="text-lg text-[#ffb300] font-semibold mb-2">₹{item?.amount || "N/A"}</h5>
+                            </div>
+                            <div className="px-2 w-1/2">
+                                <h5 className="text-lg t mb-1">Transaction ID</h5>
+                                <p className="text-[14px] font-semibold">{item?.transaction_id || "N/A"}</p>
+                            </div>
+                        </div>
+                        <div className="flex justify-between border-t border-black py-2">
+                             <div className="px-2 w-1/2">
+                                 <h5 className="text-lg t mb-1">Request Type</h5>
+                                <p className="text-[14px] font-semibold capitalize">{item?.request_type || "N/A"}</p>
+                             </div>
+                             <div className="px-2 w-1/2">
+                                 <h5 className="text-lg t mb-1">Withdraw Mode</h5>
+                                <p className="text-[14px] font-semibold capitalize">{item?.withdraw_mode || "N/A"}</p>
+                             </div>
+                         </div>
+                    </div>
+                ))
+                :
+                 <div className="w-full flex py-4 flex-col items-center gap-2">
+                    <img src={NoDataFoundImage} width={100} alt="" />
+                    <p className="text-gray-400 font-bold text-sm">No Data Found</p>
+
+                </div>
+            }
+
         </div>
-      ) : (
-        ""
-      )}
+      </div>
       {!loading && data.length > 0 && (
         <Pagination
           currentPage={currentPage}
@@ -117,6 +145,7 @@ const WalletHistoryTable = ({
 
 const Wallet = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   let { appData, user } = useSelector((state) => state.appData.appData);
   
   let [activeTab, setActiveTab] = useState("addPoints");
@@ -433,6 +462,10 @@ const Wallet = () => {
     }
   }, [location.search]); // Runs whenever the query string changes
 
+  useEffect(()=>{
+    getAppData();
+  },[])
+
   return (
     <>
       <Modal isOpen={qrCodeModalURL !== null} toggle={toggleQRCodeModal}>
@@ -487,11 +520,18 @@ const Wallet = () => {
               placeholder="Add Amount"
               setPaymentMethodModal={setPaymentMethodModal}
               addBalanceMethod={addBalanceMethod}
+              appData={appData}
             />
-            <p className="px-3 mt-1 text-xs text-center text-red-600">
-              {/* आपका पैसा 5 से 10 मिनट मैं एड हो जाएगा */}
-            </p>
-            <div className="flex px-3 mt-3 justify-center w-full">
+
+            {
+                appData?.self_recharge_bonus>0?
+                    <p className="px-3 mt-2 text-xs text-center text-green-600">
+                    रिचार्ज करें और पाएं {appData?.self_recharge_bonus}% एक्स्ट्रा बैलेंस।
+                    <br /> First time offer only
+                    </p>
+                :null
+            }
+            <div className="flex px-3 mt-2 justify-center w-full">
               <button
                 type="submit"
                 className="w-full px-4 py-1 mt-2 text-white border-0 rounded-md mb-3 bg-greenLight"
@@ -642,15 +682,25 @@ const Wallet = () => {
                 type="submit"
                 className={`w-full px-4 py-1 mt-2 text-white border-0 rounded-md 
                   ${(withdrawAmount>currentUser?.balance) ? " bg-gray-500 " :"bg-greenLight"}`}
-                disabled={withdrawAmount>currentUser?.balance ? true :false}
+                // disabled={withdrawAmount>currentUser?.balance ? true :false}
               >
                 {withdrawLoading ? <Spinner /> : "Withdraw"}
               </button>
             </div>
           </form>
         )}
+
+        {
+            appData?.invite_system_enable?
+            <div className="py-2 text-center">
+                <button onClick={() => navigate("/invite-and-earn")} className="underline text-[#60a5fa] blinkText text-sm px-2">
+                    {`${appData?.invite_percentage_bet}% Bet कमीशन पाएं Invite करके।`}
+                </button>
+            </div>
+            :null
+        }
         
-        <p className="p-3 mt-1 font-semibold text-center text-blue-400 text-md">
+        <p className="p-3 mt-3 font-semibold text-center text-blue-400 text-md border-t border-black/60">
           {activeTab === "addPoints" ? "Deposit" : "Withdraw"} History
         </p>
 

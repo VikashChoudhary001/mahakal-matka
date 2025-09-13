@@ -14,7 +14,7 @@ function withdrawBalance(payload) {
 	}
 	let stringWithPayload = queryStringArray.join('&');
 	return Repository.post(
-		`/withdraw-balance?amount=${payload.amount}&withdraw_mode=${payload.mode}&details_type=${payload.bankAccountType}&${stringWithPayload}`
+		`/withdraw-balance?amount=${payload.amount}&withdraw_mode=${payload.mode}&${stringWithPayload}`
 	);
 }
 
@@ -45,6 +45,10 @@ function transferBalance(payload) {
 function getUserBalance(payload) {
 	return Repository.get(`/get-user-balance`);
 }
+function getReferralDetails(payload) {
+	return Repository.get(`/get-referral-details`);
+}
+
 
 export {
 	withdrawBalance,
@@ -53,4 +57,5 @@ export {
 	depositBalance,
 	depositBalanceQRCode,
 	depositBalancePaymentKaro,
+	getReferralDetails
 };

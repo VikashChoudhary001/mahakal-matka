@@ -37,3 +37,30 @@ table td, table th{
 .gradiantBgButton{
   background: linear-gradient(to right, transparent 0%, #0098c7 50% , transparent 100%);
 }
+
+.rotateIcon{
+  animation: 1s linear infinite rotate;
+}
+.blinkText{
+  animation: 1.2s linear infinite blink;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes blink {
+  0% {
+    transform: scale(1);
+  }
+  75% {
+    transform: scale(.95);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

@@ -3,6 +3,7 @@ import { BeatLoader } from "react-spinners";
 import { getGameRate } from "../repository/GameRateRepository";
 import { useSelector } from "react-redux";
 import { Tab } from "@headlessui/react";
+import NoDataFoundImage from "../assets/imgs/noDataFound.png";
 
 const GameRate = () => {
   const [selectedTab, setSelectedTab] = useState(() => {
@@ -40,9 +41,11 @@ const GameRate = () => {
     const filteredGameData = gameRates
 
     if (!filteredGameData?.length) return (
-      <div className="flex justify-center items-center w-full h-[300px]">
-        No data found!
-      </div>
+      <div className="w-full flex py-4 flex-col items-center gap-2">
+          <img src={NoDataFoundImage} width={100} alt="" />
+          <p className="text-gray-400 font-bold text-sm">No Data Found</p>
+
+        </div>
     );
 
     return filteredGameData.flatMap(selectedGame =>

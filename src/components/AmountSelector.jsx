@@ -1,6 +1,6 @@
 import React from "react";
 
-const AmountSelector = ({ placeholder, minAmount, onChange, value, setPaymentMethodModal,addBalanceMethod }) => {
+const AmountSelector = ({ placeholder, minAmount, onChange, value, setPaymentMethodModal,addBalanceMethod,appData }) => {
   let priceList = [minAmount, 1000, 1500, 2000, 2500, 3000];
   const _openMethodModal = ()=>{
     if(setPaymentMethodModal){
@@ -56,9 +56,16 @@ const AmountSelector = ({ placeholder, minAmount, onChange, value, setPaymentMet
             key={index}
             type="button"
             onClick={() => onChange(price)}
-            className="flex items-center justify-center p-2 text-sm font-semibold bg-white border rounded-md shadow-md border-black/200"
+            className="flex relative items-center justify-center p-2 text-sm font-semibold bg-white border rounded-md shadow-md border-black/200"
           >
             {price}
+            {
+              appData?.self_recharge_bonus ?
+                <span className="absolute top-0 right-0 text-[10px] font-normal bg-primary text-white leading-none py-[2px] px-1 rounded">
+                  +{appData?.self_recharge_bonus>0 ? parseFloat(appData?.self_recharge_bonus).toFixed(1):0}%
+                </span>
+              :null
+            }
           </button>
         ))}
       </div>

@@ -4,6 +4,7 @@ import Sidebar from "../components/Sidebar";
 import FloatingMenu from "../components/FloatingMenu";
 import { Outlet, useNavigate, useLocation, useNavigationType } from "react-router-dom";
 import Modal from "../components/Modal"
+import { useSelector } from "react-redux";
 
 const Main = () => {
   let navigate = useNavigate();
@@ -11,6 +12,7 @@ const Main = () => {
   const navigationType = useNavigationType();
   const [prevPath, setPrevPath] = useState(null);
   const [sidebarKey, setSidebarKey] = useState(0);
+  let { appData } = useSelector((state) => state?.appData?.appData);
 
   const toggleSideBar = () => {
     let bodyClassList = document.body.classList;
@@ -39,11 +41,17 @@ const Main = () => {
     }
   }, [navigationType])
 
+const showResultsOnly = appData?.show_results_only || 0; 
+
   return (
     <div className="font-poppins border border-black/20 border-t-0 border-b-0 overflow-hidden relative max-w-[480px] w-full mx-auto h-[100vh]">
       <Header toggleSideBar={toggleSideBar} />
       <Sidebar toggleSideBar={toggleSideBar} />
-      <FloatingMenu />
+      {
+        !showResultsOnly?
+        <FloatingMenu />  
+        :null
+      }
       <div className="h-[calc(100dvh-56px)] bg-primary/5 pb-12 overflow-auto main-wrapper">
         <Outlet />
       </div>

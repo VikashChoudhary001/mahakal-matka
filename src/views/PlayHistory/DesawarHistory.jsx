@@ -5,6 +5,7 @@ import { getMarkets } from "../../repository/MarketRepository";
 import { deleteSinglePlay } from "../../repository/GameRepository";
 import Pagination from "../../components/Pagination";
 import Spinner from "../../components/Spinner";
+import NoDataFoundImage from "../../assets/imgs/noDataFound.png";
 
 const DesawarHistory = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -196,7 +197,11 @@ const DesawarHistory = () => {
         </div>
       )}
       {!dataLoading && historyData.length === 0 && (
-        <div className="w-full p-2 font-semibold text-center">No Data Found</div>
+        <div className="w-full flex py-4 flex-col items-center gap-2">
+          <img src={NoDataFoundImage} width={100} alt="" />
+          <p className="text-gray-400 font-bold text-sm">No Data Found</p>
+
+        </div>
       )}
       {!dataLoading && historyData.length > 0 && (
         <div className="pb-4">

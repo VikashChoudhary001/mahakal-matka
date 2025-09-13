@@ -175,7 +175,7 @@ const Chat = () => {
           ))}
       </div>
 
-      <div className="absolute gap-2 bottom-0 px-3 left-0 w-full h-[50px] bg-primary flex items-center">
+      <div className=" gap-2 px-3 w-full h-[50px] bg-primary flex items-center">
         <input
           type="text"
           className="w-full px-3 py-1.5 rounded-md"

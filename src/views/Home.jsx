@@ -6,7 +6,7 @@ import Withdraw from "../assets/imgs/withdraw.png";
 import deposit1 from '../assets/imgs/deposit1.png';
 import widthdraw1 from '../assets/imgs/withdraw1.png';
 import Layer from '../assets/imgs/Layer.png';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Timer from "../components/Timer";
 import Auth from '../layouts/Auth.jsx';
 import moment from "moment";
@@ -17,12 +17,14 @@ import Modal from "../components/Modal.jsx"
 // const Modal = React.lazy(() => import('../components/Modal'));
 
 const Home = () => {
+    const navigate = useNavigate();
     let { appData } = useSelector((state) => state.appData.appData);
     let { markets } = useSelector((state) => state.markets);
     let { HomeNewView } = useSelector((state) => state.FlowApp);
     let [isOpen, setOpen] = useState(false);
     const [authModalOpen, setAuthModalOpen] = useState(false);
     const [hasShownModal, setHasShownModal] = useState(false);
+    const [openLoginModal, setOpenLoginModal] = useState(false);
 
 
     const getCurrentDate = () => {
@@ -69,9 +71,20 @@ const Home = () => {
         if (!token) {
             e.preventDefault();
             localStorage.setItem("authMenu", 1)
-            setAuthModalOpen(true); // Show authentication modal
+            setAuthModalOpen(true);
+            setOpenLoginModal(true)
+        }else{
         }
     };
+
+    const openLink = (url) =>{
+        if(url?.includes("http")){
+            window.open(url,"_blank");
+        }else{
+            navigate(url);
+        }
+
+    }
 
 
 
@@ -238,11 +251,13 @@ const Home = () => {
         );
     }
 
+    const showResultsOnly = appData?.show_results_only||0
+
     return (
         <>
             <div className="p-2 pt-1 pb-5">
                 <div className="w-full rounded-md overflow-hidden mb-2">
-                    <img src={appData?.homepage_image_url} className="cursor-pointer" alt="" onClick={() => window.location.href = appData?.slider_url} />
+                    <img src={appData?.homepage_image_url} className="cursor-pointer" alt="" onClick={() => token? openLink(): setAuthModalOpen(true)} />
                 </div>
                 {
                     appData?.homepage_message?.length > 0 ?
@@ -250,14 +265,14 @@ const Home = () => {
                             <span>{appData.homepage_message}</span>
                             {
                                 appData?.homepage_button_text?.length > 0 ?
-                                    <a
-                                        href={appData?.homepage_button_url || null}
+                                    <button
+                                        onClick={ () => token ?openLink(appData?.homepage_button_url): setOpenLoginModal(true) }
                                         rel="noreferrer"
                                         className="px-4 py-1 mt-2 rounded-2xl bg-orange"
                                         target="_blank"
                                     >
                                         {appData.homepage_button_text}
-                                    </a>
+                                    </button>
                                     : null
                             }
                         </div>
@@ -266,24 +281,28 @@ const Home = () => {
                 }
 
                 {/* Deposit and Withdrawal buttons */}
-                <div className="flex justify-between items-center gap-2 mb-3">
-                    <Link
-                        to={{ pathname: "/wallet", search: "?tab=addPoints" }}
-                        className="shadow-md rounded-lg w-full h-[40px] flex items-center justify-center gap-2 p-2 border-[3px] border-[#fff] bg-[#2ed838] hover:shadow-xl transition-shadow duration-300"
-                        onClick={handleProtectedClick} // Added click handler here
-                    >
-                        <img src={deposit1} alt="" className="text-[#fff] w-6 h-6" />
-                        <span className="text-white text-[16px] font-extrabold">DEPOSIT</span>
-                    </Link>
-                    <Link
-                        to={{ pathname: "/wallet", search: "?tab=withdrawPoints" }}
-                        className="shadow-md rounded-lg w-full h-[40px] flex items-center justify-center gap-2 p-2 border-[3px] border-[#fff] bg-[#d82e2e] hover:shadow-xl transition-shadow duration-300"
-                        onClick={handleProtectedClick} // Added click handler here
-                    >
-                        <img src={widthdraw1} alt="" className="text-[#fff] w-8 h-8" />
-                        <span className="text-white text-[16px] font-extrabold">WITHDRAWAL</span>
-                    </Link>
-                </div>
+                {
+                    !showResultsOnly ?
+                        <div className="flex justify-between items-center gap-2 mb-3">
+                            <Link
+                                to={{ pathname: "/wallet", search: "?tab=addPoints" }}
+                                className="shadow-md rounded-lg w-full h-[40px] flex items-center justify-center gap-2 p-2 border-[3px] border-[#fff] bg-[#2ed838] hover:shadow-xl transition-shadow duration-300"
+                                onClick={handleProtectedClick} // Added click handler here
+                            >
+                                <img src={deposit1} alt="" className="text-[#fff] w-6 h-6" />
+                                <span className="text-white text-[16px] font-extrabold">DEPOSIT</span>
+                            </Link>
+                            <Link
+                                to={{ pathname: "/wallet", search: "?tab=withdrawPoints" }}
+                                className="shadow-md rounded-lg w-full h-[40px] flex items-center justify-center gap-2 p-2 border-[3px] border-[#fff] bg-[#d82e2e] hover:shadow-xl transition-shadow duration-300"
+                                onClick={handleProtectedClick} // Added click handler here
+                            >
+                                <img src={widthdraw1} alt="" className="text-[#fff] w-8 h-8" />
+                                <span className="text-white text-[16px] font-extrabold">WITHDRAWAL</span>
+                            </Link>
+                        </div>
+                    :null
+                }
                 {/* <div className="flex justify-center">
                     <a href={appData?.telegram_link} className="shadow-md rounded-lg w-1/2 h-[50px] flex items-center justify-center gap-2 p-2 border-[3px] border-[#fff] bg-[#2eb9d8] hover:shadow-xl transition-shadow duration-300">
                         <i className="fab fa-telegram " style={{ fontSize: "20px" }}></i>
@@ -339,9 +358,46 @@ const Home = () => {
                 )}
 
                 {/* <Suspense fallback={<div>Loading...</div>}> */}
-                <Auth isOpen={authModalOpen} toggle={() => setAuthModalOpen(false)} />
+                {/* <Auth isOpen={authModalOpen} toggle={() => setAuthModalOpen(false)} /> */}
                 {/* </Suspense> */}
             </div >
+
+            {
+                !showResultsOnly ?
+                    <Modal
+                        isOpen={openLoginModal}
+                        toggle={()=>setOpenLoginModal(false)}
+                        className="custom-modal"
+                        centered
+                        >
+                        <div className="font-semibold text-white bg-primary " style={{width:"400px",maxWidth:"90vw"}}>
+                            <div className="flex justify-between p-3 border-b border-white">
+                            <h4>Need Login</h4>
+                            <button onClick={()=>setOpenLoginModal(false)}>
+                                <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                strokeWidth="1.5"
+                                stroke="currentColor"
+                                className="w-6 h-6"
+                                >
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                            </div>
+                            <div className="flex flex-col items-center gap-4 pt-4 pb-8">
+                                <div className="text-md">
+                                    To use this feature, you need to login
+                                </div>
+                                <button className="p-2 px-8 text-md text-white rounded-md bg-green-600 " onClick={(()=>navigate("/auth/login"))}>
+                                    Login 
+                                </button>
+                            </div>
+                        </div>
+                    </Modal>
+                :null
+            }
         </>
     );
 };

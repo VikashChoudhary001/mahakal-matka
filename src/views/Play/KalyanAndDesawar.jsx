@@ -8,6 +8,8 @@ import Close_b from "../../assets/imgs/close_b.png";
 import Chat1 from "../../assets/imgs/play_now.png";
 import Auth from '../../layouts/Auth.jsx';
 import { useNavigate } from "react-router-dom";
+import Modal from "../../components/Modal.jsx";
+import { useSelector } from "react-redux";
 
 const KalyanAndDesawar = ({
   tabBorderColor,
@@ -18,9 +20,13 @@ const KalyanAndDesawar = ({
 }) => {
   const [marketsData, setMarketData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [openLoginModal, setOpenLoginModal] = useState(false);
+  let { appData } = useSelector((state) => state.appData.appData);
   const [selectedTab, setSelectedTab] = useState(() => {
     return localStorage.getItem("selectedTab") || "general";
   });
+  const showResultsOnly = appData?.show_results_only || 0; 
+
   const navigate = useNavigate();
   const [authModalOpen, setAuthModalOpen] = useState(false); // State for authentication modal
 
@@ -51,6 +57,7 @@ const KalyanAndDesawar = ({
   }, [selectedTab]);
 
   const handleProtectedClick = (e, marketId,marketName) => {
+    if(showResultsOnly) return
     if (!token) {
       e.preventDefault();
       localStorage.setItem("authMenu", 1);
@@ -81,6 +88,7 @@ const KalyanAndDesawar = ({
       navigate(`/play-game?gameType=desawar&market_id=${market?.id}`);
     }
   };
+
   return (
     <div className="px-1 pb-8">
       <Tab.Group
@@ -134,55 +142,59 @@ const KalyanAndDesawar = ({
                         <p className="text-[12px]">Close: {market?.close_time}</p>
                       </div>
 
-                      <div className="p-2 w-full flex justify-between items-center">
-                        <img
-                          src={Chart_b}
-                          alt="Chart"
-                          className="w-[50px] h-[50px] object-cover cursor-pointer my-[-5px]"
-                          onClick={(e) => handleProtectedClick(e, market?.id,market?.name)}
-                        />
-
-                        <div className="flex flex-col justify-center items-center">
-                          <span className="text-[13px] font-semibold uppercase text-[#4f4f4f]">
-                            {market?.name}
-                          </span>
-                          <span className="text-[12px] font-semibold uppercase text-primary">
-                            {market?.last_result
-                              ? market?.last_result.result
-                              : "***-**-***"}
-                          </span>
-                          <span
-                            className={`text-[12px] ${!market?.game_on
-                              ? "text-orange"
-                              : "text-greenLight"
-                              }`}
-                          >
-                            {market?.game_on
-                              ? "Market is Running"
-                              : "Market is Close"}
-                          </span>
-                        </div>
-                        <div
-                          className={`w-[50px] h-[50px] text-center font-semibold rounded-full`}
-                        >
-                          {!market?.game_on ? (
-                            <div style={{ pointerEvents: "none" }}>
-                              <img
-                                src={Close_b}
-                                alt="Close"
-                                className="w-full h-full object-cover cursor-not-allowed"
-                              />
-                            </div>
-                          ) : (
+                      {
+                        !showResultsOnly && (
+                          <div className="p-2 w-full flex justify-between items-center">
                             <img
-                              src={Chat1}
-                              alt="Play Now"
-                              className="w-full h-full object-cover cursor-pointer"
-                              onClick={() => handlekalyanChatClick(market)} 
+                              src={Chart_b}
+                              alt="Chart"
+                              className="w-[50px] h-[50px] object-cover cursor-pointer my-[-5px]"
+                              onClick={(e) => token ? handleProtectedClick(e, market?.id,market?.name) : setOpenLoginModal(true)}
                             />
-                          )}
-                        </div>
-                      </div>
+
+                            <div className="flex flex-col justify-center items-center">
+                              <span className="text-[13px] font-semibold uppercase text-[#4f4f4f]">
+                                {market?.name}
+                              </span>
+                              <span className="text-[12px] font-semibold uppercase text-primary">
+                                {market?.last_result
+                                  ? market?.last_result.result
+                                  : "***-**-***"}
+                              </span>
+                              <span
+                                className={`text-[12px] ${!market?.game_on
+                                  ? "text-orange"
+                                  : "text-greenLight"
+                                  }`}
+                              >
+                                {market?.game_on
+                                  ? "Market is Running"
+                                  : "Market is Close"}
+                              </span>
+                            </div>
+                            <div
+                              className={`w-[50px] h-[50px] text-center font-semibold rounded-full`}
+                            >
+                              {!market?.game_on ? (
+                                <div style={{ pointerEvents: "none" }}>
+                                  <img
+                                    src={Close_b}
+                                    alt="Close"
+                                    className="w-full h-full object-cover cursor-not-allowed"
+                                  />
+                                </div>
+                              ) : (
+                                <img
+                                  src={Chat1}
+                                  alt="Play Now"
+                                  className="w-full h-full object-cover cursor-pointer"
+                                  onClick={() =>token? handlekalyanChatClick(market):setOpenLoginModal(true)} 
+                                />
+                              )}
+                            </div>
+                          </div>                          
+                        )
+                      }
                     </div>
                   ))}
               </Tab.Panel>
@@ -203,7 +215,7 @@ const KalyanAndDesawar = ({
                           src={Chart_b}
                           alt="Chart"
                           className="w-[50px] h-[50px] object-cover cursor-pointer"
-                          onClick={(e) => handleProtectedClick(e, market?.id)}
+                          onClick={(e) => token? handleProtectedClick(e, market?.id) : setOpenLoginModal(true)}
                         />
 
                         <div className="flex flex-col justify-center items-center">
@@ -229,22 +241,26 @@ const KalyanAndDesawar = ({
                         <div
                           className={`w-[50px] h-[50px] text-center font-semibold rounded-full`}
                         >
-                          {!market?.game_on ? (
-                            <div style={{ pointerEvents: "none" }}>
-                              <img
-                                src={Close_b}
-                                alt="Close"
-                                className="w-full h-full object-cover cursor-not-allowed"
-                              />
-                            </div>
-                          ) : (
-                            <img
-                              src={Chat1}
-                              alt="Play Now"
-                              className="w-full h-full object-cover cursor-pointer"
-                              onClick={() => handleChatClick(market)} // Call your function on click
-                            />
-                          )}
+                          {
+                            !showResultsOnly?
+                              ( !market?.game_on ? (
+                                  <div style={{ pointerEvents: "none" }}>
+                                    <img
+                                      src={Close_b}
+                                      alt="Close"
+                                      className="w-full h-full object-cover cursor-not-allowed"
+                                    />
+                                  </div>
+                                ) : (
+                                  <img
+                                    src={Chat1}
+                                    alt="Play Now"
+                                    className="w-full h-full object-cover cursor-pointer"
+                                    onClick={() => token? handleChatClick(market) : setOpenLoginModal(true)} // Call your function on click
+                                  />
+                                ))
+                            :null
+                        }
                         </div>
                       </div>
                     </div>
@@ -257,6 +273,43 @@ const KalyanAndDesawar = ({
 
       {/* Render the authentication modal */}
       <Auth isOpen={authModalOpen} toggle={() => setAuthModalOpen(false)} />
+
+        {
+          !showResultsOnly ?
+            <Modal
+                isOpen={openLoginModal}
+                toggle={()=>setOpenLoginModal(false)}
+                className="custom-modal"
+                centered
+                >
+                <div className="font-semibold text-white bg-primary " style={{width:"400px",maxWidth:"90vw"}}>
+                    <div className="flex justify-between p-3 border-b border-white">
+                    <h4>Need Login</h4>
+                    <button onClick={()=>setOpenLoginModal(false)}>
+                        <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="currentColor"
+                        className="w-6 h-6"
+                        >
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                    </div>
+                    <div className="flex flex-col items-center gap-4 pt-4 pb-8">
+                        <div className="text-md">
+                            To use this feature, you need to login
+                        </div>
+                        <button className="p-2 px-8 text-md text-white rounded-md bg-green-600 " onClick={(()=>navigate("/auth/login"))}>
+                            Login 
+                        </button>
+                    </div>
+                </div>
+            </Modal>
+          :null
+        }
     </div>
   );
 };

@@ -18,8 +18,10 @@ const Login = () => {
     const navigate = useNavigate();
     let [loading, setLoading] = useState();
     let [isOTPScreen, setOTPScreen] = useState(false);
+    let [isNewUser,setIsNewUser] = useState(false)
     let [phone, setPhone] = useState("");
     let [otp, setOTP] = useState("");
+    let [referralCode,setRefferalCode] = useState("")
     
     const phoneInputRef = useRef(null);
     const otpInputRef = useRef(null);
@@ -38,6 +40,9 @@ const Login = () => {
             let { data } = await sendLoginOtp(payload);
             if (data.error === false) {
                 setOTPScreen(true);
+                if(data?.response?.newUser){
+                    setIsNewUser(true)
+                }
                  setTimeout(() => {
                     otpInputRef.current?.focus();
                 }, 100);
@@ -57,8 +62,12 @@ const Login = () => {
         try {
             let payload = {
                 phone,
-                otp,
+                otp
             };
+            if(referralCode?.trim()?.length>0){
+                payload.referralCode = referralCode
+            }
+            payload.referralCode = referralCode
             let { data } = await verifyLoginOtp(payload);
             if (data.error === false) {
                 // Call login success callback for Android app
@@ -72,7 +81,7 @@ const Login = () => {
 
                 navigate("/");
             } else {
-                toast.error(data.message);
+                toast.error(data?.message || "Something went wrong!");
             }
         } catch {
         } finally {
@@ -111,10 +120,11 @@ const Login = () => {
                             className="block w-full h-10 px-2 py-1 mt-1 text-black border rounded border-black/40"
                             type="number"
                             value={phone}
-                            onChange={(e) => setPhone(e.target.value)}
+                            onChange={(e) =>  setPhone(e.target.value)}
                             maxLength={10}
                             max={9999999999}
                             placeholder="Enter Mobile Number"
+                            disabled={isOTPScreen}
                         />
                     </div>
                     {
@@ -143,10 +153,25 @@ const Login = () => {
                                     placeholder="Enter OTP"
                                 />
                             </div>
+                            {
+                                isNewUser?
+                                    <div className="flex flex-col w-full mt-3">
+                                        <label style={{ color: "#fff", fontSize: "18px" }}>Referral Code (Optional)</label>
+                                        <input
+                                            className="block w-full h-10 px-2 py-1 mt-1 text-black border rounded border-black/40"
+                                            type="text"
+                                            value={referralCode}
+                                            onChange={(e) => setRefferalCode(e.target.value)}
+                                            placeholder="Enter Referral Code"
+                                        />
+                                    </div>
+
+                                :null
+                            }
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className="block w-full p-3 mt-2 font-semibold text-white rounded-md bg-[#006b9fd6]"
+                                className="block w-full p-3 mt-4 font-semibold text-white rounded-md bg-[#006b9fd6]"
                             >
                                 {loading ? <Spinner /> : "Login"}
                             </button>

@@ -21,7 +21,7 @@ const KalyanOnly = ({ tabBorderColor }) => {
   const [openLoginModal,setOpenLoginModal] = useState(false);
 
   const token = localStorage.getItem("authToken");
-  const showResultsOnly = appData?.appData?.show_results_only || 0; 
+  let showResultsOnly = appData?.appData?.show_results_only || 0; 
   if(ShowEveryThing){
     showResultsOnly = 0;
   }

@@ -26,7 +26,7 @@ const KalyanAndDesawar = ({
   const [selectedTab, setSelectedTab] = useState(() => {
     return localStorage.getItem("selectedTab") || "general";
   });
-  const showResultsOnly = appData?.show_results_only || 0; 
+  let showResultsOnly = appData?.show_results_only || 0; 
   if(ShowEveryThing){
     showResultsOnly = 0;
   }

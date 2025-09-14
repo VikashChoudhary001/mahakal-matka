@@ -80,7 +80,6 @@ const KalyanOnly = ({ tabBorderColor }) => {
 
 
   const handleChatClick = (market) => {
-    console.log("market : ",market)
     if (!token) {
       localStorage.setItem("authMenu", 1)
       setAuthModalOpen(true);

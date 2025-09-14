@@ -24,6 +24,12 @@ function depositBalance(payload) {
   );
 }
 
+function depositBalancePayFromUpi(payload) {
+    return Repository.post(
+      `/pay-from-upi-payment-url?amount=${payload.amount}`
+    );
+  }
+
 function depositBalanceQRCode(payload) {
 	return Repository.post(
 		`/i-online-pay-upi-payment-url?amount=${payload.amount}`
@@ -57,5 +63,7 @@ export {
 	depositBalance,
 	depositBalanceQRCode,
 	depositBalancePaymentKaro,
-	getReferralDetails
+	getReferralDetails,
+	depositBalancePayFromUpi
+
 };

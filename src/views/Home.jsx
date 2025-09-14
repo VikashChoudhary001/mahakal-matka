@@ -80,7 +80,7 @@ const Home = () => {
     const openLink = (url) =>{
         if(url?.includes("http")){
             window.open(url,"_blank");
-        }else{
+        }else if(url){
             navigate(url);
         }
 
@@ -257,10 +257,10 @@ const Home = () => {
         <>
             <div className="p-2 pt-1 pb-5">
                 <div className="w-full rounded-md overflow-hidden mb-2">
-                    <img src={appData?.homepage_image_url} className="cursor-pointer" alt="" onClick={() => token? openLink(): setAuthModalOpen(true)} />
+                    <img src={appData?.homepage_image_url} className="cursor-pointer" alt="" onClick={() => token? openLink(appData?.slider_url): setAuthModalOpen(true)} />
                 </div>
                 {
-                    appData?.homepage_message?.length > 0 ?
+                    (appData?.homepage_message?.length > 0 &&  !showResultsOnly) ?
                         <div className="flex flex-col items-center justify-center p-2 mb-2 font-semibold text-center text-white bg-yellow-600 rounded-md">
                             <span>{appData.homepage_message}</span>
                             {

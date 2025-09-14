@@ -149,7 +149,7 @@ const FloatingMenu = () => {
                                 display: "flex",
                                 alignItems: "center",
                                 gap: "10px",
-                                padding: "3px 8px",
+                                padding: "5px 8px",
                                 borderRadius: "4px",
                                 background: "transparent",
                                 border: "1px solid #0098c7",
@@ -161,8 +161,8 @@ const FloatingMenu = () => {
                             Download
                         </button>
                     </div>
-                    <div className="flex items-center gap-4">
-                        <p className="textalign-center">Download the app now!</p>
+                    <div className="flex items-center gap-4 pl-2">
+                        <p className="text-sm text-center">Download the app now!</p>
                         <button
                             onClick={handleCloseDownloadBar}
                             style={{

@@ -14,15 +14,8 @@ const Help = () => {
                     __html: appData?.custom_message_3_help_page_1,
                 }}
             ></span>
-            <div className="my-3 py-2 border border-l-0 border-r-0 border-black/40">
-                <span
-                    dangerouslySetInnerHTML={{
-                        __html: appData?.custom_message_5_terms,
-                    }}
-                ></span>
-            </div>
 
-            <div className="flex justify-center items-center gap-2 mt-2 pb-4 border-b border-black/40">
+            <div className="flex justify-center items-center gap-2 mt-5 pb-4 pt-3 border-b border-t border-black/40">
                 {
                     appData?.whatsapp_enable ?
                         <a href={appData?.whatsapp_number} target="_blank" className="shadow-md rounded-lg w-1/2 h-[50px] flex items-center justify-center gap-2 p-2 border-[3px] border-[#fff] bg-[#2ed838] hover:shadow-xl transition-shadow duration-300">
@@ -44,15 +37,8 @@ const Help = () => {
             <span className="text-white text-[12px] font-extrabold">WITHDRAWAL CHAT</span>
           </Link> */}
             </div>
-            {/* <p style={{textAlign:"center",fontSize:"16px",color:"#000", margin:"10px 0 10px"}}>Or</p>
-        <div className="flex justify-center">
-             <a href="tel:8570869547" className="shadow-md rounded-lg w-1/2 h-[50px] flex items-center justify-center gap-2 p-2 border-[3px] border-[#fff] bg-[#2ed838] hover:shadow-xl transition-shadow duration-300">
-             <i className="fas fa-phone-alt" style={{fontSize:"20px"}}></i>
-            <span className="text-white text-[12px] font-extrabold">Call Us</span>
-          </a>
-        </div> */}
 
-          <div className="grid grid-cols-2 gap-4 p-3 text-center">
+          <div className="grid grid-cols-2 gap-4 py-3 text-center">
             <div>
               <Link
                 to="/withdrawal-chat"

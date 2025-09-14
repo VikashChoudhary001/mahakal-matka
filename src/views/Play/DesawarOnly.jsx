@@ -52,7 +52,7 @@ const DesawarOnly = ({ tabBorderColor }) => {
       setAuthModalOpen(true);
     } else {
       // Use navigate to redirect in the same tab
-      navigate(`/general-sub-games?gameType=desawar&market_id=${market?.id}&tabType=desawar`);
+      navigate(`/general-sub-games?gameType=desawar&market_id=${market?.id}&tabType=desawar&open=${market?.open_game_status}&close=${market?.close_game_status}`);
     }
   };
 

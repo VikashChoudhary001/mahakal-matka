@@ -102,7 +102,7 @@ const DualPana = () => {
        
       </div>
       <div className='max-w-[400px] m-auto mt-4 fixed bottom-0 left-0 right-0 p-4'>
-        <button className='w-full p-3 bg-[#ac407b] text-white rounded' onClick={handleSubmit}>Submit1</button>
+        <button className='w-full p-3 bg-[#ac407b] text-white rounded' onClick={handleSubmit}>Submit</button>
       </div>
       <Popup show={showPopup} data={dataToShow} onClose={closePopup} onSubmitted={() => { setInputValues({}) }} />
     </>

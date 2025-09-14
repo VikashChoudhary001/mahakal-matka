@@ -4,8 +4,11 @@ import { sendLoginOtp, verifyLoginOtp } from "../repository/AuthRepository";
 import Repository from "../repository/Repository";
 import { toast } from "react-toastify";
 import Spinner from "../components/Spinner";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import BannerLogo from "../assets/imgs/banner_login_page.jpg";
+import { getAppData } from "../repository/DataRepository";
+import { useDispatch } from "react-redux";
+import { setAppData } from "../store/features/appData/appDataSlice";
 
 // Function to call Android app callback on login success
 function loginSuccess(userNumber) {
@@ -16,12 +19,14 @@ function loginSuccess(userNumber) {
 
 const Login = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    let [searchParams] = useSearchParams();
     let [loading, setLoading] = useState();
     let [isOTPScreen, setOTPScreen] = useState(false);
     let [isNewUser,setIsNewUser] = useState(false)
     let [phone, setPhone] = useState("");
     let [otp, setOTP] = useState("");
-    let [referralCode,setRefferalCode] = useState("")
+    let [referralCode,setRefferalCode] = useState(searchParams?.get("referralCode")||"")
     
     const phoneInputRef = useRef(null);
     const otpInputRef = useRef(null);
@@ -80,6 +85,10 @@ const Login = () => {
                 localStorage.setItem("welcomeStatus", true);
 
                 navigate("/");
+                let response = await getAppData();
+                if(response?.data?.response){
+                    dispatch(setAppData(response?.data?.response));
+                }
             } else {
                 toast.error(data?.message || "Something went wrong!");
             }
@@ -99,9 +108,7 @@ const Login = () => {
         >
 
 
-                <p style={{ textAlign: "center", fontSize: "22px", color: "#fff", margin: "20px 0 0" }}>Login</p>
-            <div className="relative flex flex-col p-5 mt-8 rounded-md" style={{ border: "1px solid #fff" }}>
-            <div className="flex justify-center mb-3 h-auto">
+            <div className="flex justify-center mb-2  h-auto">
                 {/* <img
                     src={Logo}
                     alt="Logo"
@@ -111,6 +118,8 @@ const Login = () => {
                 <img src={BannerLogo} alt="banner" style={{ display: "block",width:"100%" }} />
 
             </div>
+            <div className="relative flex flex-col p-5 mt-6 rounded-md" style={{ border: "1px solid #fff" }}>
+                <p style={{ textAlign: "center", fontSize: "22px", color: "#fff", margin: "0 0 0" }}>Login</p>
                 
                 <form onSubmit={handlePhoneSubmit}>
                     <div className="flex flex-col w-full">
@@ -173,7 +182,7 @@ const Login = () => {
                                 disabled={loading}
                                 className="block w-full p-3 mt-4 font-semibold text-white rounded-md bg-[#006b9fd6]"
                             >
-                                {loading ? <Spinner /> : "Login"}
+                                {loading ? <Spinner /> : isNewUser? "Register":"Login"}
                             </button>
                         </form>
                     :null

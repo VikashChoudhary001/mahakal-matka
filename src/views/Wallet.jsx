@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import {
   depositBalance,
+  depositBalancePayFromUpi,
   depositBalancePaymentKaro,
   depositBalanceQRCode,
   transferBalance,
@@ -75,7 +76,7 @@ const WalletHistoryTable = ({
                     <div className="mb-4 rounded-xl overflow-hidden shadow-md p-3 border-t border-black/10 " key={item?.id || index}>
                         <div className="flex justify-between py-2">
                             <div className="px-2 w-1/2">
-                                <p className="text-sm text-[#ffb300]">{item?.created_at?.length ? moment(item?.created_at).format("DD-MM-YYYY HH:mm A"):"N/A"}</p>
+                                <p className="text-sm text-primary">{item?.created_at?.length ? moment(item?.created_at).format("DD-MM-YYYY HH:mm A"):"N/A"}</p>
                             </div>
                             <div className="px-2 w-1/2 flex justify-end items-center gap-1">
                             {
@@ -90,11 +91,11 @@ const WalletHistoryTable = ({
                             }
                             {
                                 item?.status === "pending" ? (
-                                    <span className="text-md text-[#ffb300] font-semibold capitalize">{item?.status || "N/A"}</span>
+                                    <span className="text-sm text-[#ffb300] font-semibold capitalize">{item?.status || "N/A"}</span>
                                 ) : item?.status === "success" ? (
-                                    <span className="text-md text-[#00ff5e] font-semibold capitalize">{item?.status || "N/A"}</span>
+                                    <span className="text-sm text-green-600 font-semibold capitalize">{item?.status || "N/A"}</span>
                                 )  : item?.status === "failed" ? (
-                                    <span className="text-md text-[#f50f0f] font-semibold capitalize">{item?.status || "N/A"}</span>
+                                    <span className="text-sm text-[#f50f0f] font-semibold capitalize">{item?.status || "N/A"}</span>
                                 )  :""                               
                                 
                             }
@@ -103,20 +104,20 @@ const WalletHistoryTable = ({
                         </div>
                         <div className="flex justify-between py-2">
                             <div className="px-2 w-1/2">
-                                <h5 className="text-lg text-[#ffb300] font-semibold mb-2">₹{item?.amount || "N/A"}</h5>
+                                <h5 className="text-sm text-primary font-semibold mb-2">₹{item?.amount || "N/A"}</h5>
                             </div>
                             <div className="px-2 w-1/2">
-                                <h5 className="text-lg t mb-1">Transaction ID</h5>
+                                <h5 className="text-sm t mb-1">Transaction ID</h5>
                                 <p className="text-[14px] font-semibold">{item?.transaction_id || "N/A"}</p>
                             </div>
                         </div>
                         <div className="flex justify-between border-t border-black py-2">
                              <div className="px-2 w-1/2">
-                                 <h5 className="text-lg t mb-1">Request Type</h5>
+                                 <h5 className="text-sm t mb-1">Request Type</h5>
                                 <p className="text-[14px] font-semibold capitalize">{item?.request_type || "N/A"}</p>
                              </div>
                              <div className="px-2 w-1/2">
-                                 <h5 className="text-lg t mb-1">Withdraw Mode</h5>
+                                 <h5 className="text-sm t mb-1">Withdraw Mode</h5>
                                 <p className="text-[14px] font-semibold capitalize">{item?.withdraw_mode || "N/A"}</p>
                              </div>
                          </div>
@@ -301,6 +302,7 @@ const Wallet = () => {
       setBalanceMethodData({bank:formData});
   }
 
+
   const handleDepositSubmit = async (e) => {
     e.preventDefault();
     // if(addBalanceMethod==="upi"){
@@ -367,6 +369,15 @@ const Wallet = () => {
           let aHref = document.createElement('a');
           aHref.href = data.response.payment_url;
           // aHref.target = "_blank";
+          aHref.click();
+        }
+      }else if (paymentMethod === "pay_from_upi") {
+        let { data } = await depositBalancePayFromUpi(payload);
+        if (data.error) {
+          toast.error(data.message);
+        } else {
+          let aHref = document.createElement('a');
+          aHref.href = data.response.payment_url;
           aHref.click();
         }
       }
@@ -462,10 +473,6 @@ const Wallet = () => {
     }
   }, [location.search]); // Runs whenever the query string changes
 
-  useEffect(()=>{
-    getAppData();
-  },[])
-
   return (
     <>
       <Modal isOpen={qrCodeModalURL !== null} toggle={toggleQRCodeModal}>
@@ -525,7 +532,7 @@ const Wallet = () => {
 
             {
                 appData?.self_recharge_bonus>0?
-                    <p className="px-3 mt-2 text-xs text-center text-green-600">
+                    <p className="px-3 mt-2 text-xs text-center text-primary">
                     रिचार्ज करें और पाएं {appData?.self_recharge_bonus}% एक्स्ट्रा बैलेंस।
                     <br /> First time offer only
                     </p>
@@ -555,8 +562,9 @@ const Wallet = () => {
             {/* <p className="px-3 mt-2 text-xs text-center text-blue-400">
               Win Amount :- 0
             </p> */}
-            <p className="px-3 mt-2 text-sm font-semibold text-center text-black">
-              Bank Account Details
+            <p className="px-3 mt-2 mb-2 text-sm font-semibold text-center text-black">
+              {/* {method==="bank"?"Bank account details" : "UPI ID"}*/}
+               Enter Withdraw Details
             </p>
             {/* <div className="flex justify-center gap-3 px-2">
               <label className="inline-flex items-center gap-1">
@@ -586,7 +594,7 @@ const Wallet = () => {
             {appData.enable_upi_withdraw === 1 &&
               appData.enable_bank_withdraw === 1 && (
                 <div className="flex flex-col px-3">
-                  <label className="text-sm font-bold">Withdrawal Method</label>
+                  {/* <label className="text-sm font-bold">Withdrawal Method</label> */}
                   <select
                     className="w-[100%] px-2 py-1 mt-1 text-black border rounded h-9 border-black/30"
                     name="method"
@@ -693,14 +701,14 @@ const Wallet = () => {
         {
             appData?.invite_system_enable?
             <div className="py-2 text-center">
-                <button onClick={() => navigate("/invite-and-earn")} className="underline text-[#60a5fa] blinkText text-sm px-2">
+                <button onClick={() => navigate("/invite-and-earn")} className="underline text-primary blinkText text-sm px-2">
                     {`${appData?.invite_percentage_bet}% Bet कमीशन पाएं Invite करके।`}
                 </button>
             </div>
             :null
         }
         
-        <p className="p-3 mt-3 font-semibold text-center text-blue-400 text-md border-t border-black/60">
+        <p className="p-3 mt-3 font-semibold text-center text-primary text-md border-t border-black/60">
           {activeTab === "addPoints" ? "Deposit" : "Withdraw"} History
         </p>
 

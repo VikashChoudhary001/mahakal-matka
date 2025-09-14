@@ -122,14 +122,14 @@ const GeneralHistory = () => {
                                 className="h-8 px-2 py-1 text-black border-0 rounded"
                             >
                                 <option value="all">All</option>
-                                <option value="4">Single Ank</option>
-                                <option value="5">Jodi</option>
-                                <option value="6">Single Pana</option>
-                                <option value="7">Double Pana</option>
-                                <option value="8">Triple Pana</option>
-                                <option value="9">Half Sangam A</option>
-                                <option value="10">Half Sangam B</option>
-                                <option value="11">Full Sangam</option>
+                                <option value="1">Single Digit</option>
+                                <option value="2">Jodi Digits</option>
+                                <option value="3">Single Pana</option>
+                                <option value="4">Double Pana</option>
+                                <option value="5">Triple Pana</option>
+                                <option value="6">Half Sangam A</option>
+                                <option value="7">Half Sangam B</option>
+                                <option value="8">Full Sangam</option>
                             </select>
                         </div>
 
@@ -222,8 +222,8 @@ const GeneralHistory = () => {
                             </div>
                         :historyData?.length>0 ?
                         historyData?.map((item,index)=>
-                            <div className="mb-4 rounded-xl overflow-hidden shadow-md " key={item?.id || index}>
-                                <h4 className="font-semibold text-lg bg-primary p-2 text-center text-white ">
+                            <div className="mb-3 rounded-xl overflow-hidden shadow-md " key={item?.id || index}>
+                                <h4 className="font-semibold text-md bg-green-500 p-2 text-center text-white ">
                                     {item?.market?.name || "N/A"} ({item?.session || "N/A"})
                                 </h4>
                                 <div className="flex justify-between py-2">
@@ -240,24 +240,24 @@ const GeneralHistory = () => {
                                         <p className="font-semibold text-md text-center">{item?.amount}</p>
                                     </div>
                                 </div>
-                                <div className="py-2 text-center">
+                                <div className="pb-2 text-sm text-center">
                                     <p>Transaction Time : {item?.created_at?.length>0 ? moment(item?.created_at).format("DD-MM-YYYY hh:mm:ss A") : "N/A"}</p>
                                 </div>
                                 {
                                     item?.status==="SUCCESS"?
                                     <div className="flex justify-center items-center border-t border-black/20 py-2">
-                                        <span className="text-green-600">Congratulations you won ({item?.win_amount}) </span>
-                                        <span className="text-green-600 text-2xl">👍</span>
+                                        <span className="text-green-600 text-md">Congratulations you won ({item?.win_amount}) </span>
+                                        <span className="text-green-600 text-lg">👍</span>
                                     </div>
                                     : item?.status==="FAILED"?
                                     <div className="flex justify-center items-center border-t border-black/20 py-2">
-                                        <span className="text-red-600">Better Luck Next Time</span>
-                                        <span className="text-red-600 text-2xl">👎</span>
+                                        <span className="text-red-600 text-md">Better Luck Next Time</span>
+                                        <span className="text-red-600 text-lg">👎</span>
                                     </div>
                                     : item?.status==="PENDING"?
                                     <div className="flex justify-center items-center border-t border-black/20 py-2">
-                                        <span className="text-yellow-600">Best Of luck</span>
-                                        <span className="text-yellow-600 text-2xl">⌛</span>
+                                        <span className="text-yellow-600 text-md">Best Of luck</span>
+                                        <span className="text-yellow-600 text-lg">⌛</span>
                                     </div>
                                     :null
                                 }

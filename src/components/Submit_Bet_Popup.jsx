@@ -24,7 +24,7 @@ const Submit_Bet_Popup = ({ show, data, onClose, onSubmitted = () => {} }) => {
     const bidType = searchParams.get('bidType');
 
     const gameTypeIdMap = {
-        "Single Digits": 1,
+        "Single Digit": 1,
         "Jodi Digits": 2,
         "Single Pana": 3,
         "Double Pana": 4,

@@ -73,7 +73,7 @@ const Sidebar = ({ toggleSideBar }) => {
       onClick: async (e) => {
         e.preventDefault();
         const shareText = `कल्याण मिलन श्रीदेवी खेलने वाले भाई ये Trusted एप डाउनलोड करें और Online खेलें! Use My Refer Code: ${user?.own_code}`;
-        const shareUrl = "https://app.mahakalmatka.com";
+        const shareUrl = "https://app.mahakalmatka.com/auth/login?referralCode="+user?.own_code;
 
         if (navigator.share) {
           try {
@@ -266,7 +266,7 @@ const Sidebar = ({ toggleSideBar }) => {
               {/* <InstallButton /> */}
             </div>
           </div>
-          <div className="h-[calc(100vh-272px)] overflow-auto bg-orange">
+          <div className="h-[calc(100vh-172px)] overflow-auto bg-orange">
             {links.map((link, idx) =>
               link.onClick ? (
                 <a
@@ -360,12 +360,8 @@ const Sidebar = ({ toggleSideBar }) => {
               )
             )}
           </div>
-            <div className="p-2 text-[9px] h-[100px] font-semibold text-center text-black bg-white">
+            {/* <div className="p-2 text-[9px] h-[100px] font-semibold text-center text-black bg-white">
               <div className="grid grid-cols-3 gap-2">
-                {/* <div onClick={() => { toggle(); toggleSideBar() }} className="flex flex-col items-center">
-                  <img src={Chat} alt="Chat" className="w-14 h-14" />
-                  <p className="mt-1">हमसे बात करने के लिए चैट पे क्लिक करे</p>
-                </div> */}
                 <a
                   href={appData?.whatsapp_group_join_link}
                   target="_blank"
@@ -376,7 +372,6 @@ const Sidebar = ({ toggleSideBar }) => {
                   <i className="text-4xl text-white fab fa-whatsapp"></i>
                   </div>
                   <p className="mt-1">
-                    {/* सॉलिड गेम के लिए हमारा फेसबुक ग्रुप ज्वाइन करे */}
                      WhatsApp
                   </p>
                 </a>
@@ -390,7 +385,6 @@ const Sidebar = ({ toggleSideBar }) => {
                     <i className="text-4xl text-white fab fa-telegram"></i>
                   </div>
                   <p className="mt-1">
-                    {/* सॉलिड गेम के लिए हमारा फेसबुक ग्रुप ज्वाइन करे */}
                     Telegram
                   </p>
                 </a>
@@ -412,13 +406,7 @@ const Sidebar = ({ toggleSideBar }) => {
                   <p className="mt-1">Instagram</p>
                 </a>
               </div>
-              {/* <a
-                className="inline-block mt-3 text-blue-400 underline"
-                href={window.location.origin}
-              >
-                {window.location.origin}
-              </a> */}
-            </div>
+            </div> */}
         </div>
       </div>
       <Modal isOpen={isOpen} toggle={toggle}>

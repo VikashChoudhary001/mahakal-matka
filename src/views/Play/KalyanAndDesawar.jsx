@@ -85,7 +85,7 @@ const KalyanAndDesawar = ({
       setAuthModalOpen(true); // Open modal for authentication
     } else {
       // Use navigate to redirect in the same tab
-      navigate(`/play-game?gameType=desawar&market_id=${market?.id}`);
+      navigate(`/play-game?gameType=desawar&market_id=${market?.id}&open=${market?.open_game_status}&close=${market?.close_game_status}`);
     }
   };
 

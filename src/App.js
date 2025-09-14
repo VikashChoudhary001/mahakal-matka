@@ -319,6 +319,7 @@ const App = () => {
 	const [error, setError] = useState('');
 	const [isOnline, setIsOnline] = useState(navigator.onLine);
 	const [updateVersionModalOpen,setUpdateVersionModalOpen] = useState(false);
+	const [myAuthToken,setMyAuthToken] = useState(null)
 
 	useEffect(() => {
 	function handleOnline() {
@@ -364,6 +365,22 @@ const App = () => {
 		};
 	}, []);
 
+	  useEffect(() => {
+		const handleStorageChange = (event) => {
+		if (event.key === 'authToken') {
+			setMyAuthToken(event.newValue)
+		}
+		};
+
+		// Listen for changes to localStorage
+		window.addEventListener('storage', handleStorageChange);
+
+		// Cleanup listener on component unmount
+		return () => {
+		window.removeEventListener('storage', handleStorageChange);
+		};
+	}, []);
+
 	useEffect(() => {
 		document.title = 'Mahakal Matka';
 		const fetchData = async () => {
@@ -404,7 +421,7 @@ const App = () => {
 		};
 
 		fetchData();
-	}, []);
+	}, [myAuthToken]);
 
 	useEffect(() => {
 		if (user?.blocked === 1) {
@@ -428,7 +445,7 @@ const App = () => {
 	}, [user]);
 
 	useEffect(()=>{
-		if(localStorage.getItem('appVersion') && appData?.version!==undefined && appData?.version!==null && localStorage.getItem('appVersion') !== (appData?.version).toString()){
+		if(localStorage.getItem('appVersion') && appData?.version!==undefined && appData?.version!==null && (localStorage.getItem('appVersion') !== (appData?.version).toString())){
 			setUpdateVersionModalOpen(true);
 			
 		}else if(appData?.version!==undefined && appData?.version!==null && !localStorage.getItem('appVersion')){
@@ -778,7 +795,7 @@ const App = () => {
 			}
 		}
 
-		localStorage.setItem('appVersion', appData?.app_version);
+		localStorage.setItem('appVersion',appData?.version);
 		// reload fresh build
 		window.location.reload(true);
 	}

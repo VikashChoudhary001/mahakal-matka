@@ -79,11 +79,11 @@ const DualPana = () => {
         <div className='w-[100%] m-auto h-full shadow-inner p-2 mt-20 '>
           {[...Array(10).keys()].map(remainder => (
             <div key={remainder}>
-              <div className='gradiantBgButton py-1 text-center my-4 ml-4 text-white'>{remainder}</div>
+              <div className='border-t border-black/30 shadow-md py-1 text-center my-4 ml-4 text-black'>{remainder}</div>
               <div className='grid grid-cols-2 gap-4 w-[92%] m-auto'>
                 {filterDoublePanaByRemainder(remainder).map(pair => (
                   <div key={pair} className='flex items-center justify-start'>
-                    <div className='text-[18px] font-semibold bg-[#ac407b] w-[50px] h-[40px] flex justify-center items-center text-[#fff]'>{pair}</div>
+                    <div className='text-[18px] font-semibold bg-[#e4ae39] w-[50px] h-[40px] flex justify-center items-center text-[#fff]'>{pair}</div>
                     <input
                       type="number"
                       className='border p-2 text-[14px] w-full border-none bg-slate-200 h-[40px] text-center outline-none'
@@ -102,7 +102,7 @@ const DualPana = () => {
        
       </div>
       <div className='max-w-[400px] m-auto mt-4 fixed bottom-0 left-0 right-0 p-4'>
-        <button className='w-full p-3 bg-[#ac407b] text-white rounded' onClick={handleSubmit}>Submit</button>
+        <button className='w-full p-3 bg-[#e4ae39] text-white rounded shadow-2xl' onClick={handleSubmit}>Submit</button>
       </div>
       <Popup show={showPopup} data={dataToShow} onClose={closePopup} onSubmitted={() => { setInputValues({}) }} />
     </>

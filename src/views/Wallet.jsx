@@ -34,6 +34,7 @@ const WalletHistoryTable = ({
   lastPage,
   setCurrentPage,
   perPageRecords,
+  activeTab
 }) => {
   return (
     <>
@@ -73,12 +74,12 @@ const WalletHistoryTable = ({
                 ) :
                 data?.length>0  ?
                 data?.map((item,index)=>(
-                    <div className="mb-4 rounded-xl overflow-hidden shadow-md p-3 border-t border-black/10 " key={item?.id || index}>
+                    <div className="mb-4 rounded-xl overflow-hidden shadow-lg p-2 border border-black/30 " key={item?.id || index}>
                         <div className="flex justify-between py-2">
-                            <div className="px-2 w-1/2">
-                                <p className="text-sm text-primary">{item?.created_at?.length ? moment(item?.created_at).format("DD-MM-YYYY HH:mm A"):"N/A"}</p>
+                            <div className="px-2 w-[65%]">
+                                <p className="text-sm text-[#000]">{item?.created_at?.length ? moment(item?.created_at).format("DD-MM-YYYY HH:mm A"):"N/A"}</p>
                             </div>
-                            <div className="px-2 w-1/2 flex justify-end items-center gap-1">
+                            <div className="px-2 w-[35^] flex justify-end items-center gap-1">
                             {
                                 item?.status === "pending" ? (
                                     <span>⌛</span>
@@ -102,9 +103,9 @@ const WalletHistoryTable = ({
                                 
                             </div>
                         </div>
-                        <div className="flex justify-between py-2">
+                        <div className="flex justify-between pb-2">
                             <div className="px-2 w-1/2">
-                                <h5 className="text-sm text-primary font-semibold mb-2">₹{item?.amount || "N/A"}</h5>
+                                <h5 className="text-sm text-[#000] font-semibold mb-2">₹{item?.amount || "N/A"}</h5>
                             </div>
                             <div className="px-2 w-1/2">
                                 <h5 className="text-sm t mb-1">Transaction ID</h5>
@@ -113,12 +114,12 @@ const WalletHistoryTable = ({
                         </div>
                         <div className="flex justify-between border-t border-black py-2">
                              <div className="px-2 w-1/2">
-                                 <h5 className="text-sm t mb-1">Request Type</h5>
+                                 <h5 className="text-sm t">Request Type</h5>
                                 <p className="text-[14px] font-semibold capitalize">{item?.request_type || "N/A"}</p>
                              </div>
                              <div className="px-2 w-1/2">
-                                 <h5 className="text-sm t mb-1">Withdraw Mode</h5>
-                                <p className="text-[14px] font-semibold capitalize">{item?.withdraw_mode || "N/A"}</p>
+                                 <h5 className="text-sm t">{activeTab==="addPoints" ? "Deposit" : "Withdraw"} Mode</h5>
+                                <p className="text-[14px] font-semibold capitalize">{activeTab==="addPoints" ? (item?.deposit_mode || "N/A") : (item?.withdraw_mode || "N/A")}</p>
                              </div>
                          </div>
                     </div>
@@ -725,6 +726,7 @@ const Wallet = () => {
           data={
             activeTab === "addPoints" ? depositHistoryData : withdrawHistoryData
           }
+          activeTab={activeTab}
         />
         <Modal isOpen={isDepositModal} toggle={toggleDepositModal}>
           <form onSubmit={onHandleTransferSubmit}>

@@ -72,7 +72,7 @@ const Sidebar = ({ toggleSideBar }) => {
       text: "Share",
       onClick: async (e) => {
         e.preventDefault();
-        const shareText = `कल्याण मिलन श्रीदेवी खेलने वाले भाई ये Trusted एप डाउनलोड करें और Online खेलें! Use My Refer Code: ${user?.own_code}`;
+        const shareText = `कल्याण मिलन श्रीदेवी खेलने वाले भाई ये Trusted एप डाउनलोड करें और Online खेलें!`;
         const shareUrl = "https://app.mahakalmatka.com/auth/login?referralCode="+user?.own_code;
 
         if (navigator.share) {

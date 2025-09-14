@@ -4,6 +4,7 @@ import { fetchAppData } from '../store/features/appData/appDataSlice';
 import Gold_Coin from '../assets/imgs/coin.png';
 import Calendar from '../assets/imgs/calendar.png';
 import { useSearchParams } from 'react-router-dom';
+import moment from 'moment';
 
 
 const GameHeader = ({ dropdown, selectedOption, onSelectChange }) => {
@@ -55,18 +56,18 @@ const GameHeader = ({ dropdown, selectedOption, onSelectChange }) => {
   return (
     <div className='pt-2 bg-[#f2fafc] fixed top-[45px] left-0 right-0 w-[480px] max-w-full mx-auto'>
     
-      <div className='w-[92%] rounded-lg text-[22px] p-1 m-auto my-0 text-center bg-[#ac407b] font-semibold text-[#fff] flex justify-center items-center gap-0'>
+      <div className='w-[92%] rounded-lg text-[22px] p-1 m-auto my-0 text-center bg-white shadow-lg border-t border-black/30 font-semibold text-[#fff] flex justify-center items-center gap-0'>
         <img src={Gold_Coin} alt="Balance" className="w-[25px] h-[25px] object-cover cursor-auto " />
-        <p className='text-[16px]'> Balance: {user?.balance}</p>
+        <p className='text-[16px] text-black'> Balance: {user?.balance}</p>
       </div>
 
-      <div className='w-[92%] rounded-lg text-[22px] px-2 m-auto mb-2 text-center font-semibold text-[#ac407b] flex justify-center items-center gap-0'>
+      <div className='w-[92%] rounded-lg text-[22px] px-2 m-auto mb-1 mt-1 text-center font-semibold text-[#000] flex justify-center items-center gap-0'>
         <img src={Calendar} alt="Date" className="w-[25px] h-[25px] object-cover cursor-pointer" />
-        <p className='text-[18px]'>{formattedDate}</p>
+        <p className='text-[18px]'>{moment().format("DD/MMM/YYYY")}</p>
 
         {dropdown && (
           <div className="w-[100px] p-1 m-auto">
-            <select className="w-[100px] border text-[14px] font-medium rounded py-1" value={selectedOption} onChange={onSelectChange}>
+            <select className="w-[150px] py-2 border-black bg-white px-3 border text-[14px] font-medium rounded" value={selectedOption} onChange={onSelectChange}>
               {currentMarket?.open_game_status && <option value="open" className='text-[12px] font-thin'>Open</option>}
               {currentMarket?.close_game_status && <option value="close" className='text-[12px] font-thin'>Close</option>}
             </select>

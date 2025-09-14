@@ -140,7 +140,7 @@ const FullSangam = () => {
 
   return (
     <div>
-      <div className='w-[92%] rounded-lg text-[22px] p-1 m-auto my-2 text-center bg-[#ac407b] font-semibold text-[#fff] flex justify-center items-center gap-0'>
+      <div className='w-[92%] rounded-lg text-[22px] p-1 m-auto my-2 text-center bg-[#e4ae39] font-semibold text-[#fff] flex justify-center items-center gap-0'>
         <img src={Gold_Coin} alt="Balance" className="w-[25px] h-[25px] object-cover cursor-auto" />
         <p className='text-[16px]'> Balance: {user?.balance}</p>
       </div>
@@ -190,7 +190,7 @@ const FullSangam = () => {
             <button
               type="button"
               id="submit"
-              className="w-full h-[33px] bg-[#ac407b] text-white font-sans font-medium py-1 shadow-sm mt-7 rounded"
+              className="w-full h-[33px] bg-[#e4ae39] text-white font-sans font-medium py-1 shadow-sm mt-7 rounded"
               onClick={handleAddRow}
             >
               Add
@@ -229,7 +229,7 @@ const FullSangam = () => {
       </div>
 
       <div className='max-w-[400px] m-auto mt-4 fixed bottom-0 left-0 right-0 p-4'>
-        <button className='w-full p-3 bg-[#ac407b] text-white rounded' onClick={handleSubmit}>Submit</button>
+        <button className='w-full p-3 bg-[#e4ae39] text-white rounded' onClick={handleSubmit}>Submit</button>
       </div>
       <Popup show={showPopup} data={formattedData} onClose={closePopup} onSubmitted={()=>{
         setRows([])

@@ -81,9 +81,9 @@ const Notifications = () => {
                 <span className="text-sm font-semibold uppercase text-orange">
                   {notification.title}
                 </span>
-                <p className="text-[10px] mt-1">{notification.description}</p>
-                <p className="text-[10px] font-semibold">
-                  Date:
+                <p className="text-sm mt-1">{notification.description}</p>
+                <p className="text-xs mt-2 font-semibold text-right">
+                  
                   {moment(notification.created_at).format(
                     "DD-MM-YYYY hh:mm:ss A"
                   )}

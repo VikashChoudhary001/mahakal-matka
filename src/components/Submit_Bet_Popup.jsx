@@ -123,7 +123,7 @@ const Submit_Bet_Popup = ({ show, data, onClose, onSubmitted = () => {} }) => {
             {show && !loading && !notEnoughPoints && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
                     <div className="bg-[#eeeeee] w-full max-w-md mx-4 rounded-lg h-[90vh] overflow-auto">
-                        <div className='w-full text-center bg-[#ac407b] p-1'>
+                        <div className='w-full text-center bg-primary p-1'>
                         <h2 className="text-lg text-[#fff] font-normal">{gameType} - {new Date().toLocaleDateString('en-GB')}</h2>
                         </div>
                         <div className='p-2'>
@@ -197,7 +197,7 @@ const Submit_Bet_Popup = ({ show, data, onClose, onSubmitted = () => {} }) => {
                         }
 
                         <h2 className="text-xl mb-4 mt-8">{success ? 'Game successfully added' : 'Error adding game'}</h2>
-                        <button className="bg-[#ac407b] text-white px-12 py-2 rounded" onClick={handleOkayClick}>Okay</button>
+                        <button className="bg-[#e4ae39] text-white px-12 py-2 rounded" onClick={handleOkayClick}>Okay</button>
                     </div>
                 </div>
             )}
@@ -206,7 +206,7 @@ const Submit_Bet_Popup = ({ show, data, onClose, onSubmitted = () => {} }) => {
                     <div className="bg-white p-6 rounded-2xl text-center w-[400px] m-auto">
                         <img src={Warning} alt="" className='w-24 h-16 m-auto' />
                         <h2 className="text-xl mb-4 mt-8">You don't have enough points for this bet.</h2>
-                        <button className="bg-[#ac407b] text-white px-12 py-2 rounded" onClick={handleNotEnoughPointsOkayClick}>Okay</button>
+                        <button className="bg-[#e4ae39] text-white px-12 py-2 rounded" onClick={handleNotEnoughPointsOkayClick}>Okay</button>
                     </div>
                 </div>
             )}

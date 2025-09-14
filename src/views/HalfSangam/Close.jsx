@@ -148,7 +148,7 @@ const Close = () => {
                         <button
                             type="button"
                             id="submit"
-                            className="w-full h-[33px] bg-[#ac407b] text-white font-sans font-medium py-1 shadow-sm mt-7 rounded"
+                            className="w-full h-[33px] bg-[#e4ae39] text-white font-sans font-medium py-1 shadow-sm mt-7 rounded"
                             onClick={handleAddRow}
                         >
                             Add
@@ -157,23 +157,23 @@ const Close = () => {
                 </div>
             </div>
 
-            <div className="border-t border-gray-300">
-                <div className="text-center">
+            <div className="">
+                <div className="text-center p-1">
                     <table className="min-w-full bg-white">
                         <thead>
-                            <tr className="bg-[#0098c7] text-[#fff] w-full flex justify-between items-center py-1 text-md">
-                                <th className="py-1 text-[13px]">Open Ank</th>
-                                <th className="py-1 text-[13px]">Close Pana</th>
-                                <th className="py-1 text-[13px]">Amount</th>
-                                <th className="py-1 text-[13px]">Del</th>
+                            <tr className="bg-white text-[#000] border border-gray-300 shadow-md w-full flex justify-between items-center py-1 text-md">
+                                <th className="py-1 text-[13px] border-r border-gray-300">Open Ank</th>
+                                <th className="py-1 text-[13px] border-r border-gray-300">Close Pana</th>
+                                <th className="py-1 text-[13px] border-r border-gray-300">Amount</th>
+                                <th className="py-1 text-[13px] border-r border-gray-300">Del</th>
                             </tr>
                         </thead>
                         <tbody>
                             {rows.map((row, index) => (
                                 <tr key={index} className="w-full flex justify-between items-center py-2 px-2 text-md">
-                                    <td className="py-1 bg-[#ff2d2d] border-none text-[#fff]">{row.ank}</td>
-                                    <td className="py-1 bg-[#4deb4b] border-none text-[#fff]">{row.pana}</td>
-                                    <td className="py-1 bg-[#a83dbf] border-none text-[#fff]">{row.amount}</td>
+                                    <td className="py-1 bg-white text-black border-none">{row.ank}</td>
+                                    <td className="py-1 bg-white text-black border-none">{row.pana}</td>
+                                    <td className="py-1 bg-white text-black border-none">{row.amount}</td>
                                     <td className="py-1 border-none text-[#fff] bg-[#fff]">
                                         <button onClick={() => handleDeleteRow(index)}>
                                             <FaTrash color="#ff2d2d" />
@@ -187,7 +187,7 @@ const Close = () => {
             </div>
 
             <div className='max-w-[400px] m-auto mt-4 fixed bottom-0 left-0 right-0 p-4'>
-                <button className='w-full p-3 bg-[#ac407b] text-white rounded' onClick={handleSubmit}>Submit</button>
+                <button className='w-full p-3 bg-[#e4ae39] text-white rounded' onClick={handleSubmit}>Submit</button>
             </div>
             <Popup show={showPopup} data={formattedData} onClose={closePopup} onSubmitted={()=>{setRows([])}}/>
         </div>

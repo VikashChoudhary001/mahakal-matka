@@ -141,7 +141,7 @@ const Open = () => {
                         <button
                             type="button"
                             id="submit"
-                            className="w-full h-[33px] bg-[#ac407b] text-white font-sans font-medium py-1 shadow-sm mt-7 rounded"
+                            className="w-full h-[33px] bg-[#e4ae39] text-white font-sans font-medium py-1 shadow-sm mt-7 rounded"
                             onClick={handleAddRow}
                         >
                             Add
@@ -150,23 +150,23 @@ const Open = () => {
                 </div>
             </div>
 
-            <div className="border-t border-gray-300">
+            <div className="p-1">
                 <div className="text-center">
                     <table className="min-w-full bg-white">
                         <thead>
-                            <tr className="bg-[#0098c7] text-[#fff] w-full flex justify-between items-center py-1 text-md">
-                                <th className="py-1 text-[13px]">Open Pana</th>
-                                <th className="py-1 text-[13px]">Close Ank</th>
-                                <th className="py-1 text-[13px]">Amount</th>
-                                <th className="py-1 text-[13px]">Del</th>
+                            <tr className="bg-white text-[#000] border border-gray-300 shadow-md w-full flex justify-between items-center py-1 text-md">
+                                <th className="py-1 text-[13px] border-gray-300">Open Pana</th>
+                                <th className="py-1 text-[13px] border-gray-300">Close Ank</th>
+                                <th className="py-1 text-[13px] border-gray-300">Amount</th>
+                                <th className="py-1 text-[13px] border-gray-300">Del</th>
                             </tr>
                         </thead>
                         <tbody>
                             {rows.map((row, index) => (
                                 <tr key={index} className="w-full flex justify-between items-center py-2 px-2 text-lg text-[#fff] border-none">
-                                    <td className="py-1 bg-[#ff2d2d] border-none">{row.pana}</td>
-                                    <td className="py-1 bg-[#4deb4b] border-none">{row.ank}</td>
-                                    <td className="py-1 bg-[#a83dbf] border-none">{row.amount}</td>
+                                    <td className="py-1 bg-white text-black border-none">{row.pana}</td>
+                                    <td className="py-1 bg-white text-black border-none">{row.ank}</td>
+                                    <td className="py-1 bg-white text-black border-none">{row.amount}</td>
                                     <td className="py-1 border-none bg-[#f1f1f1]">
                                         <button onClick={() => handleDeleteRow(index)}>
                                             <FaTrash color="#ff2d2d" />
@@ -180,7 +180,7 @@ const Open = () => {
             </div>
 
             <div className='max-w-[400px] m-auto mt-4 fixed bottom-0 left-0 right-0 p-4'>
-                <button className='w-full p-3 bg-[#ac407b] text-white rounded' onClick={handleSubmit}>Submit</button>
+                <button className='w-full p-3 bg-[#e4ae39] text-white rounded' onClick={handleSubmit}>Submit</button>
             </div>
             <Popup show={showPopup} data={formattedData} onClose={closePopup} onSubmitted={()=>{
                 setRows([]);

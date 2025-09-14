@@ -976,7 +976,7 @@ const App = () => {
 							</button>
 							</div>
 							<div className='flex flex-col items-center gap-6 py-4 pb-8'>
-								<div className="text-md">
+								<div className="text-md px-2 text-center">
 									Please update App to get latest changes
 								</div>
 								<div>

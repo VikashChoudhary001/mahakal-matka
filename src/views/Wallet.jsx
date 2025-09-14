@@ -336,10 +336,8 @@ const Wallet = () => {
         if (data.error) {
           toast.error(data.message);
         } else {
-          let aHref = document.createElement('a');
-          aHref.href = data.response.payment_url;
-          // aHref.target = "_blank";
-          aHref.click();
+          navigate("/payment/?pageName=deposit"+"&pageUrl=" + data?.response?.payment_url);
+  
           dispatch(
             setAuthDataUsersSingleValue({
               key: "balance",
@@ -351,10 +349,7 @@ const Wallet = () => {
       else if (paymentMethod === "manual") {
         let baseDomain = appData?.base_domain;
         let url = `${baseDomain}/payment/${user?.id}/${payload?.amount}`
-        let aHref = document.createElement('a');
-        aHref.href = url;
-        aHref.target = "_blank";
-        aHref.click();
+       navigate("/payment/?pageName=deposit"+"&pageUrl=" + url);   
       } else if (paymentMethod === "ibr_pay") {
         let { data } = await ibrPayUPIPaymentUrl(payload);
         if (data.error) {
@@ -367,19 +362,14 @@ const Wallet = () => {
         if (data.error) {
           toast.error(data.message);
         } else {
-          let aHref = document.createElement('a');
-          aHref.href = data.response.payment_url;
-          // aHref.target = "_blank";
-          aHref.click();
+          navigate("/payment/?pageName=deposit"+"&pageUrl=" + data?.response?.payment_url);
         }
       }else if (paymentMethod === "pay_from_upi") {
         let { data } = await depositBalancePayFromUpi(payload);
         if (data.error) {
           toast.error(data.message);
         } else {
-          let aHref = document.createElement('a');
-          aHref.href = data.response.payment_url;
-          aHref.click();
+          navigate("/payment/?pageName=deposit"+"&pageUrl=" + data?.response?.payment_url);         
         }
       }
       else {

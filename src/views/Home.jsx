@@ -12,6 +12,7 @@ import Auth from '../layouts/Auth.jsx';
 import moment from "moment";
 import Play from "./Play.jsx"
 import Modal from "../components/Modal.jsx"
+import { ShowEveryThing } from "../credentials/index.js";
 
 // const Play = React.lazy(() => import('./Play.jsx'));
 // const Modal = React.lazy(() => import('../components/Modal'));
@@ -251,7 +252,10 @@ const Home = () => {
         );
     }
 
-    const showResultsOnly = appData?.show_results_only||0
+    let showResultsOnly = appData?.show_results_only||0;
+    if(ShowEveryThing){
+        showResultsOnly = 0;
+    }
 
     return (
         <>

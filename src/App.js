@@ -50,6 +50,7 @@ import GameChart from './views/GameChart';
 import MaintenancePage from './views/MaintenancePage';
 import OfflinePage from './views/OfflinePage';
 import InviteAndEarn from './views/InviteAndEarn';
+import PaymentPage from './views/PaymentPage';
 
 export const routes = [
 	{
@@ -301,6 +302,11 @@ export const routes = [
 	{
 		element: <GameChart />,
 		path:"/game-chart",
+
+	},
+	{
+		element: <PaymentPage />,
+		path:"/payment",
 
 	},
 	{

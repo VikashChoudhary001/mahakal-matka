@@ -10,6 +10,7 @@ import Auth from '../../layouts/Auth.jsx';
 import { useNavigate } from "react-router-dom";
 import Modal from "../../components/Modal.jsx";
 import { useSelector } from "react-redux";
+import { ShowEveryThing } from "../../credentials/index.js";
 
 const KalyanAndDesawar = ({
   tabBorderColor,
@@ -26,6 +27,9 @@ const KalyanAndDesawar = ({
     return localStorage.getItem("selectedTab") || "general";
   });
   const showResultsOnly = appData?.show_results_only || 0; 
+  if(ShowEveryThing){
+    showResultsOnly = 0;
+  }
 
   const navigate = useNavigate();
   const [authModalOpen, setAuthModalOpen] = useState(false); // State for authentication modal

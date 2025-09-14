@@ -8,6 +8,7 @@ import Modal from "./Modal";
 import moment from "moment";
 import { setAppData, setReadNotifications } from "../store/features/appData/appDataSlice";
 import { getUserBalance } from "../repository/BalanceRepository";
+import { ShowEveryThing } from "../credentials";
 
 const Header = ({ toggleSideBar }) => {
     const navigate = useNavigate();
@@ -74,7 +75,11 @@ const Header = ({ toggleSideBar }) => {
     const currentUser = user?.phone ? user : storedUser;
 
     const isAuthenticated = Boolean(localStorage.getItem("authToken"));
-    const showResultsOnly = appData?.show_results_only || 0;
+    let showResultsOnly = appData?.show_results_only || 0;
+
+    if(ShowEveryThing){
+        showResultsOnly = 0;
+    }
 
     return (
         <>

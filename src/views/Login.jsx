@@ -102,13 +102,13 @@ const Login = () => {
         <div
             style={{
                 background:
-                    "linear-gradient(153deg, rgba(2,0,36,1) 0%, rgba(0,191,254,1) 35%, rgba(0,212,255,1) 100%)",
+                    "linear-gradient(153deg,rgba(0,212,255,1) 0% , rgba(0,191,254,1) 35%,rgb(0 200 255) 100% )",
             }}
             className="h-[100vh] p-3 overflow-auto"
         >
 
 
-            <div className="flex justify-center mb-2  h-auto">
+            <div className="flex justify-center mb-3 mt-3 h-auto">
                 {/* <img
                     src={Logo}
                     alt="Logo"

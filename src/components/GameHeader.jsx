@@ -65,9 +65,10 @@ const GameHeader = ({ dropdown, selectedOption, onSelectChange }) => {
         <img src={Calendar} alt="Date" className="w-[25px] h-[25px] object-cover cursor-pointer" />
         <p className='text-[18px]'>{moment().format("DD/MMM/YYYY")}</p>
 
+        {/* {(dropdown && (currentMarket?.open_game_status || currentMarket?.close_game_status) ) && ( */}
         {dropdown && (
           <div className="w-[100px] p-1 m-auto">
-            <select className="w-[150px] py-2 border-black bg-white px-3 border text-[14px] font-medium rounded" value={selectedOption} onChange={onSelectChange}>
+            <select className="w-[150px] py-2 text-black border-black bg-white px-3 border text-[14px] font-medium rounded" value={selectedOption} onChange={onSelectChange} placeholder="Select an option" >
               {currentMarket?.open_game_status && <option value="open" className='text-[12px] font-thin'>Open</option>}
               {currentMarket?.close_game_status && <option value="close" className='text-[12px] font-thin'>Close</option>}
             </select>

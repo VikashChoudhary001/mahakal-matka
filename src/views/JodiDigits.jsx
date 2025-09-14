@@ -64,7 +64,7 @@ const JodiDigits = () => {
     <div className="min-h-screen flex flex-col justify-between">
       <div className="flex-grow">
         <GameHeader dropdown={false} selectedOption={selectedOption} onSelectChange={handleSelectChange} />
-        <div className='grid grid-cols-2 gap-4 w-[92%] m-auto mt-20'>
+        <div className='grid grid-cols-2 gap-4 w-[92%] m-auto mt-[90px]'>
           {digitPairs.map((pair, index) => (
             <div key={pair} className='flex items-center justify-start'>
               <div className='text-[20px] font-semibold bg-[#e4ae39] w-[50px] h-[40px] flex justify-center items-center text-[#fff]'>{pair}</div>

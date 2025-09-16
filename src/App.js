@@ -195,9 +195,9 @@ export const routes = [
 			{
 				path: '/withdrawal-chat',
 				element: (
-					  <ProtectedRoute>
-					<Chat />
-					  </ProtectedRoute>
+					<ProtectedRoute>
+						<Chat />
+					</ProtectedRoute>
 				),
 				name: 'Withdrawal Chat',
 			},
@@ -296,17 +296,17 @@ export const routes = [
 				),
 				name: 'Full Sangam',
 			},
-			
+
 		],
 	},
 	{
 		element: <GameChart />,
-		path:"/game-chart",
+		path: "/game-chart",
 
 	},
 	{
 		element: <PaymentPage />,
-		path:"/payment",
+		path: "/payment",
 
 	},
 	{
@@ -319,30 +319,30 @@ const App = () => {
 	const router = createBrowserRouter(routes);
 	const dispatch = useDispatch();
 	const [isOpen, setOpen] = useState(false);
-	const [isOpenWebApp,setOpenWebApp]= useState(false);
+	const [isOpenWebApp, setOpenWebApp] = useState(false);
 	const { appData, user } = useSelector(state => state.appData.appData);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState('');
 	const [isOnline, setIsOnline] = useState(navigator.onLine);
-	const [updateVersionModalOpen,setUpdateVersionModalOpen] = useState(false);
-	const [myAuthToken,setMyAuthToken] = useState(null)
+	const [updateVersionModalOpen, setUpdateVersionModalOpen] = useState(false);
+	const [myAuthToken, setMyAuthToken] = useState(null)
 
 	useEffect(() => {
-	function handleOnline() {
-		setIsOnline(true);
-	}
-	function handleOffline() {
-		setIsOnline(false);
-	}
+		function handleOnline() {
+			setIsOnline(true);
+		}
+		function handleOffline() {
+			setIsOnline(false);
+		}
 
-	window.addEventListener('online', handleOnline);
-	window.addEventListener('offline', handleOffline);
+		window.addEventListener('online', handleOnline);
+		window.addEventListener('offline', handleOffline);
 
-	return () => {
-		window.removeEventListener('online', handleOnline);
-		window.removeEventListener('offline', handleOffline);
-	};
-}, []);
+		return () => {
+			window.removeEventListener('online', handleOnline);
+			window.removeEventListener('offline', handleOffline);
+		};
+	}, []);
 
 	let [isSuccessModalOpen, setSuccessModalOpen] = useState(false);
 	let [successMessage, setSuccessMessage] = useState('');
@@ -371,11 +371,11 @@ const App = () => {
 		};
 	}, []);
 
-	  useEffect(() => {
+	useEffect(() => {
 		const handleStorageChange = (event) => {
-		if (event.key === 'authToken') {
-			setMyAuthToken(event.newValue)
-		}
+			if (event.key === 'authToken') {
+				setMyAuthToken(event.newValue)
+			}
 		};
 
 		// Listen for changes to localStorage
@@ -383,18 +383,18 @@ const App = () => {
 
 		// Cleanup listener on component unmount
 		return () => {
-		window.removeEventListener('storage', handleStorageChange);
+			window.removeEventListener('storage', handleStorageChange);
 		};
 	}, []);
 
 	useEffect(() => {
 		document.title = 'Mahakal Matka';
 		const fetchData = async () => {
-			if(localStorage.getItem('authToken')===null){
+			if (localStorage.getItem('authToken') === null) {
 				// window.location.href="/auth/login";
 				// setLoading(false)
 				// return;
-			
+
 			}
 			// if(localStorage.getItem('authToken')===null && window.location.pathname !=="/auth/login"){
 			// 	window.location.href="/auth/login";
@@ -404,7 +404,7 @@ const App = () => {
 				setLoading(true);
 				const fetchAppDataPromise = getAppData();
 				const fetchDesawarMarketsPromise = localStorage.getItem('authToken') || true ? getMarkets('desawar') : Promise.resolve();
-				const fetchGeneralMarketsPromise = localStorage.getItem('authToken') ||true ? getMarkets('general') : Promise.resolve();
+				const fetchGeneralMarketsPromise = localStorage.getItem('authToken') || true ? getMarkets('general') : Promise.resolve();
 
 				const [appDataResponse, desawarMarketsResponse, generalMarketsResponse] = await Promise.all([fetchAppDataPromise, fetchDesawarMarketsPromise, fetchGeneralMarketsPromise]);
 
@@ -415,7 +415,7 @@ const App = () => {
 				}
 
 				if (desawarMarketsResponse?.data?.error === false && generalMarketsResponse?.data?.error === false) {
-					dispatch(setMarkets({desawar: desawarMarketsResponse.data.response, general: generalMarketsResponse.data.response}));
+					dispatch(setMarkets({ desawar: desawarMarketsResponse.data.response, general: generalMarketsResponse.data.response }));
 				} else if (desawarMarketsResponse) {
 					toast.error(desawarMarketsResponse.data.message);
 				}
@@ -423,7 +423,7 @@ const App = () => {
 				toast.error(err.message);
 			} finally {
 				setTimeout(() => {
-					setLoading(false);					
+					setLoading(false);
 				}, 1000);
 			}
 		};
@@ -446,21 +446,21 @@ const App = () => {
 				!JSON.parse(localStorage.getItem('isModelOpenedAlready')) ??
 				true
 			);
-			
+
 		}
 
 		setOpenWebApp(true);
 	}, [user]);
 
-	useEffect(()=>{
-		if(localStorage.getItem('appVersion') && appData?.version!==undefined && appData?.version!==null && (localStorage.getItem('appVersion') !== (appData?.version).toString())){
+	useEffect(() => {
+		if (localStorage.getItem('appVersion') && appData?.version !== undefined && appData?.version !== null && (localStorage.getItem('appVersion') !== (appData?.version).toString())) {
 			setUpdateVersionModalOpen(true);
-			
-		}else if(appData?.version!==undefined && appData?.version!==null && !localStorage.getItem('appVersion')){
-			localStorage.setItem('appVersion',appData?.version);
+
+		} else if (appData?.version !== undefined && appData?.version !== null && !localStorage.getItem('appVersion')) {
+			localStorage.setItem('appVersion', appData?.version);
 		}
 
-	},[appData])
+	}, [appData])
 
 	const errorMode = message => {
 		return (
@@ -795,28 +795,28 @@ const App = () => {
 		);
 	};
 
-	const handleUpdateVersion = async()=>{
+	const handleUpdateVersion = async () => {
 		if ('caches' in window) {
 			const cacheNames = await caches.keys();
 			for (const name of cacheNames) {
-			await caches.delete(name);
+				await caches.delete(name);
 			}
 		}
 
-		localStorage.setItem('appVersion',appData?.version);
+		localStorage.setItem('appVersion', appData?.version);
 		// reload fresh build
 		window.location.reload(true);
 	}
 
-	return  !isOnline ? (
-		<OfflinePage/>
-	) :loading ? (
+	return !isOnline ? (
+		<OfflinePage />
+	) : loading ? (
 		<div className='flex justify-center items-center h-[100vh]'>
 			<Splash />
 		</div>
 	) : error !== '' ? (
 		errorMode(error)
-	) : (appData?.maintain_mode !== 0 && appData?.maintain_mode!==undefined) ? (
+	) : (appData?.maintain_mode !== 0 && appData?.maintain_mode !== undefined) ? (
 		<MaintenancePage />
 	) : (
 		<>
@@ -923,8 +923,8 @@ const App = () => {
 					</div>
 				</div>
 			</Modal> */}
-			
-			
+
+
 			<Modal isOpen={isSuccessModalOpen} toggle={toggleSuccessModalOpen}>
 				<div className='font-semibold text-black bg-white w-[300px]'>
 					<div className='flex justify-end p-3 border-b border-black'>
@@ -957,29 +957,29 @@ const App = () => {
 					</div>
 				</div>
 			</Modal>
-			 {
+			{
 				(updateVersionModalOpen && localStorage.getItem('authToken')) ?
 					<Modal
 						isOpen={updateVersionModalOpen}
 						toggle={handleUpdateVersion}
 						className="custom-modal"
 						centered
-						>
-						<div className="font-semibold text-white bg-primary " style={{width:"400px",maxWidth:"90vw"}}>
+					>
+						<div className="font-semibold text-white bg-primary " style={{ width: "400px", maxWidth: "90vw" }}>
 							<div className="flex justify-between p-3 border-b border-white">
-							<h4>Important</h4>
-							<button onClick={()=>setUpdateVersionModalOpen(false)}>
-								<svg
-								xmlns="http://www.w3.org/2000/svg"
-								fill="none"
-								viewBox="0 0 24 24"
-								strokeWidth="1.5"
-								stroke="currentColor"
-								className="w-6 h-6"
-								>
-								<path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
-								</svg>
-							</button>
+								<h4>Important</h4>
+								<button onClick={() => setUpdateVersionModalOpen(false)}>
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										fill="none"
+										viewBox="0 0 24 24"
+										strokeWidth="1.5"
+										stroke="currentColor"
+										className="w-6 h-6"
+									>
+										<path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+									</svg>
+								</button>
 							</div>
 							<div className='flex flex-col items-center gap-6 py-4 pb-8'>
 								<div className="text-md px-2 text-center">
@@ -992,7 +992,7 @@ const App = () => {
 								</div>
 							</div>
 						</div>
-						</Modal>
+					</Modal>
 
 					: null
 			}

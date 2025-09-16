@@ -18,8 +18,8 @@ const DesawarOnly = ({ tabBorderColor }) => {
   const [authModalOpen, setAuthModalOpen] = useState(false); // State for authentication modal
   const [openLoginModal, setOpenLoginModal] = useState(false);
   let { appData } = useSelector((state) => state.appData.appData);
-  let showResultsOnly = appData?.show_results_only || 0; 
-  if(ShowEveryThing){
+  let showResultsOnly = appData?.show_results_only || 0;
+  if (ShowEveryThing) {
     showResultsOnly = 0;
   }
 
@@ -42,15 +42,15 @@ const DesawarOnly = ({ tabBorderColor }) => {
     fetchMarkets();
   }, []);
 
-  const handleChartClick = (marketId,marketName) => {
-    if(showResultsOnly) return;
+  const handleChartClick = (marketId, marketName) => {
+    if (showResultsOnly) return;
     const url = `https://api.mahakalmatka.com/desawar/chart/${marketId}/hello`;
-    navigate("/game-chart/?gameName="+marketName+"&gameUrl=" + url);
+    navigate("/game-chart/?gameName=" + marketName + "&gameUrl=" + url);
   };
 
 
   const handleChatClick = (market) => {
-    if(showResultsOnly) return
+    if (showResultsOnly) return
     if (!token) {
       localStorage.setItem("authMenu", 1)
       setAuthModalOpen(true);
@@ -87,7 +87,7 @@ const DesawarOnly = ({ tabBorderColor }) => {
                 src={Chart_b}
                 alt="Chart"
                 className="w-[50px] h-[50px] object-cover cursor-pointer"
-                onClick={() => token ? handleChartClick(market?.id,market?.name) : setOpenLoginModal(true)}
+                onClick={() => handleChartClick(market?.id, market?.name)}
               />
 
               <div className="flex flex-col justify-center items-center">
@@ -152,7 +152,7 @@ const DesawarOnly = ({ tabBorderColor }) => {
                     src={Chat1}
                     alt="Play Now"
                     className="w-full h-full object-cover cursor-pointer"
-                    onClick={() =>token? handleChatClick(market) : setOpenLoginModal(true)}
+                    onClick={() => token ? handleChatClick(market) : setOpenLoginModal(true)}
                   />
                 )}
               </div>
@@ -161,42 +161,42 @@ const DesawarOnly = ({ tabBorderColor }) => {
         ))}
       {/* Render the authentication modal */}
       <Auth isOpen={authModalOpen} toggle={() => setAuthModalOpen(false)} />
-        {
-          !showResultsOnly ? 
-            <Modal
-                isOpen={openLoginModal}
-                toggle={()=>setOpenLoginModal(false)}
-                className="custom-modal"
-                centered
-                >
-                <div className="font-semibold text-white bg-primary " style={{width:"400px",maxWidth:"90vw"}}>
-                    <div className="flex justify-between p-3 border-b border-white">
-                    <h4>Need Login</h4>
-                    <button onClick={()=>setOpenLoginModal(false)}>
-                        <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth="1.5"
-                        stroke="currentColor"
-                        className="w-6 h-6"
-                        >
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                    </div>
-                    <div className="flex flex-col items-center gap-4 pt-4 pb-8">
-                        <div className="text-md">
-                            To use this feature, you need to login
-                        </div>
-                        <button className="p-2 px-8 text-md text-white rounded-md bg-green-600 " onClick={(()=>navigate("/auth/login"))}>
-                            Login 
-                        </button>
-                    </div>
+      {
+        !showResultsOnly ?
+          <Modal
+            isOpen={openLoginModal}
+            toggle={() => setOpenLoginModal(false)}
+            className="custom-modal"
+            centered
+          >
+            <div className="font-semibold text-white bg-primary " style={{ width: "400px", maxWidth: "90vw" }}>
+              <div className="flex justify-between p-3 border-b border-white">
+                <h4>Need Login</h4>
+                <button onClick={() => setOpenLoginModal(false)}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="1.5"
+                    stroke="currentColor"
+                    className="w-6 h-6"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              <div className="flex flex-col items-center gap-4 pt-4 pb-8">
+                <div className="text-md">
+                  To use this feature, you need to login
                 </div>
-            </Modal>
-          :null
-        }
+                <button className="p-2 px-8 text-md text-white rounded-md bg-green-600 " onClick={(() => navigate("/auth/login"))}>
+                  Login
+                </button>
+              </div>
+            </div>
+          </Modal>
+          : null
+      }
     </div>
   );
 };

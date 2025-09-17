@@ -83,6 +83,7 @@ const Login = () => {
                 localStorage.setItem("authToken", token);
                 localStorage.setItem("authUser", JSON.stringify(user));
                 localStorage.setItem("welcomeStatus", true);
+                localStorage.setItem("withdraw_details", JSON.stringify(user?.withdraw_details));
 
                 navigate("/");
                 let response = await getAppData();

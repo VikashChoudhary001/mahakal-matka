@@ -1,6 +1,6 @@
 import React from "react";
 
-const AmountSelector = ({ placeholder, minAmount, onChange, value, setPaymentMethodModal,addBalanceMethod,appData }) => {
+const AmountSelector = ({ placeholder, minAmount, onChange, value, setPaymentMethodModal,addBalanceMethod,appData,user}) => {
   let priceList = [minAmount, 1000, 1500, 2000, 2500, 3000];
   const _openMethodModal = ()=>{
     if(setPaymentMethodModal){
@@ -22,6 +22,7 @@ const AmountSelector = ({ placeholder, minAmount, onChange, value, setPaymentMet
           onChange={(e) => onChange(e.target.value)}
         ></input>
         <div className="absolute flex items-center justify-center w-8 h-8 text-white -translate-y-1/2 rounded-full top-1/2 left-1 bg-primary">
+       
         {
           addBalanceMethod==="upi"?
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 80" width="200" height="80"     style={{cursor:setPaymentMethodModal?"pointer":"default"}}
@@ -50,6 +51,13 @@ const AmountSelector = ({ placeholder, minAmount, onChange, value, setPaymentMet
         }
         </div>
       </div>
+       {
+            placeholder === "Withdraw Amount" ?
+                <p className="text-center text-[14px] pt-3">
+                    Withdrawable Balance : {user?.withdrawable_balance ? parseInt(user?.withdrawable_balance).toFixed(2) : 0}
+                </p>
+                : null
+        }
       <div className="grid grid-cols-3 gap-3 mt-3">
         {priceList.map((price, index) => (
           <button

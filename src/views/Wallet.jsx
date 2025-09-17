@@ -687,15 +687,15 @@ const Wallet = () => {
                         )}
                         <div className="p-3">
                             {
-                                (withdrawAmount > currentUser?.balance) ?
+                                (withdrawAmount > parseFloat(user?.withdrawable_balance)) ?
                                     <p className="text-red-500 text-center text-sm">Your balance is not sufficient for withdrawal.</p>
                                     : null
                             }
                             <button
                                 type="submit"
                                 className={`w-full px-4 py-1 mt-2 text-white border-0 rounded-md 
-                  ${(withdrawAmount > currentUser?.balance) ? " bg-gray-500 " : "bg-greenLight"}`}
-                            // disabled={withdrawAmount>currentUser?.balance ? true :false}
+                                ${(withdrawAmount > parseFloat(user?.withdrawable_balance)) ? " bg-gray-500 " : "bg-greenLight"}`}
+                            // disabled={withdrawAmount>parseFloat(user?.withdrawable_balance) ? true :false}
                             >
                                 {withdrawLoading ? <Spinner /> : "Withdraw"}
                             </button>

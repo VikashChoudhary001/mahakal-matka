@@ -64,7 +64,13 @@ const Header = ({ toggleSideBar }) => {
         setRefreshBalanceLoading(true);
         let userBalance = await getUserBalance();
         if (userBalance?.data?.error === false) {
-            dispatch(setAppData({ appData: initialAppData?.appData, user: { ...initialAppData?.user, balance: userBalance?.data?.response?.balance } }));
+            dispatch(setAppData(
+                { 
+                    appData: initialAppData?.appData, 
+                    user: { ...initialAppData?.user, 
+                            balance: userBalance?.data?.response?.balance ,
+                            withdrawable_balance: userBalance?.data?.response?.withdrawable_balance 
+                        } }));
         }
 
         setRefreshBalanceLoading(false);

@@ -56,7 +56,7 @@ const AmountSelector = ({ placeholder, minAmount, onChange, value, setPaymentMet
                 <p className="text-center text-[14px] pt-3">
                     Withdrawable Balance : {user?.withdrawable_balance ? parseInt(user?.withdrawable_balance).toFixed(2) : 0}
                 </p>
-                : null
+                : null 
         }
       <div className="grid grid-cols-3 gap-3 mt-3">
         {priceList.map((price, index) => (

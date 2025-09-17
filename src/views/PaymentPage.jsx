@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import {useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const PaymentPage = () => {
   let location = useLocation();
@@ -19,11 +19,11 @@ const PaymentPage = () => {
       <div className="h-[45px] bg-primary flex items-center text-white p-3">
         <div className="flex items-center">
           <button onClick={() => navigate(-1)}>
-            <svg 
+            <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
-              strokeWidth="1.5" 
+              strokeWidth="1.5"
               stroke="currentColor"
               className="w-6 h-6"
             >
@@ -42,7 +42,7 @@ const PaymentPage = () => {
         </div>
       </div>
       <div className="h-[calc(100vh-45px)] overflow-auto main-wrapper">
-        <iframe src={pageUrl} width="100%" height="100%" frameborder="0"></iframe>
+        <iframe src={pageUrl} width="100%" height="100%" frameBorder="0"></iframe>
       </div>
     </div>
   );

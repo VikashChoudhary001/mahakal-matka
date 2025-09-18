@@ -23,11 +23,11 @@ const Login = () => {
     let [searchParams] = useSearchParams();
     let [loading, setLoading] = useState();
     let [isOTPScreen, setOTPScreen] = useState(false);
-    let [isNewUser,setIsNewUser] = useState(false)
+    let [isNewUser, setIsNewUser] = useState(false)
     let [phone, setPhone] = useState("");
     let [otp, setOTP] = useState("");
-    let [referralCode,setRefferalCode] = useState(searchParams?.get("referralCode")||"")
-    
+    let [referralCode, setRefferalCode] = useState(searchParams?.get("referralCode") || "")
+
     const phoneInputRef = useRef(null);
     const otpInputRef = useRef(null);
 
@@ -45,10 +45,10 @@ const Login = () => {
             let { data } = await sendLoginOtp(payload);
             if (data.error === false) {
                 setOTPScreen(true);
-                if(data?.response?.newUser){
+                if (data?.response?.newUser) {
                     setIsNewUser(true)
                 }
-                 setTimeout(() => {
+                setTimeout(() => {
                     otpInputRef.current?.focus();
                 }, 100);
             } else {
@@ -69,7 +69,7 @@ const Login = () => {
                 phone,
                 otp
             };
-            if(referralCode?.trim()?.length>0){
+            if (referralCode?.trim()?.length > 0) {
                 payload.referralCode = referralCode
             }
             payload.referralCode = referralCode
@@ -87,7 +87,7 @@ const Login = () => {
 
                 navigate("/");
                 let response = await getAppData();
-                if(response?.data?.response){
+                if (response?.data?.response) {
                     dispatch(setAppData(response?.data?.response));
                 }
             } else {
@@ -116,12 +116,12 @@ const Login = () => {
                     width={80}
                     style={{ display: "block" }}
                 /> */}
-                <img src={BannerLogo} alt="banner" style={{ display: "block",width:"100%" }} />
+                <img src={BannerLogo} alt="banner" style={{ display: "block", width: "100%" }} />
 
             </div>
             <div className="relative flex flex-col p-5 mt-6 rounded-md" style={{ border: "1px solid #fff" }}>
                 <p style={{ textAlign: "center", fontSize: "22px", color: "#fff", margin: "0 0 0" }}>Login</p>
-                
+
                 <form onSubmit={handlePhoneSubmit}>
                     <div className="flex flex-col w-full">
                         <label style={{ color: "#fff", fontSize: "18px" }}>Mobile Number</label>
@@ -130,7 +130,7 @@ const Login = () => {
                             className="block w-full h-10 px-2 py-1 mt-1 text-black border rounded border-black/40"
                             type="number"
                             value={phone}
-                            onChange={(e) =>  setPhone(e.target.value)}
+                            onChange={(e) => setPhone(e.target.value)}
                             maxLength={10}
                             max={9999999999}
                             placeholder="Enter Mobile Number"
@@ -146,12 +146,12 @@ const Login = () => {
                             >
                                 {loading ? <Spinner /> : "Send OTP"}
                             </button>
-                        :null
+                            : null
                     }
                 </form>
                 {
                     isOTPScreen ?
-                        <form onSubmit={handleOTPSubmit} style={{marginTop:10}}>
+                        <form onSubmit={handleOTPSubmit} style={{ marginTop: 10 }}>
                             <div className="flex flex-col w-full">
                                 <label style={{ color: "#fff", fontSize: "18px" }}>OTP</label>
                                 <input
@@ -164,7 +164,7 @@ const Login = () => {
                                 />
                             </div>
                             {
-                                isNewUser?
+                                isNewUser ?
                                     <div className="flex flex-col w-full mt-3">
                                         <label style={{ color: "#fff", fontSize: "18px" }}>Referral Code (Optional)</label>
                                         <input
@@ -176,17 +176,17 @@ const Login = () => {
                                         />
                                     </div>
 
-                                :null
+                                    : null
                             }
                             <button
                                 type="submit"
                                 disabled={loading}
                                 className="block w-full p-3 mt-4 font-semibold text-white rounded-md bg-[#006b9fd6]"
                             >
-                                {loading ? <Spinner /> : isNewUser? "Register":"Login"}
+                                {loading ? <Spinner /> : isNewUser ? "Register" : "Login"}
                             </button>
                         </form>
-                    :null
+                        : null
                 }
 
             </div>

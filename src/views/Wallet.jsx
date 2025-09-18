@@ -395,9 +395,9 @@ const Wallet = () => {
         }
     };
     const handleWithdrawSubmit = async (e) => {
-        let maximumWithdrawAmount = user?.withdrawable_balance? parseFloat(user?.withdrawable_balance) : 0
-        if(withdrawAmount > maximumWithdrawAmount){
-            toast.error("Can't withdraw more than "+user?.withdrawable_balance);
+        let maximumWithdrawAmount = user?.withdrawable_balance ? parseFloat(user?.withdrawable_balance) : 0
+        if (withdrawAmount > maximumWithdrawAmount) {
+            toast.error("Can't withdraw more than " + user?.withdrawable_balance);
             e.preventDefault();
             return;
         }
@@ -451,6 +451,9 @@ const Wallet = () => {
                 if (data?.response?.withdrwabale_balance) {
                     localStorage.setItem("", JSON.stringify(data?.response?.withdrwabale_balance));
                 }
+
+                //also save the withdraw details
+                localStorage.setItem("withdraw_details", JSON.stringify(response?.withdraw_details));
             }
         } catch (err) {
             toast.error(err.message);
@@ -553,7 +556,7 @@ const Wallet = () => {
                     </form>
                 ) : (
                     <form ref={walletWithdrawForm} onSubmit={handleWithdrawSubmit}>
-                        
+
                         <AmountSelector
                             value={withdrawAmount}
                             onChange={setWithdrawAmount}
@@ -617,7 +620,7 @@ const Wallet = () => {
                                         )}
                                     </select>
                                 </div>
-                            )}                        
+                            )}
                         {method === "upi" ? (
                             <div className="px-3 text-sm">
                                 <div className="flex flex-col">

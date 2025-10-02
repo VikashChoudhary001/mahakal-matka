@@ -1,6 +1,6 @@
 import Repository from "./Repository";
 
-function getAppData(){
+function getAppData() {
     return Repository.get(`/get-app-data`)
 }
 

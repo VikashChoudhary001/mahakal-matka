@@ -7,7 +7,7 @@ import Spinner from "../components/Spinner";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import BannerLogo from "../assets/imgs/banner_login_page.jpg";
 import { getAppData } from "../repository/DataRepository";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setAppData } from "../store/features/appData/appDataSlice";
 
 // Function to call Android app callback on login success
@@ -20,6 +20,7 @@ function loginSuccess(userNumber) {
 const Login = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const { appData } = useSelector((state) => state.appData.appData);
     let [searchParams] = useSearchParams();
     let [loading, setLoading] = useState();
     let [isOTPScreen, setOTPScreen] = useState(false);
@@ -37,6 +38,13 @@ const Login = () => {
 
     const handlePhoneSubmit = async (e) => {
         e.preventDefault();
+
+        // Validate phone number length
+        if (phone.length !== 10) {
+            toast.error("Mobile number must be exactly 10 digits");
+            return;
+        }
+
         setLoading(true);
         try {
             let payload = {
@@ -132,7 +140,6 @@ const Login = () => {
                             value={phone}
                             onChange={(e) => setPhone(e.target.value)}
                             maxLength={10}
-                            max={9999999999}
                             placeholder="Enter Mobile Number"
                             disabled={isOTPScreen}
                         />
@@ -190,6 +197,33 @@ const Login = () => {
                 }
 
             </div>
+
+            {/* Support Section */}
+            {(appData?.whatsapp_enable || appData?.telegram_enable) && (
+                <div className="mt-5 text-center">
+                    <p className="text-white text-sm mb-3">For any Problem, Contact us</p>
+                    <div className="flex justify-center items-center gap-3">
+                        {appData?.whatsapp_enable && (
+                            <a
+                                href={appData?.whatsapp_number}
+                                className="inline-flex items-center gap-1 px-4 py-2.5 rounded-full bg-[#2ed838] text-white text-sm font-semibold hover:bg-[#25c230] transition-colors duration-200 shadow-sm"
+                            >
+                                <i className="fab fa-whatsapp" style={{ fontSize: "15px" }}></i>
+                                <span>WhatsApp</span>
+                            </a>
+                        )}
+                        {appData?.telegram_enable && !appData?.whatsapp_enable && (
+                            <a
+                                href={appData?.telegram_link}
+                                className="inline-flex items-center gap-1 px-4 py-2.5 rounded-full bg-[#2eb9d8] text-white text-sm font-semibold hover:bg-[#26a5c4] transition-colors duration-200 shadow-sm"
+                            >
+                                <i className="fab fa-telegram" style={{ fontSize: "15px" }}></i>
+                                <span>Telegram</span>
+                            </a>
+                        )}
+                    </div>
+                </div>
+            )}
 
             {/* <p style={{textAlign:"center",fontSize:"16px",color:"#fff", margin:"30px 0 15px"}}>Download App</p>
                 <div style={{display:"flex",justifyContent:"space-around",alignItems:"top"}}>

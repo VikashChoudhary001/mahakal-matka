@@ -4,16 +4,43 @@ import Logo from "../assets/imgs/Logo.png";
 import { useSelector } from "react-redux";
 import Modal from "./Modal";
 import InstallButton from "../components/InstallButton";
+import { logout } from "../repository/AuthRepository";
+import { toast } from "react-toastify";
+import Spinner from "./Spinner";
 
 const Sidebar = ({ toggleSideBar }) => {
   let location = useLocation();
   let { appData, user } = useSelector((state) => state.appData.appData);
   let { GameRate } = useSelector((state) => state.FlowApp);
   let [logoutModal, setLogoutModal] = useState(false);
+  let [logoutLoading, setLogoutLoading] = useState(false);
 
   // Get user data either from Redux or localStorage
   const storedUser = JSON.parse(localStorage.getItem("authUser")) || {};
   const currentUser = user?.phone ? user : storedUser;
+
+  // Handle logout API call
+  const handleLogout = async () => {
+    setLogoutLoading(true);
+    try {
+      const { data } = await logout();
+      if (data.error === false) {
+        // Success - proceed with current logout logic
+        localStorage.clear();
+        sessionStorage.clear();
+        window.location.href = "/auth/login";
+        document.title = "Mahakal Matka";
+      } else {
+        // Show error message from API
+        toast.error(data.message || "Logout failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Logout error:", error);
+      toast.error("Something went wrong during logout. Please try again.");
+    } finally {
+      setLogoutLoading(false);
+    }
+  };
 
 
   let links = [
@@ -73,7 +100,7 @@ const Sidebar = ({ toggleSideBar }) => {
       onClick: async (e) => {
         e.preventDefault();
         const shareText = `कल्याण मिलन श्रीदेवी खेलने वाले भाई ये Trusted एप डाउनलोड करें और Online खेलें!`;
-        const shareUrl = "https://app.mahakalmatka.com/auth/login?referralCode="+user?.own_code;
+        const shareUrl = "https://app.mahakalmatka.com/auth/login?referralCode=" + user?.own_code;
 
         if (navigator.share) {
           try {
@@ -133,7 +160,7 @@ const Sidebar = ({ toggleSideBar }) => {
     },
   ];
 
-  
+
 
   // Conditionally add the Game Rate link if GameRate is true
   if (GameRate) {
@@ -201,12 +228,13 @@ const Sidebar = ({ toggleSideBar }) => {
           <div className="w-11/12 max-w-[480px] p-3">
             Are You sure you want to logout?
             <div className="mt-4 flex gap-4 justify-end">
-              <button onClick={() => {
-                localStorage.clear();
-                sessionStorage.clear();
-                window.location.href = "/auth/login";
-                document.title = "Mahakal Matka"
-              }} className="py-1 px-3 bg-red-400 rounded-md">Logout</button>
+              <button
+                onClick={handleLogout}
+                disabled={logoutLoading}
+                className="py-1 px-3 bg-red-400 rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {logoutLoading ? <Spinner /> : "Logout"}
+              </button>
               <button onClick={() => {
                 setLogoutModal(false)
               }} className="py-1 px-3 bg-primary rounded-md">Cancel</button>
@@ -360,7 +388,7 @@ const Sidebar = ({ toggleSideBar }) => {
               )
             )}
           </div>
-            {/* <div className="p-2 text-[9px] h-[100px] font-semibold text-center text-black bg-white">
+          {/* <div className="p-2 text-[9px] h-[100px] font-semibold text-center text-black bg-white">
               <div className="grid grid-cols-3 gap-2">
                 <a
                   href={appData?.whatsapp_group_join_link}

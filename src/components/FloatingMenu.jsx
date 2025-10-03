@@ -2,11 +2,11 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Auth from "../layouts/Auth";
 import "./styles.css";
-import { FaCross, FaDownload } from "react-icons/fa";
+import { FaCross } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { DeferredPromptContext } from "../context/DeferredPromptContext";
 import Modal from "./Modal";
-import { ShowEveryThing } from "../credentials";
+import FloatingDownloadButton from "./FloatingDownloadButton";
 
 const FloatingMenu = () => {
     const navigate = useNavigate();
@@ -16,6 +16,8 @@ const FloatingMenu = () => {
     const { appData } = useSelector((state) => state.appData.appData);
     const [openDownloadBar, setOpenDownloadBar] = useState(false);
     const [openLoginModal, setOpenLoginModal] = useState(false);
+    const [downloadError, setDownloadError] = useState(null);
+    const [isDownloading, setIsDownloading] = useState(false);
 
     let { deferredPrompt, setDeferredPrompt } = useContext(DeferredPromptContext);
 
@@ -24,14 +26,8 @@ const FloatingMenu = () => {
     }, []);
 
     const handleInstallClick = async () => {
-        handleCloseDownloadBar();
-        if (appData?.app_update_link?.length > 0) {
-            if (ShowEveryThing) {
-                window.location.href = "https://api.mahakalmatka.com/download2";
-            } else {
-                window.location.href = appData?.app_update_link;
-            }
-        } else if (deferredPrompt) {
+        if (deferredPrompt) {
+            handleCloseDownloadBar();
             deferredPrompt?.prompt();
             const { outcome } = await deferredPrompt?.userChoice;
             if (outcome === "accepted") {
@@ -41,6 +37,10 @@ const FloatingMenu = () => {
             }
             setDeferredPrompt(null);
         }
+    };
+
+    const handleDownloadComplete = () => {
+        handleCloseDownloadBar();
     };
 
     let items = [
@@ -148,41 +148,52 @@ const FloatingMenu = () => {
             {openDownloadBar ? (
                 <div className="floating-webAppNotification floating-menu">
                     <div className="fwnLeft">
-                        <button
-                            onClick={handleInstallClick}
-                            style={{
-                                display: "flex",
-                                alignItems: "center",
-                                gap: "10px",
-                                padding: "5px 8px",
-                                borderRadius: "4px",
-                                background: "transparent",
-                                border: "1px solid #0098c7",
-                                fontWeight: "600",
-                                color: "#0098c7",
-                            }}
-                        >
-                            <FaDownload />
-                            Download
-                        </button>
+                        {appData?.app_update_link?.length > 0 ? (
+                            <FloatingDownloadButton
+                                onDownloadComplete={handleDownloadComplete}
+                                onErrorChange={setDownloadError}
+                                onDownloadingChange={setIsDownloading}
+                            />
+                        ) : (
+                            <button
+                                onClick={handleInstallClick}
+                                style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: "10px",
+                                    padding: "5px 8px",
+                                    borderRadius: "4px",
+                                    background: "transparent",
+                                    border: "1px solid #0098c7",
+                                    fontWeight: "600",
+                                    color: "#0098c7",
+                                }}
+                            >
+                                Install App
+                            </button>
+                        )}
                     </div>
                     <div className="flex items-center gap-4 pl-2">
-                        <p className="text-sm text-center">Download the app now!</p>
+                        <p className="text-sm text-center" style={{ color: downloadError ? "#ff4444" : "inherit" }}>
+                            {downloadError || (appData?.app_update_link?.length > 0 ? "Download the app now!" : "Install as Mobile App!")}
+                        </p>
                         <button
                             onClick={handleCloseDownloadBar}
+                            disabled={isDownloading}
                             style={{
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "center",
                                 borderRadius: "20px",
-                                background: "red",
+                                background: isDownloading ? "#ccc" : "red",
                                 fontWeight: "600",
                                 padding: "3px",
                                 width: "25px",
                                 height: "25px",
+                                cursor: isDownloading ? "not-allowed" : "pointer",
+                                opacity: isDownloading ? 0.5 : 1,
                             }}
                         >
-                            {" "}
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"

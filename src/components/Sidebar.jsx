@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Logo from "../assets/imgs/Logo.png";
 import { useSelector } from "react-redux";
 import Modal from "./Modal";
 import InstallButton from "../components/InstallButton";
+import DownloadButton from "./DownloadButton";
 import { logout } from "../repository/AuthRepository";
 import { toast } from "react-toastify";
 import Spinner from "./Spinner";
+import { DeferredPromptContext } from "../context/DeferredPromptContext";
 
 const Sidebar = ({ toggleSideBar }) => {
   let location = useLocation();
@@ -14,6 +16,7 @@ const Sidebar = ({ toggleSideBar }) => {
   let { GameRate } = useSelector((state) => state.FlowApp);
   let [logoutModal, setLogoutModal] = useState(false);
   let [logoutLoading, setLogoutLoading] = useState(false);
+  const { deferredPrompt } = useContext(DeferredPromptContext);
 
   // Get user data either from Redux or localStorage
   const storedUser = JSON.parse(localStorage.getItem("authUser")) || {};
@@ -291,6 +294,17 @@ const Sidebar = ({ toggleSideBar }) => {
               >
                 Edit Profile
               </Link>
+
+              {/* Download Button */}
+              {(appData?.app_update_link?.length > 0 || deferredPrompt) && (
+                <div className="mt-2">
+                  <DownloadButton
+                    variant="sidebar"
+                    size="medium"
+                  />
+                </div>
+              )}
+
               {/* <InstallButton /> */}
             </div>
           </div>

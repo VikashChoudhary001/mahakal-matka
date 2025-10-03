@@ -12,6 +12,7 @@ import Auth from '../layouts/Auth.jsx';
 import moment from "moment";
 import Play from "./Play.jsx"
 import Modal from "../components/Modal.jsx"
+import InstallAppDialog from "../components/InstallAppDialog.jsx";
 import { ShowEveryThing } from "../credentials/index.js";
 
 // const Play = React.lazy(() => import('./Play.jsx'));
@@ -26,6 +27,8 @@ const Home = () => {
     const [authModalOpen, setAuthModalOpen] = useState(false);
     const [hasShownModal, setHasShownModal] = useState(false);
     const [openLoginModal, setOpenLoginModal] = useState(false);
+    const [showInstallDialog, setShowInstallDialog] = useState(false);
+    const [hasShownInstallDialog, setHasShownInstallDialog] = useState(false);
 
 
     const getCurrentDate = () => {
@@ -34,6 +37,32 @@ const Home = () => {
 
     useEffect(() => {
         document.title = "Home | Mahakal Matka";
+
+        // Also trigger install dialog check on mount
+        const checkInstallDialog = () => {
+            const currentToken = localStorage.getItem("authToken");
+            const isModelOpenedAlready = localStorage.getItem("isModelOpenedAlready") === "true";
+            const hasShownInstallDialogBefore = localStorage.getItem("hasShownInstallDialog") === "true";
+
+            // console.log("Mount Install Dialog Check:", {
+            //     token: !!currentToken,
+            //     isModelOpenedAlready,
+            //     hasShownInstallDialogBefore,
+            //     hasShownInstallDialog
+            // });
+
+            if (currentToken && !isModelOpenedAlready && !hasShownInstallDialogBefore && !hasShownInstallDialog) {
+                // console.log("Showing install dialog on mount in 2 seconds...");
+                setTimeout(() => {
+                    setShowInstallDialog(true);
+                    setHasShownInstallDialog(true);
+                    localStorage.setItem("hasShownInstallDialog", "true");
+                    console.log("Install dialog shown on mount");
+                }, 2000);
+            }
+        };
+
+        checkInstallDialog();
     }, []);
 
     const toggle = () => {
@@ -62,6 +91,33 @@ const Home = () => {
         }
     }, [hasShownModal]);
 
+    // Show install dialog once after login when isModelOpenedAlready is false
+    useEffect(() => {
+        const currentToken = localStorage.getItem("authToken");
+        const isModelOpenedAlready = localStorage.getItem("isModelOpenedAlready") === "true";
+        const hasShownInstallDialogBefore = localStorage.getItem("hasShownInstallDialog") === "true";
+
+        console.log("Install Dialog Check:", {
+            token: !!currentToken,
+            isModelOpenedAlready,
+            hasShownInstallDialogBefore,
+            hasShownInstallDialog
+        });
+
+        // Show dialog when user is logged in AND floating download bar was NOT dismissed (isModelOpenedAlready is false)
+        if (currentToken && !isModelOpenedAlready && !hasShownInstallDialogBefore && !hasShownInstallDialog) {
+            console.log("Showing install dialog in 2 seconds...");
+            const timer = setTimeout(() => {
+                setShowInstallDialog(true);
+                setHasShownInstallDialog(true);
+                localStorage.setItem("hasShownInstallDialog", "true");
+                console.log("Install dialog shown");
+            }, 2000); // Show after 2 seconds of being on homepage
+
+            return () => clearTimeout(timer);
+        }
+    }, [hasShownInstallDialog]);
+
     const tabHeight = "h-[1px]";
     const overallPadding = "p-0";
     const vertialyPadding = "p-0";
@@ -74,14 +130,14 @@ const Home = () => {
             localStorage.setItem("authMenu", 1)
             setAuthModalOpen(true);
             setOpenLoginModal(true)
-        }else{
+        } else {
         }
     };
 
-    const openLink = (url) =>{
-        if(url?.includes("http")){
-            window.open(url,"_blank");
-        }else if(url){
+    const openLink = (url) => {
+        if (url?.includes("http")) {
+            window.open(url, "_blank");
+        } else if (url) {
             navigate(url);
         }
 
@@ -248,12 +304,18 @@ const Home = () => {
                 {/* <Suspense fallback={<div>Loading...</div>}> */}
                 <Auth isOpen={authModalOpen} toggle={() => setAuthModalOpen(false)} />
                 {/* </Suspense> */}
+
+                {/* Install App Dialog */}
+                <InstallAppDialog
+                    isOpen={showInstallDialog}
+                    onClose={() => setShowInstallDialog(false)}
+                />
             </div>
         );
     }
 
-    let showResultsOnly = appData?.show_results_only||0;
-    if(ShowEveryThing){
+    let showResultsOnly = appData?.show_results_only || 0;
+    if (ShowEveryThing) {
         showResultsOnly = 0;
     }
 
@@ -261,16 +323,16 @@ const Home = () => {
         <>
             <div className="p-2 pt-1 pb-5">
                 <div className="w-full rounded-md overflow-hidden mb-2">
-                    <img src={appData?.homepage_image_url} className="cursor-pointer" alt="" onClick={() => token? openLink(appData?.slider_url): setAuthModalOpen(true)} />
+                    <img src={appData?.homepage_image_url} className="cursor-pointer" alt="" onClick={() => token ? openLink(appData?.slider_url) : setAuthModalOpen(true)} />
                 </div>
                 {
-                    (appData?.homepage_message?.length > 0 &&  !showResultsOnly) ?
+                    (appData?.homepage_message?.length > 0 && !showResultsOnly) ?
                         <div className="flex flex-col items-center justify-center p-2 mb-2 font-semibold text-center text-white bg-yellow-600 rounded-md">
                             <span>{appData.homepage_message}</span>
                             {
                                 appData?.homepage_button_text?.length > 0 ?
                                     <button
-                                        onClick={ () => token ?openLink(appData?.homepage_button_url): setOpenLoginModal(true) }
+                                        onClick={() => token ? openLink(appData?.homepage_button_url) : setOpenLoginModal(true)}
                                         rel="noreferrer"
                                         className="px-4 py-1 mt-2 rounded-2xl bg-orange"
                                         target="_blank"
@@ -305,7 +367,7 @@ const Home = () => {
                                 <span className="text-white text-[16px] font-extrabold">WITHDRAWAL</span>
                             </Link>
                         </div>
-                    :null
+                        : null
                 }
                 {/* <div className="flex justify-center">
                     <a href={appData?.telegram_link} className="shadow-md rounded-lg w-1/2 h-[50px] flex items-center justify-center gap-2 p-2 border-[3px] border-[#fff] bg-[#2eb9d8] hover:shadow-xl transition-shadow duration-300">
@@ -370,38 +432,44 @@ const Home = () => {
                 !showResultsOnly ?
                     <Modal
                         isOpen={openLoginModal}
-                        toggle={()=>setOpenLoginModal(false)}
+                        toggle={() => setOpenLoginModal(false)}
                         className="custom-modal"
                         centered
-                        >
-                        <div className="font-semibold text-white bg-primary " style={{width:"400px",maxWidth:"90vw"}}>
+                    >
+                        <div className="font-semibold text-white bg-primary " style={{ width: "400px", maxWidth: "90vw" }}>
                             <div className="flex justify-between p-3 border-b border-white">
-                            <h4>Need Login</h4>
-                            <button onClick={()=>setOpenLoginModal(false)}>
-                                <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth="1.5"
-                                stroke="currentColor"
-                                className="w-6 h-6"
-                                >
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
-                                </svg>
-                            </button>
+                                <h4>Need Login</h4>
+                                <button onClick={() => setOpenLoginModal(false)}>
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        strokeWidth="1.5"
+                                        stroke="currentColor"
+                                        className="w-6 h-6"
+                                    >
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
                             </div>
                             <div className="flex flex-col items-center gap-4 pt-4 pb-8">
                                 <div className="text-md">
                                     To use this feature, you need to login
                                 </div>
-                                <button className="p-2 px-8 text-md text-white rounded-md bg-green-600 " onClick={(()=>navigate("/auth/login"))}>
-                                    Login 
+                                <button className="p-2 px-8 text-md text-white rounded-md bg-green-600 " onClick={(() => navigate("/auth/login"))}>
+                                    Login
                                 </button>
                             </div>
                         </div>
                     </Modal>
-                :null
+                    : null
             }
+
+            {/* Install App Dialog */}
+            <InstallAppDialog
+                isOpen={showInstallDialog}
+                onClose={() => setShowInstallDialog(false)}
+            />
         </>
     );
 };

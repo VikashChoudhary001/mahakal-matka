@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FaDownload } from 'react-icons/fa';
 import { useDownload } from '../hooks/useDownload';
 import { useSelector } from 'react-redux';
 import { ShowEveryThing } from '../credentials';
-import { useEffect } from 'react';
 
 const FloatingDownloadButton = ({
     onDownloadComplete = null,

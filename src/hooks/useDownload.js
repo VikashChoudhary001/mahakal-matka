@@ -11,85 +11,49 @@ export const useDownload = () => {
             setDownloadProgress(0);
             setDownloadError(null);
 
-            const response = await fetch(url, {
-                method: 'GET',
-                mode: 'cors'
-            });
+            console.log('Starting direct download...');
 
-            if (!response.ok) {
-                throw new Error(`Server error: ${response.status} ${response.statusText}`);
-            }
+            // Show progress animation for better UX
+            const progressInterval = setInterval(() => {
+                setDownloadProgress(prev => {
+                    if (prev >= 100) {
+                        clearInterval(progressInterval);
+                        return 100;
+                    }
+                    return prev + 20;
+                });
+            }, 100);
 
-            const contentLength = response.headers.get('content-length');
-            const total = parseInt(contentLength, 10);
-            let loaded = 0;
-
-            const reader = response.body.getReader();
-            const chunks = [];
-
-            while (true) {
-                const { done, value } = await reader.read();
-                if (done) break;
-
-                chunks.push(value);
-                loaded += value.length;
-
-                if (total) {
-                    const progress = Math.round((loaded / total) * 100);
-                    setDownloadProgress(progress);
-                }
-            }
-
-            // Create blob from chunks
-            const blob = new Blob(chunks);
-            const downloadUrl = window.URL.createObjectURL(blob);
-
-            // Create download link and trigger download
-            const link = document.createElement('a');
-            link.href = downloadUrl;
-            link.download = filename || 'app.apk';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-
-            // Clean up
-            window.URL.revokeObjectURL(downloadUrl);
-
-            // Set progress to 100% and show completion
-            setDownloadProgress(100);
-
-            // Reset states after successful download
+            // Start direct download
             setTimeout(() => {
-                setIsDownloading(false);
-                setDownloadProgress(0);
-            }, 1500);
+                clearInterval(progressInterval);
+                setDownloadProgress(100);
+
+                // Trigger direct download
+                window.location.href = url;
+
+                // Reset states after download
+                setTimeout(() => {
+                    setIsDownloading(false);
+                    setDownloadProgress(0);
+                }, 1000);
+            }, 500);
 
             return { success: true };
 
         } catch (error) {
             console.error('Download failed:', error);
 
-            let errorMessage = 'Download failed. Please try again.';
-
-            if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
-                errorMessage = 'Network error. Please check your connection and try again.';
-            } else if (error.message.includes('CORS')) {
-                errorMessage = 'Server configuration issue. Using direct download instead.';
-            } else if (error.message.includes('Server error')) {
-                errorMessage = `Server error: ${error.message}. Using direct download instead.`;
-            }
-
-            setDownloadError(errorMessage);
+            setDownloadError('Download failed. Please try again.');
             setIsDownloading(false);
             setDownloadProgress(0);
 
-            // Show error for 3 seconds, then fallback to direct download
+            // Clear error after 3 seconds
             setTimeout(() => {
                 setDownloadError(null);
-                window.location.href = url;
             }, 3000);
 
-            return { success: false, error: errorMessage };
+            return { success: false, error: 'Download failed. Please try again.' };
         }
     };
 

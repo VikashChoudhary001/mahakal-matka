@@ -8,6 +8,10 @@ const InstallAppDialog = ({ isOpen, onClose }) => {
     const { appData } = useSelector((state) => state.appData.appData);
     const { deferredPrompt } = useContext(DeferredPromptContext);
 
+    // Detect Android WebView via the JS bridge your WebView exposes
+    const isInAndroidApp =
+        typeof window !== 'undefined' && typeof window.AndroidApp !== 'undefined';
+
     const handleDownloadComplete = () => {
         // Close dialog after successful download
         setTimeout(() => {
@@ -16,7 +20,12 @@ const InstallAppDialog = ({ isOpen, onClose }) => {
     };
 
     return (
-        <Modal isOpen={isOpen} toggle={onClose} className="custom-modal" centered>
+        <Modal
+            isOpen={isOpen && !isInAndroidApp}
+            toggle={onClose}
+            className="custom-modal"
+            centered
+        >
             <div className="font-semibold text-white bg-primary rounded-lg" style={{ width: "400px", maxWidth: "90vw" }}>
                 <div className="flex justify-between p-3 border-b border-white">
                     <h4>📱 Install Our App</h4>

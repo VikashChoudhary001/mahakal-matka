@@ -12,6 +12,10 @@ const FloatingDownloadButton = ({
     const { appData } = useSelector((state) => state.appData.appData);
     const { downloadProgress, isDownloading, downloadError, downloadFile } = useDownload();
 
+    // Detect Android WebView via the JS bridge your WebView exposes
+    const isInAndroidApp =
+        typeof window !== 'undefined' && typeof window.AndroidApp !== 'undefined';
+
     // Communicate state changes to parent
     useEffect(() => {
         if (onErrorChange) {
@@ -41,6 +45,11 @@ const FloatingDownloadButton = ({
         if (isDownloading) return `${downloadProgress}%`;
         return "Download";
     };
+
+    // Don't render the button if running inside Android app
+    if (isInAndroidApp) {
+        return null;
+    }
 
     return (
         <button

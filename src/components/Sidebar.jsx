@@ -18,6 +18,10 @@ const Sidebar = ({ toggleSideBar }) => {
   let [logoutLoading, setLogoutLoading] = useState(false);
   const { deferredPrompt } = useContext(DeferredPromptContext);
 
+  // Detect Android WebView via the JS bridge your WebView exposes
+  const isInAndroidApp =
+    typeof window !== 'undefined' && typeof window.AndroidApp !== 'undefined';
+
   // Get user data either from Redux or localStorage
   const storedUser = JSON.parse(localStorage.getItem("authUser")) || {};
   const currentUser = user?.phone ? user : storedUser;
@@ -296,7 +300,7 @@ const Sidebar = ({ toggleSideBar }) => {
               </Link>
 
               {/* Download Button */}
-              {(appData?.app_update_link?.length > 0 || deferredPrompt) && (
+              {(appData?.app_update_link?.length > 0 || deferredPrompt) && !isInAndroidApp && (
                 <div className="mt-2">
                   <DownloadButton
                     variant="sidebar"

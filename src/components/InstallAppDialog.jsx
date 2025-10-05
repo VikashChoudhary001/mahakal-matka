@@ -35,9 +35,9 @@ const InstallAppDialog = ({ isOpen, onClose }) => {
             className="custom-modal"
             centered
         >
-            <div className="font-semibold text-white bg-primary rounded-lg" style={{ width: "400px", maxWidth: "90vw" }}>
+            <div className="font-semibold text-white bg-primary rounded-lg font-hindi" style={{ width: "400px", maxWidth: "90vw" }}>
                 <div className="flex justify-between p-3 border-b border-white">
-                    <h4>📱 Install Our App</h4>
+                    <h4>📱 App Install करें</h4>
                     <button onClick={handleClose}>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -54,9 +54,9 @@ const InstallAppDialog = ({ isOpen, onClose }) => {
                 <div className="flex flex-col items-center gap-4 p-6">
                     <div className="text-center">
                         <div className="text-4xl mb-3">🚀</div>
-                        <h3 className="text-xl mb-2">Get Better Experience!</h3>
+                        <h3 className="text-xl mb-2">बेहतर अनुभव पाएं!</h3>
                         <p className="text-sm opacity-90 mb-4">
-                            Install our app for faster access, better performance, and exclusive features.
+                            तेज़ गति और बेहतर सुविधाओं के लिए App install करें।
                         </p>
                     </div>
 
@@ -70,12 +70,12 @@ const InstallAppDialog = ({ isOpen, onClose }) => {
                         </div>
                     ) : (
                         <div className="text-center text-sm opacity-75">
-                            App installation not available at the moment.
+                            अभी App install उपलब्ध नहीं है।
                         </div>
                     )}
 
                     <div className="text-xs text-center opacity-75 mt-2">
-                        ✨ Fast • Secure • Easy to use
+                        ✨ तेज़ • सुरक्षित • आसान
                     </div>
                 </div>
             </div>

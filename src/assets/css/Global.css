@@ -1,4 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -7,7 +9,8 @@
   display: none;
 }
 
-table td, table th{
+table td,
+table th {
   border: 1px solid rgba(255, 255, 255, 0.4);
   width: 100%;
   min-width: 80px;
@@ -18,8 +21,8 @@ table td, table th{
   align-items: center;
   justify-content: center;
   padding: 6px 15px;
-  background-color: #013951; 
-  border: 1px solid #013951; 
+  background-color: #013951;
+  border: 1px solid #013951;
   color: white;
   font-size: 14px;
   border-radius: 30px;
@@ -28,24 +31,29 @@ table td, table th{
 }
 
 .android-button:hover {
-  border: 1px solid #fff; 
+  border: 1px solid #fff;
 }
+
 .android-button i {
-  margin-right: 10px; /* Space between icon and text */
+  margin-right: 10px;
+  /* Space between icon and text */
 }
 
-.gradiantBgButton{
-  background: linear-gradient(to right, transparent 0%, #0098c7 50% , transparent 100%);
+.gradiantBgButton {
+  background: linear-gradient(to right, transparent 0%, #0098c7 50%, transparent 100%);
 }
 
-.rotateIcon{
+.rotateIcon {
   animation: 1s linear infinite rotate;
 }
-.blinkText{
+
+.blinkText {
   animation: 1.2s linear infinite blink;
 }
+
 .Toastify__toast {
-  font-size: 14px; /* your desired font size */
+  font-size: 14px;
+  /* your desired font size */
   color: #000 !important;
   line-height: 1.2em;
   font-weight: 600;
@@ -55,17 +63,21 @@ table td, table th{
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
 }
+
 @keyframes blink {
   0% {
     transform: scale(1);
   }
+
   75% {
     transform: scale(.95);
   }
+
   100% {
     transform: scale(1);
   }

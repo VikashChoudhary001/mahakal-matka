@@ -10,6 +10,8 @@ module.exports = {
       },
       fontFamily: {
         poppins: "Poppins",
+        hindi: ["Noto Sans Devanagari", "Inter", "Poppins", "sans-serif"],
+        inter: ["Inter", "sans-serif"],
       },
     },
   },

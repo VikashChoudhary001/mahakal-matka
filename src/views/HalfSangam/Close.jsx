@@ -36,7 +36,7 @@ const Close = () => {
             }
             e.target.value = value;
         } else {
-            e.target.value = value.slice(0, 3); 
+            e.target.value = value.slice(0, 3);
         }
     };
 
@@ -54,9 +54,9 @@ const Close = () => {
         const pana = document.getElementById('pana').value;
         const ank = document.getElementById('ank').value;
         const amount = document.getElementById('amount').value;
-    
+
         // check for minimum bid
-        if(initialAppData?.appData?.min_bid_amount && parseInt(amount)<initialAppData?.appData?.min_bid_amount){
+        if (initialAppData?.appData?.min_bid_amount && parseInt(amount) < initialAppData?.appData?.min_bid_amount) {
             toast.error(`Bid amount cannot be less than ${initialAppData.appData.min_bid_amount}!`);
             return;
         }
@@ -66,7 +66,7 @@ const Close = () => {
             toast.error(`Invalid Pana`);
             return;
         }
-    
+
         if (pana.length === 3 && ank.length === 1 && amount) {
             setRows([...rows, { pana, ank, amount }]);
             document.getElementById('pana').value = '';
@@ -85,7 +85,7 @@ const Close = () => {
 
     const handleSubmit = () => {
         if (rows.length === 0) {
-            alert('No records to submit.');
+            toast.error('No records to submit.');
             return;
         }
         setShowPopup(true);
@@ -96,7 +96,7 @@ const Close = () => {
     };
 
     const formattedData = rows.map(row => ({
-        pair: row.pana +"x"+ row.ank,
+        pair: row.pana + "x" + row.ank,
         value: row.amount,
         type: 'close'  // Assuming 'Close' as a fixed type for this component
     }));
@@ -133,7 +133,7 @@ const Close = () => {
             </div>
 
             <div className="flex justify-center bg-blue-gray-100 ">
-            <div className="w-full bg-white rounded-lg shadow-sm flex justify-center items-center gap-2 p-1 mx-1 mb-2">
+                <div className="w-full bg-white rounded-lg shadow-sm flex justify-center items-center gap-2 p-1 mx-1 mb-2">
                     <div className="flex flex-col w-full">
                         <label className="text-md font-semibold">Amount</label>
                         <input
@@ -189,7 +189,7 @@ const Close = () => {
             <div className='max-w-[400px] m-auto mt-4 fixed bottom-0 left-0 right-0 p-4'>
                 <button className='w-full p-3 bg-[#e4ae39] text-white rounded' onClick={handleSubmit}>Submit</button>
             </div>
-            <Popup show={showPopup} data={formattedData} onClose={closePopup} onSubmitted={()=>{setRows([])}}/>
+            <Popup show={showPopup} data={formattedData} onClose={closePopup} onSubmitted={() => { setRows([]) }} />
         </div>
     );
 };

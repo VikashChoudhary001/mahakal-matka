@@ -4,20 +4,20 @@ import Popup from '../components/Submit_Bet_Popup';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 
-  const filterDoublePanaByRemainder = (remainder) => {
-    return Array.from({ length: 900 }, (_, index) => index + 100)
-      .filter(num => {
-        const digits = num.toString().split('').map(Number);
-        const sumOfDigits = digits.reduce((acc, curr) => acc + curr, 0);
-        const isAscending = digits[2] === 0
-          ? digits[0] <= digits[1]
-          : digits[0] <= digits[1] && digits[1] <= digits[2];
-        const hasRepeatedDigit = new Set(digits).size !== digits.length;
-        const allSameDigit = new Set(digits).size === 1; // Checks if all digits are the same
-        return (sumOfDigits % 10 === remainder && isAscending && hasRepeatedDigit && !allSameDigit) || (num%100===0);
-      })
-      .map(num => num.toString());
-  };
+const filterDoublePanaByRemainder = (remainder) => {
+  return Array.from({ length: 900 }, (_, index) => index + 100)
+    .filter(num => {
+      const digits = num.toString().split('').map(Number);
+      const sumOfDigits = digits.reduce((acc, curr) => acc + curr, 0);
+      const isAscending = digits[2] === 0
+        ? digits[0] <= digits[1]
+        : digits[0] <= digits[1] && digits[1] <= digits[2];
+      const hasRepeatedDigit = new Set(digits).size !== digits.length;
+      const allSameDigit = new Set(digits).size === 1; // Checks if all digits are the same
+      return (sumOfDigits % 10 === remainder && isAscending && hasRepeatedDigit && !allSameDigit) || (num % 100 === 0);
+    })
+    .map(num => num.toString());
+};
 
 const DualPana = () => {
   const [selectedOption, setSelectedOption] = useState('close');
@@ -40,23 +40,23 @@ const DualPana = () => {
     setSelectedOption(event.target.value);
   };
 
-    const _checkMinBid=(minBid,allbids)=>{
-      let check = allbids?.find((bid)=>parseInt(bid?.value)<minBid)
-      return check !==undefined;
+  const _checkMinBid = (minBid, allbids) => {
+    let check = allbids?.find((bid) => parseInt(bid?.value) < minBid)
+    return check !== undefined;
+  }
+
+  const handleSubmit = () => {
+
+    if (dataToShow.length === 0) {
+      toast.error('No records to submit.');
+      return;
     }
-  
-    const handleSubmit = () => {
-      
-      if (dataToShow.length === 0) {
-          alert('No records to submit.');
-          return;
-        }
-      else if(appData?.appData?.min_bid_amount && dataToShow?.length>0 && _checkMinBid(appData.appData.min_bid_amount,dataToShow)){
-          toast.error(`Bid amount cannot be less than ${appData.appData.min_bid_amount}!`);
-          return;
-      }
-      setShowPopup(true);
-    };
+    else if (appData?.appData?.min_bid_amount && dataToShow?.length > 0 && _checkMinBid(appData.appData.min_bid_amount, dataToShow)) {
+      toast.error(`Bid amount cannot be less than ${appData.appData.min_bid_amount}!`);
+      return;
+    }
+    setShowPopup(true);
+  };
 
   const closePopup = () => {
     setShowPopup(false);
@@ -75,31 +75,31 @@ const DualPana = () => {
 
   return (
     <>
-        <GameHeader dropdown={true} selectedOption={selectedOption} onSelectChange={handleSelectChange} />
-        <div className='w-[100%] m-auto h-full shadow-inner p-2 mt-20 '>
-          {[...Array(10).keys()].map(remainder => (
-            <div key={remainder}>
-              <div className='border-t border-black/30 shadow-md py-1 text-center my-4 ml-4 text-black'>{remainder}</div>
-              <div className='grid grid-cols-2 gap-4 w-[92%] m-auto'>
-                {filterDoublePanaByRemainder(remainder).map(pair => (
-                  <div key={pair} className='flex items-center justify-start'>
-                    <div className='text-[18px] font-semibold bg-[#e4ae39] w-[50px] h-[40px] flex justify-center items-center text-[#fff]'>{pair}</div>
-                    <input
-                      type="number"
-                      className='border p-2 text-[14px] w-full border-none bg-slate-200 h-[40px] text-center outline-none'
-                      maxLength="2"
-                      placeholder="Enter number"
-                      onChange={(e) => handleInputChange(e, `${remainder}-${pair}`)}
-                      value={inputValues[`${remainder}-${pair}`] || ''}
-                    />
-                  </div>
-                ))}
-              </div>
+      <GameHeader dropdown={true} selectedOption={selectedOption} onSelectChange={handleSelectChange} />
+      <div className='w-[100%] m-auto h-full shadow-inner p-2 mt-20 '>
+        {[...Array(10).keys()].map(remainder => (
+          <div key={remainder}>
+            <div className='border-t border-black/30 shadow-md py-1 text-center my-4 ml-4 text-black'>{remainder}</div>
+            <div className='grid grid-cols-2 gap-4 w-[92%] m-auto'>
+              {filterDoublePanaByRemainder(remainder).map(pair => (
+                <div key={pair} className='flex items-center justify-start'>
+                  <div className='text-[18px] font-semibold bg-[#e4ae39] w-[50px] h-[40px] flex justify-center items-center text-[#fff]'>{pair}</div>
+                  <input
+                    type="number"
+                    className='border p-2 text-[14px] w-full border-none bg-slate-200 h-[40px] text-center outline-none'
+                    maxLength="2"
+                    placeholder="Enter number"
+                    onChange={(e) => handleInputChange(e, `${remainder}-${pair}`)}
+                    value={inputValues[`${remainder}-${pair}`] || ''}
+                  />
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
+        ))}
 
-          <br /><br /><br /> <br />
-       
+        <br /><br /><br /> <br />
+
       </div>
       <div className='max-w-[400px] m-auto mt-4 fixed bottom-0 left-0 right-0 p-4'>
         <button className='w-full p-3 bg-[#e4ae39] text-white rounded shadow-2xl' onClick={handleSubmit}>Submit</button>

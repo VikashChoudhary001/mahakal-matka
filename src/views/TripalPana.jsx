@@ -14,7 +14,7 @@ const isTriplePana = (num) => {
 };
 
 const TriplePana = () => {
-  const [selectedOption, setSelectedOption] = useState('close'); 
+  const [selectedOption, setSelectedOption] = useState('close');
   const [inputValues, setInputValues] = useState({});
   const [showPopup, setShowPopup] = useState(false);
 
@@ -23,7 +23,7 @@ const TriplePana = () => {
   );
   const handleSelectChange = (event) => {
     setSelectedOption(event.target.value);
-  }; 
+  };
 
   // Handle input change to allow multiple digits and numeric values
   const handleInputChange = (e, key) => {
@@ -33,20 +33,20 @@ const TriplePana = () => {
     }
   };
 
-  const _checkMinBid=(minBid,allbids)=>{
-    let check = allbids?.find((bid)=>parseInt(bid?.value)<minBid)
-    return check !==undefined;
+  const _checkMinBid = (minBid, allbids) => {
+    let check = allbids?.find((bid) => parseInt(bid?.value) < minBid)
+    return check !== undefined;
   }
 
   const handleSubmit = () => {
-    
+
     if (dataToShow.length === 0) {
-        alert('No records to submit.');
-        return;
-      }
-    else if(appData?.appData?.min_bid_amount && dataToShow?.length>0 && _checkMinBid(appData.appData.min_bid_amount,dataToShow)){
-        toast.error(`Bid amount cannot be less than ${appData.appData.min_bid_amount}!`);
-        return;
+      toast.error('No records to submit.');
+      return;
+    }
+    else if (appData?.appData?.min_bid_amount && dataToShow?.length > 0 && _checkMinBid(appData.appData.min_bid_amount, dataToShow)) {
+      toast.error(`Bid amount cannot be less than ${appData.appData.min_bid_amount}!`);
+      return;
     }
     setShowPopup(true);
   };
@@ -93,9 +93,9 @@ const TriplePana = () => {
       <div className='max-w-[400px] m-auto mt-4 fixed bottom-0 left-0 right-0 p-4'>
         <button className='w-full p-3 bg-[#e4ae39] text-white rounded' onClick={handleSubmit}>Submit</button>
       </div>
-      <Popup show={showPopup} data={dataToShow} onClose={closePopup} onSubmitted={()=>{
+      <Popup show={showPopup} data={dataToShow} onClose={closePopup} onSubmitted={() => {
         setInputValues({})
-      }}/>
+      }} />
     </div>
   );
 }

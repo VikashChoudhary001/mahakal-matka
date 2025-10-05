@@ -93,7 +93,7 @@ const FullSangam = () => {
     const pana2Int = parseInt(pana2, 10);
 
     // check for minimum bid
-    if(initialAppData?.appData?.min_bid_amount && parseInt(amount)<initialAppData?.appData?.min_bid_amount){
+    if (initialAppData?.appData?.min_bid_amount && parseInt(amount) < initialAppData?.appData?.min_bid_amount) {
       toast.error(`Bid amount cannot be less than ${initialAppData.appData.min_bid_amount}!`);
       return;
     }
@@ -120,11 +120,11 @@ const FullSangam = () => {
     setRows(newRows);
   };
 
-    const handleSubmit = () => {
+  const handleSubmit = () => {
     if (rows.length === 0) {
-        alert('No records to submit.');
-        return;
-      }
+      toast.error('No records to submit.');
+      return;
+    }
     setShowPopup(true);
   };
 
@@ -133,7 +133,7 @@ const FullSangam = () => {
   };
 
   const formattedData = rows.map(row => ({
-    pair: row.pana1 +"x"+ row.pana2,
+    pair: row.pana1 + "x" + row.pana2,
     value: row.amount,
     type: ''  // Assuming 'FullSangam' as a fixed type for this component
   }));
@@ -231,9 +231,9 @@ const FullSangam = () => {
       <div className='max-w-[400px] m-auto mt-4 fixed bottom-0 left-0 right-0 p-4'>
         <button className='w-full p-3 bg-[#e4ae39] text-white rounded' onClick={handleSubmit}>Submit</button>
       </div>
-      <Popup show={showPopup} data={formattedData} onClose={closePopup} onSubmitted={()=>{
+      <Popup show={showPopup} data={formattedData} onClose={closePopup} onSubmitted={() => {
         setRows([])
-      }}/>
+      }} />
     </div>
   );
 };

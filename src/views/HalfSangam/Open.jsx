@@ -52,13 +52,13 @@ const Open = () => {
         const pana = document.getElementById('pana').value;
         const ank = document.getElementById('ank').value;
         const amount = document.getElementById('amount').value;
-    
+
         // Check if the pana exists in the numbers array
         if (!numbers.includes(parseInt(pana, 10))) {
             toast.error(`Invalid Pana`);
             return;
         }
-    
+
         if (pana.length === 3 && ank.length === 1 && amount) {
             setRows([...rows, { pana, ank, amount }]);
             document.getElementById('pana').value = '';
@@ -68,7 +68,7 @@ const Open = () => {
             toast.error("Pana must be 3 digits and Ank must be 1 digit.");
         }
     };
-    
+
 
     const handleDeleteRow = (index) => {
         const newRows = [...rows];
@@ -78,7 +78,7 @@ const Open = () => {
 
     const handleSubmit = () => {
         if (rows.length === 0) {
-            alert('No records to submit.');
+            toast.error('No records to submit.');
             return;
         }
         setShowPopup(true);
@@ -89,7 +89,7 @@ const Open = () => {
     };
 
     const formattedData = rows.map(row => ({
-        pair: row.ank +"x"+ row.pana,
+        pair: row.ank + "x" + row.pana,
         value: row.amount,
         type: 'open'  // Assuming 'Open' as a fixed type for this component
     }));
@@ -182,9 +182,9 @@ const Open = () => {
             <div className='max-w-[400px] m-auto mt-4 fixed bottom-0 left-0 right-0 p-4'>
                 <button className='w-full p-3 bg-[#e4ae39] text-white rounded' onClick={handleSubmit}>Submit</button>
             </div>
-            <Popup show={showPopup} data={formattedData} onClose={closePopup} onSubmitted={()=>{
+            <Popup show={showPopup} data={formattedData} onClose={closePopup} onSubmitted={() => {
                 setRows([]);
-            }}/>
+            }} />
         </div>
     );
 };

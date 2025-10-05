@@ -42,21 +42,25 @@ const Home = () => {
         const checkInstallDialog = () => {
             const currentToken = localStorage.getItem("authToken");
             const isModelOpenedAlready = localStorage.getItem("isModelOpenedAlready") === "true";
-            const hasShownInstallDialogBefore = localStorage.getItem("hasShownInstallDialog") === "true";
+            const userDismissedDialog = localStorage.getItem("userDismissedInstallDialog") === "true";
 
-            // console.log("Mount Install Dialog Check:", {
-            //     token: !!currentToken,
-            //     isModelOpenedAlready,
-            //     hasShownInstallDialogBefore,
-            //     hasShownInstallDialog
-            // });
+            console.log("Mount Install Dialog Check:", {
+                token: !!currentToken,
+                isModelOpenedAlready,
+                userDismissedDialog,
+                hasShownInstallDialog
+            });
 
-            if (currentToken && !isModelOpenedAlready && !hasShownInstallDialogBefore && !hasShownInstallDialog) {
-                // console.log("Showing install dialog on mount in 2 seconds...");
+            // Show dialog if:
+            // 1. User is logged in
+            // 2. Floating download bar was NOT dismissed (isModelOpenedAlready is false)  
+            // 3. User has NOT dismissed dialog before (permanent dismissal)
+            // 4. Dialog hasn't been shown in this page load yet
+            if (currentToken && !isModelOpenedAlready && !userDismissedDialog && !hasShownInstallDialog) {
+                console.log("Showing install dialog on mount in 2 seconds...");
                 setTimeout(() => {
                     setShowInstallDialog(true);
                     setHasShownInstallDialog(true);
-                    localStorage.setItem("hasShownInstallDialog", "true");
                     console.log("Install dialog shown on mount");
                 }, 2000);
             }
@@ -95,22 +99,22 @@ const Home = () => {
     useEffect(() => {
         const currentToken = localStorage.getItem("authToken");
         const isModelOpenedAlready = localStorage.getItem("isModelOpenedAlready") === "true";
-        const hasShownInstallDialogBefore = localStorage.getItem("hasShownInstallDialog") === "true";
+        const userDismissedDialog = localStorage.getItem("userDismissedInstallDialog") === "true";
 
         console.log("Install Dialog Check:", {
             token: !!currentToken,
             isModelOpenedAlready,
-            hasShownInstallDialogBefore,
+            userDismissedDialog,
             hasShownInstallDialog
         });
 
         // Show dialog when user is logged in AND floating download bar was NOT dismissed (isModelOpenedAlready is false)
-        if (currentToken && !isModelOpenedAlready && !hasShownInstallDialogBefore && !hasShownInstallDialog) {
+        // AND user has NOT dismissed dialog before (permanent dismissal)
+        if (currentToken && !isModelOpenedAlready && !userDismissedDialog && !hasShownInstallDialog) {
             console.log("Showing install dialog in 2 seconds...");
             const timer = setTimeout(() => {
                 setShowInstallDialog(true);
                 setHasShownInstallDialog(true);
-                localStorage.setItem("hasShownInstallDialog", "true");
                 console.log("Install dialog shown");
             }, 2000); // Show after 2 seconds of being on homepage
 

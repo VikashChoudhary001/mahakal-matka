@@ -13,10 +13,19 @@ const InstallAppDialog = ({ isOpen, onClose }) => {
         typeof window !== 'undefined' && typeof window.AndroidApp !== 'undefined';
 
     const handleDownloadComplete = () => {
+        // Mark that user has interacted with dialog - don't show dialog again
+        localStorage.setItem("userDismissedInstallDialog", "true");
+
         // Close dialog after successful download
         setTimeout(() => {
             onClose();
         }, 2000);
+    };
+
+    const handleClose = () => {
+        // Mark that user has dismissed dialog - don't show dialog again
+        localStorage.setItem("userDismissedInstallDialog", "true");
+        onClose();
     };
 
     return (
@@ -29,7 +38,7 @@ const InstallAppDialog = ({ isOpen, onClose }) => {
             <div className="font-semibold text-white bg-primary rounded-lg" style={{ width: "400px", maxWidth: "90vw" }}>
                 <div className="flex justify-between p-3 border-b border-white">
                     <h4>📱 Install Our App</h4>
-                    <button onClick={onClose}>
+                    <button onClick={handleClose}>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"

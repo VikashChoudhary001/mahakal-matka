@@ -1,7 +1,7 @@
 import Repository from "./Repository";
 
 function sendLoginOtp(payload) {
-    return Repository.post(`/send-login-otp?phone=${payload?.phone}`)
+    return Repository.post(`/send-login-otp?phone=${payload?.phone}${payload?.promo_type ? `&promo_type=${payload?.promo_type}` : ''}`)
 }
 function verifyLoginOtp(payload) {
     return Repository.post(`/verify-login-otp?phone=${payload?.phone}&otp=${payload?.otp}${payload?.referralCode ? `&referral_code=${payload?.referralCode}` : ''}`)

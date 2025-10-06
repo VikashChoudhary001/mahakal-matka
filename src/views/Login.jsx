@@ -28,6 +28,7 @@ const Login = () => {
     let [phone, setPhone] = useState("");
     let [otp, setOTP] = useState("");
     let [referralCode, setRefferalCode] = useState(searchParams?.get("referralCode") || "")
+    let [promoType, setPromoType] = useState(localStorage.getItem("promo_type") || "")
 
     const phoneInputRef = useRef(null);
     const otpInputRef = useRef(null);
@@ -50,6 +51,9 @@ const Login = () => {
             let payload = {
                 phone,
             };
+            if (promoType?.trim()?.length > 0) {
+                payload.promo_type = promoType;
+            }
             let { data } = await sendLoginOtp(payload);
             if (data.error === false) {
                 setOTPScreen(true);
@@ -92,6 +96,9 @@ const Login = () => {
                 localStorage.setItem("authUser", JSON.stringify(user));
                 localStorage.setItem("welcomeStatus", true);
                 localStorage.setItem("withdraw_details", JSON.stringify(user?.withdraw_details));
+
+                // Clear promo_type after successful login
+                localStorage.removeItem("promo_type");
 
                 navigate("/");
                 let response = await getAppData();

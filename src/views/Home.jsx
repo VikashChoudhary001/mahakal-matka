@@ -6,7 +6,7 @@ import Withdraw from "../assets/imgs/withdraw.png";
 import deposit1 from '../assets/imgs/deposit1.png';
 import widthdraw1 from '../assets/imgs/withdraw1.png';
 import Layer from '../assets/imgs/Layer.png';
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import Timer from "../components/Timer";
 import Auth from '../layouts/Auth.jsx';
 import moment from "moment";
@@ -20,6 +20,7 @@ import { ShowEveryThing } from "../credentials/index.js";
 
 const Home = () => {
     const navigate = useNavigate();
+    let [searchParams] = useSearchParams();
     let { appData } = useSelector((state) => state.appData.appData);
     let { markets } = useSelector((state) => state.markets);
     let { HomeNewView } = useSelector((state) => state.FlowApp);
@@ -37,6 +38,12 @@ const Home = () => {
 
     useEffect(() => {
         document.title = "Home | Mahakal Matka";
+
+        // Capture and store promo_type from 'r' URL parameter
+        const promoType = searchParams.get("r");
+        if (promoType?.trim()?.length > 0) {
+            localStorage.setItem("promo_type", promoType);
+        }
 
         // Also trigger install dialog check on mount
         const checkInstallDialog = () => {

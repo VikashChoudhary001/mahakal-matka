@@ -108,8 +108,17 @@ const WalletHistoryTable = ({
                                                 <h5 className="text-sm text-[#000] font-semibold mb-2">₹{item?.amount || "N/A"}</h5>
                                             </div>
                                             <div className="px-2 w-1/2">
-                                                <h5 className="text-sm t mb-1">Transaction ID</h5>
-                                                <p className="text-[14px] font-semibold">{item?.transaction_id || "N/A"}</p>
+                                                {activeTab === "withdrawPoints" && item?.status === "failed" && item?.failed_reason ? (
+                                                    <>
+                                                        <h5 className="text-sm text-red-600 font-semibold mb-1">Failed Reason</h5>
+                                                        <p className="text-[14px] text-red-600">{item?.failed_reason}</p>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <h5 className="text-sm t mb-1">Transaction ID</h5>
+                                                        <p className="text-[14px] font-semibold">{item?.transaction_id || "N/A"}</p>
+                                                    </>
+                                                )}
                                             </div>
                                         </div>
                                         <div className="flex justify-between border-t border-black py-2">

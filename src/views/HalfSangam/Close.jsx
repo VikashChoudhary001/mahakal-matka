@@ -98,7 +98,8 @@ const Close = () => {
     const formattedData = rows.map(row => ({
         pair: row.pana + "x" + row.ank,
         value: row.amount,
-        type: 'close'  // Assuming 'Close' as a fixed type for this component
+        type: '',
+        gameTypeId: 7
     }));
 
     return (

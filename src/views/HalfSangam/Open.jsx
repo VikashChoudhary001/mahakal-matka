@@ -91,7 +91,8 @@ const Open = () => {
     const formattedData = rows.map(row => ({
         pair: row.ank + "x" + row.pana,
         value: row.amount,
-        type: 'open'  // Assuming 'Open' as a fixed type for this component
+        type: '',
+        gameTypeId: 6
     }));
 
     return (

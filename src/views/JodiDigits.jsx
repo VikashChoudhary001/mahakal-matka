@@ -56,7 +56,8 @@ const JodiDigits = () => {
     .map((pair, index) => ({
       pair,
       value: inputValues[index] || 'N/A',
-      type: selectedOption
+      // type: selectedOption
+      type: ''
     }))
     .filter(item => item.value !== 'N/A');
 

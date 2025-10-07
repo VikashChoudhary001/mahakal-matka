@@ -10,9 +10,9 @@ import { setAppData } from '../store/features/appData/appDataSlice';
 import { getMarkets } from '../repository/MarketRepository';
 
 
-const Submit_Bet_Popup = ({ show, data, onClose, onSubmitted = () => {} }) => {
-	const [error, setError] = useState('');
-	const dispatch = useDispatch();
+const Submit_Bet_Popup = ({ show, data, onClose, onSubmitted = () => { } }) => {
+    const [error, setError] = useState('');
+    const dispatch = useDispatch();
     const { appData: initialAppData } = useSelector((state) => state.appData);
     const { user } = initialAppData;
     const [searchParams] = useSearchParams();
@@ -61,13 +61,13 @@ const Submit_Bet_Popup = ({ show, data, onClose, onSubmitted = () => {} }) => {
         const formattedData = {
             type: "general",
             market_id: market_id,
-            games: data.map(({ number, value, pair, type }) => {
-                const gameTypeId = getGameTypeId(bidType, type);
+            games: data.map(({ number, value, pair, type, gameTypeId }) => {
+                const finalGameTypeId = gameTypeId || getGameTypeId(bidType, type);
                 return {
-                    number: pair.toString(),
+                    number: pair.toString().replace('x', ''),
                     amount: parseInt(value, 10),
                     session: type || "null",
-                    game_type_id: gameTypeId
+                    game_type_id: finalGameTypeId
                 };
             })
         };
@@ -82,11 +82,11 @@ const Submit_Bet_Popup = ({ show, data, onClose, onSubmitted = () => {} }) => {
                 const fetchAppDataPromise = getAppData();
                 const fetchMarketsPromise = localStorage.getItem('authToken') ? getMarkets('desawar') : Promise.resolve();
                 const [appDataResponse, marketsResponse] = await Promise.all([fetchAppDataPromise, fetchMarketsPromise]);
-	  
+
                 if (appDataResponse?.data?.error === false) {
-                  dispatch(setAppData(appDataResponse.data.response));
+                    dispatch(setAppData(appDataResponse.data.response));
                 } else {
-                  setError(appDataResponse?.data?.message);
+                    setError(appDataResponse?.data?.message);
                 }
                 setSuccess(true);
                 onSubmitted();
@@ -96,8 +96,8 @@ const Submit_Bet_Popup = ({ show, data, onClose, onSubmitted = () => {} }) => {
             toast.error('Error submitting bet. Please try again.');
             console.error('Error submitting bet:', error);
         }
-        finally{
-            setLoading(false);  
+        finally {
+            setLoading(false);
         }
     };
 
@@ -124,7 +124,7 @@ const Submit_Bet_Popup = ({ show, data, onClose, onSubmitted = () => {} }) => {
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
                     <div className="bg-[#eeeeee] w-full max-w-md mx-4 rounded-lg h-[90vh] overflow-auto">
                         <div className='w-full text-center bg-primary p-1'>
-                        <h2 className="text-lg text-[#fff] font-normal">{gameType} - {new Date().toLocaleDateString('en-GB')}</h2>
+                            <h2 className="text-lg text-[#fff] font-normal">{gameType} - {new Date().toLocaleDateString('en-GB')}</h2>
                         </div>
                         <div className='p-2'>
                             <div className="w-full flex justify-between items-center text-center text-[14px] border-none">
@@ -186,12 +186,12 @@ const Submit_Bet_Popup = ({ show, data, onClose, onSubmitted = () => {} }) => {
                     <div className="bg-white p-6 rounded-2xl text-center w-[400px] m-auto">
                         {
                             success ?
-                                <svg width="60px" height="60px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style={{margin:"0 auto"}}>
-                                    <circle cx="12" cy="12" r="12" fill="green"/>
-                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M16.0303 8.96967C16.3232 9.26256 16.3232 9.73744 16.0303 10.0303L11.0303 15.0303C10.7374 15.3232 10.2626 15.3232 9.96967 15.0303L7.96967 13.0303C7.67678 12.7374 7.67678 12.2626 7.96967 11.9697C8.26256 11.6768 8.73744 11.6768 9.03033 11.9697L10.5 13.4393L12.7348 11.2045L14.9697 8.96967C15.2626 8.67678 15.7374 8.67678 16.0303 8.96967Z" fill="#fff"/>
+                                <svg width="60px" height="60px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style={{ margin: "0 auto" }}>
+                                    <circle cx="12" cy="12" r="12" fill="green" />
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M16.0303 8.96967C16.3232 9.26256 16.3232 9.73744 16.0303 10.0303L11.0303 15.0303C10.7374 15.3232 10.2626 15.3232 9.96967 15.0303L7.96967 13.0303C7.67678 12.7374 7.67678 12.2626 7.96967 11.9697C8.26256 11.6768 8.73744 11.6768 9.03033 11.9697L10.5 13.4393L12.7348 11.2045L14.9697 8.96967C15.2626 8.67678 15.7374 8.67678 16.0303 8.96967Z" fill="#fff" />
                                 </svg>
                                 :
-                        <img src={Warning} alt="" className='w-24 h-16 m-auto' />
+                                <img src={Warning} alt="" className='w-24 h-16 m-auto' />
 
 
                         }

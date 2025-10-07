@@ -20,6 +20,7 @@ const EditProfile = () => {
     let [dob, setDob] = useState("");
     let [name, setName] = useState("");
     let [receiveNotification, setReceiveNotification] = useState(false);
+    let [mpin, setMpin] = useState("");
 
     let [loading, setLoading] = useState(false);
 
@@ -38,17 +39,32 @@ const EditProfile = () => {
 
     const handleProfileSubmit = async (e) => {
         e.preventDefault();
+
+        // Validate MPIN if provided
+        if (mpin && mpin.trim().length > 0) {
+            if (mpin.length !== 6) {
+                toast.error("MPIN must be exactly 6 digits");
+                return;
+            }
+        }
+
         setLoading(true);
         try {
             let payload = {
                 name,
                 general_noti: receiveNotification
             };
+            // Add MPIN if user wants to change it
+            if (mpin && mpin.trim().length > 0) {
+                payload.mpin = mpin;
+            }
             let { data } = await updateProfile(payload);
             if (data?.error === false) {
                 toggleSuccessModalOpen();
                 setSuccessMessage(data?.message)
                 fetchAppData();
+                // Clear MPIN field after successful update
+                setMpin("");
             } else {
                 toast.error(data?.message);
             }
@@ -86,19 +102,37 @@ const EditProfile = () => {
                             onChange={(e) => setName(e.target.value)}
                         ></input>
                     </div>
+                    <div className="flex flex-col mt-4">
+                        <label className="text-sm font-semibold">Change MPIN (Optional)</label>
+                        <input
+                            type="password"
+                            className="py-2 mt-1 border-b outline-0 focus:border-primary"
+                            placeholder="Enter new 6-digit MPIN"
+                            value={mpin}
+                            onChange={(e) => {
+                                // Only allow numbers and max 6 digits
+                                const value = e.target.value.replace(/\D/g, '').slice(0, 6);
+                                setMpin(value);
+                            }}
+                            maxLength={6}
+                        ></input>
+                        <p className="text-xs text-gray-500 mt-1">
+                            Leave blank to keep your current MPIN
+                        </p>
+                    </div>
                     <div className="flex flex-col mt-4 mb-6">
                         <label className="text-sm font-semibold mb-2">Receive Notifications</label>
-                         <Switch
+                        <Switch
                             checked={receiveNotification}
                             onChange={setReceiveNotification}
                             className={`${receiveNotification ? 'bg-green-600' : 'bg-gray-300'}
                                 relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none`}
-                            >
+                        >
                             <span
                                 className={`${receiveNotification ? 'translate-x-6' : 'translate-x-1'}
                                 inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
                             />
-                            </Switch>
+                        </Switch>
                     </div>
                     {/* <div className="flex flex-col mt-3">
             <label className="text-sm font-semibold">Date Of Birth</label>

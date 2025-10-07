@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Logo from "../assets/imgs/Logo.png";
-import { sendLoginOtp, verifyLoginOtp } from "../repository/AuthRepository";
+import { sendLoginOtp, verifyLoginOtp, verifyLoginMPin } from "../repository/AuthRepository";
 import Repository from "../repository/Repository";
 import { toast } from "react-toastify";
 import Spinner from "../components/Spinner";
@@ -24,14 +24,19 @@ const Login = () => {
     let [searchParams] = useSearchParams();
     let [loading, setLoading] = useState();
     let [isOTPScreen, setOTPScreen] = useState(false);
+    let [isMpinScreen, setMpinScreen] = useState(false);
+    let [isMpinSet, setIsMpinSet] = useState(false);
     let [isNewUser, setIsNewUser] = useState(false)
     let [phone, setPhone] = useState("");
     let [otp, setOTP] = useState("");
+    let [mpin, setMpin] = useState("");
+    let [newMpin, setNewMpin] = useState("");
     let [referralCode, setRefferalCode] = useState(searchParams?.get("referralCode") || "")
     let [promoType, setPromoType] = useState(localStorage.getItem("promo_type") || "")
 
     const phoneInputRef = useRef(null);
     const otpInputRef = useRef(null);
+    const mpinInputRef = useRef(null);
 
     useEffect(() => {
         phoneInputRef.current?.focus();
@@ -56,13 +61,22 @@ const Login = () => {
             }
             let { data } = await sendLoginOtp(payload);
             if (data.error === false) {
-                setOTPScreen(true);
                 if (data?.response?.newUser) {
                     setIsNewUser(true)
                 }
-                setTimeout(() => {
-                    otpInputRef.current?.focus();
-                }, 100);
+                // Check if MPIN is set
+                if (data?.response?.isMpinSet) {
+                    setIsMpinSet(true);
+                    setMpinScreen(true);
+                    setTimeout(() => {
+                        mpinInputRef.current?.focus();
+                    }, 100);
+                } else {
+                    setOTPScreen(true);
+                    setTimeout(() => {
+                        otpInputRef.current?.focus();
+                    }, 100);
+                }
             } else {
                 toast.error(data.message);
             }
@@ -75,6 +89,25 @@ const Login = () => {
 
     const handleOTPSubmit = async (e) => {
         e.preventDefault();
+
+        // Validate OTP length
+        if (otp.length !== 4) {
+            toast.error("OTP must be exactly 4 digits");
+            return;
+        }
+
+        // Validate new MPIN - required if MPIN is not set
+        if (!isMpinSet) {
+            if (!newMpin || newMpin.trim().length === 0) {
+                toast.error("Please set your MPIN");
+                return;
+            }
+            if (newMpin.length !== 6) {
+                toast.error("MPIN must be exactly 6 digits");
+                return;
+            }
+        }
+
         setLoading(true);
         try {
             let payload = {
@@ -84,7 +117,10 @@ const Login = () => {
             if (referralCode?.trim()?.length > 0) {
                 payload.referralCode = referralCode
             }
-            payload.referralCode = referralCode
+            // Add MPIN if user wants to set it
+            if (newMpin?.trim()?.length > 0) {
+                payload.mpin = newMpin;
+            }
             let { data } = await verifyLoginOtp(payload);
             if (data.error === false) {
                 // Call login success callback for Android app
@@ -112,6 +148,89 @@ const Login = () => {
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleMPINSubmit = async (e) => {
+        e.preventDefault();
+
+        // Validate MPIN length
+        if (mpin.length !== 6) {
+            toast.error("MPIN must be exactly 6 digits");
+            return;
+        }
+
+        setLoading(true);
+        try {
+            let payload = {
+                phone,
+                mpin
+            };
+            let { data } = await verifyLoginMPin(payload);
+            if (data.error === false) {
+                // Call login success callback for Android app
+                loginSuccess(phone);
+
+                let { token, user } = data.response;
+                Repository.defaults.headers.Authorization = "Bearer " + token;
+                localStorage.setItem("authToken", token);
+                localStorage.setItem("authUser", JSON.stringify(user));
+                localStorage.setItem("welcomeStatus", true);
+                localStorage.setItem("withdraw_details", JSON.stringify(user?.withdraw_details));
+
+                // Clear promo_type after successful login
+                localStorage.removeItem("promo_type");
+
+                navigate("/");
+                let response = await getAppData();
+                if (response?.data?.response) {
+                    dispatch(setAppData(response?.data?.response));
+                }
+            } else {
+                toast.error(data?.message || "Something went wrong!");
+            }
+        } catch {
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleSwitchToOTP = async () => {
+        setLoading(true);
+        try {
+            let payload = {
+                phone,
+                otp_asked: true
+            };
+            if (promoType?.trim()?.length > 0) {
+                payload.promo_type = promoType;
+            }
+            let { data } = await sendLoginOtp(payload);
+            if (data.error === false) {
+                setMpinScreen(false);
+                setOTPScreen(true);
+                setMpin("");
+                toast.success("OTP sent successfully!");
+                setTimeout(() => {
+                    otpInputRef.current?.focus();
+                }, 100);
+            } else {
+                toast.error(data.message);
+            }
+        } catch {
+            toast.error("Something went wrong!");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleSwitchToMPIN = () => {
+        setOTPScreen(false);
+        setMpinScreen(true);
+        setOTP("");
+        setNewMpin("");
+        setTimeout(() => {
+            mpinInputRef.current?.focus();
+        }, 100);
     };
 
     return (
@@ -148,11 +267,11 @@ const Login = () => {
                             onChange={(e) => setPhone(e.target.value)}
                             maxLength={10}
                             placeholder="Enter Mobile Number"
-                            disabled={isOTPScreen}
+                            disabled={isOTPScreen || isMpinScreen}
                         />
                     </div>
                     {
-                        !isOTPScreen ?
+                        !isOTPScreen && !isMpinScreen ?
                             <button
                                 type="submit"
                                 disabled={loading}
@@ -163,6 +282,47 @@ const Login = () => {
                             : null
                     }
                 </form>
+
+                {/* MPIN Login Screen */}
+                {
+                    isMpinScreen ?
+                        <form onSubmit={handleMPINSubmit} style={{ marginTop: 10 }}>
+                            <div className="flex flex-col w-full">
+                                <label style={{ color: "#fff", fontSize: "18px" }}>Enter MPIN</label>
+                                <input
+                                    ref={mpinInputRef}
+                                    className="block w-full h-10 px-2 py-1 mt-1 text-black border rounded border-black/40"
+                                    type="password"
+                                    value={mpin}
+                                    onChange={(e) => {
+                                        // Only allow numbers and max 6 digits
+                                        const value = e.target.value.replace(/\D/g, '').slice(0, 6);
+                                        setMpin(value);
+                                    }}
+                                    maxLength={6}
+                                    placeholder="Enter 6-digit MPIN"
+                                />
+                            </div>
+                            <button
+                                type="submit"
+                                disabled={loading}
+                                className="block w-full p-3 mt-4 font-semibold text-white rounded-md bg-[#006b9fd6] shadow-md"
+                            >
+                                {loading ? <Spinner /> : "Login with MPIN"}
+                            </button>
+                            <button
+                                type="button"
+                                onClick={handleSwitchToOTP}
+                                disabled={loading}
+                                className="block w-full p-2 mt-3 text-sm text-white rounded-md bg-[#00000030] border border-white/50 hover:bg-[#00000045] transition-all"
+                            >
+                                {loading ? <Spinner /> : "Login using OTP instead"}
+                            </button>
+                        </form>
+                        : null
+                }
+
+                {/* OTP Login Screen */}
                 {
                     isOTPScreen ?
                         <form onSubmit={handleOTPSubmit} style={{ marginTop: 10 }}>
@@ -173,10 +333,38 @@ const Login = () => {
                                     className="block w-full h-10 px-2 py-1 mt-1 text-black border rounded border-black/40"
                                     type="number"
                                     value={otp}
-                                    onChange={(e) => setOTP(e.target.value)}
-                                    placeholder="Enter OTP"
+                                    onChange={(e) => {
+                                        // Only allow numbers and max 4 digits
+                                        const value = e.target.value.replace(/\D/g, '').slice(0, 4);
+                                        setOTP(value);
+                                    }}
+                                    maxLength={4}
+                                    placeholder="Enter 4-digit OTP"
                                 />
                             </div>
+                            {/* Set MPIN field for users who don't have MPIN */}
+                            {
+                                !isMpinSet ?
+                                    <div className="flex flex-col w-full mt-3">
+                                        <label style={{ color: "#fff", fontSize: "18px" }}>Set MPIN</label>
+                                        <input
+                                            className="block w-full h-10 px-2 py-1 mt-1 text-black border rounded border-black/40"
+                                            type="password"
+                                            value={newMpin}
+                                            onChange={(e) => {
+                                                // Only allow numbers and max 6 digits
+                                                const value = e.target.value.replace(/\D/g, '').slice(0, 6);
+                                                setNewMpin(value);
+                                            }}
+                                            maxLength={6}
+                                            placeholder="Enter 6-digit MPIN"
+                                        />
+                                        <p style={{ color: "#fff", fontSize: "12px", marginTop: "5px" }}>
+                                            Set a 6-digit MPIN for faster login next time
+                                        </p>
+                                    </div>
+                                    : null
+                            }
                             {
                                 isNewUser ?
                                     <div className="flex flex-col w-full mt-3">
@@ -195,10 +383,23 @@ const Login = () => {
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className="block w-full p-3 mt-4 font-semibold text-white rounded-md bg-[#006b9fd6]"
+                                className="block w-full p-3 mt-4 font-semibold text-white rounded-md bg-[#006b9fd6] shadow-md"
                             >
-                                {loading ? <Spinner /> : isNewUser ? "Register" : "Login"}
+                                {loading ? <Spinner /> : isNewUser ? "Register" : "Login with OTP"}
                             </button>
+                            {/* Show switch to MPIN button only if MPIN is set */}
+                            {
+                                isMpinSet ?
+                                    <button
+                                        type="button"
+                                        onClick={handleSwitchToMPIN}
+                                        disabled={loading}
+                                        className="block w-full p-2 mt-3 text-sm text-white rounded-md bg-[#00000030] border border-white/50 hover:bg-[#00000045] transition-all"
+                                    >
+                                        Login using MPIN instead
+                                    </button>
+                                    : null
+                            }
                         </form>
                         : null
                 }

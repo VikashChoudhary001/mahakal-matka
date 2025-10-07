@@ -293,6 +293,8 @@ const Login = () => {
                                     ref={mpinInputRef}
                                     className="block w-full h-10 px-2 py-1 mt-1 text-black border rounded border-black/40"
                                     type="password"
+                                    inputMode="numeric"
+                                    pattern="[0-9]*"
                                     value={mpin}
                                     onChange={(e) => {
                                         // Only allow numbers and max 6 digits
@@ -350,6 +352,8 @@ const Login = () => {
                                         <input
                                             className="block w-full h-10 px-2 py-1 mt-1 text-black border rounded border-black/40"
                                             type="password"
+                                            inputMode="numeric"
+                                            pattern="[0-9]*"
                                             value={newMpin}
                                             onChange={(e) => {
                                                 // Only allow numbers and max 6 digits

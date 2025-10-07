@@ -106,6 +106,8 @@ const EditProfile = () => {
                         <label className="text-sm font-semibold">Change MPIN (Optional)</label>
                         <input
                             type="password"
+                            inputMode="numeric"
+                            pattern="[0-9]*"
                             className="py-2 mt-1 border-b outline-0 focus:border-primary"
                             placeholder="Enter new 6-digit MPIN"
                             value={mpin}

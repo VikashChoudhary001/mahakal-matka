@@ -22,7 +22,12 @@ const InstallAppDialog = ({ isOpen, onClose }) => {
         }, 2000);
     };
 
-    const handleClose = () => {
+    const handleClose = (e) => {
+        // Prevent event from bubbling to parent modals
+        if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
         // Mark that user has dismissed dialog - don't show dialog again
         localStorage.setItem("userDismissedInstallDialog", "true");
         onClose();
@@ -32,6 +37,8 @@ const InstallAppDialog = ({ isOpen, onClose }) => {
         <Modal
             isOpen={isOpen && !isInAndroidApp}
             toggle={onClose}
+            zIndex={50}
+            closeOnBackdrop={false}
             className="custom-modal"
             centered
         >

@@ -9,26 +9,71 @@ import Spinner from "../components/Spinner";
 import { useSelector } from "react-redux";
 import pusherJs from "pusher-js";
 
+// Function to convert URLs in text to clickable links while preserving line breaks
+const linkifyText = (text, isAdminMessage = false) => {
+  if (!text) return null;
+
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+  const parts = text.split(urlRegex);
+
+  return parts.map((part, index) => {
+    if (part.match(urlRegex)) {
+      return (
+        <a
+          key={index}
+          href={part}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`underline break-all font-semibold ${isAdminMessage ? "text-blue-600 hover:text-blue-800" : "text-yellow-300 hover:text-yellow-400"}`}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {part}
+        </a>
+      );
+    }
+    // Split by newlines and map to preserve line breaks
+    const lines = part.split('\n');
+    return lines.map((line, lineIndex) => (
+      <React.Fragment key={`${index}-${lineIndex}`}>
+        {line}
+        {lineIndex < lines.length - 1 && '\n'}
+      </React.Fragment>
+    ));
+  });
+};
+
 const ChatBubble = ({ isLeft, message, user }) => {
+  // Check if there's media (video, image, audio, pdf)
+  const hasMedia = message.type === "video" || message.type === "image" || message.type === "pdf" || message.file_type === "webm";
+  // Check if message text is meaningful (not just dummy text or very short)
+  const hasRealMessage = message.message && message.message.trim().length > 0 && message.message.toLowerCase() !== "dummy-text";
+
   return (
-    <div className={`${isLeft ? 'ml-2' : 'mr-2'} text-xs`}>
+    <div className={`${isLeft ? 'ml-2 mr-4' : 'ml-4 mr-2'} text-xs`}>
       <div
-        className={`relative w-8/12 p-4 ${isLeft ? "bg-[#a3a3a3] after:rotate-180 after:-left-5" : "bg-[#646464] ml-auto after:right-[-20px]"
-          } text-white  after:border-[10px] after:top-4 after:border-t-transparent after:border-b-transparent after:border-r-transparent after:absolute ${isLeft ? "after:border-[#a3a3a3]" : "after:border-[#646464]"} rounded-2xl rounded-se-[3px]`}
+        className={`relative max-w-[75%] ${hasMedia && !hasRealMessage ? 'p-2' : 'p-4 pr-6'} ${isLeft ? "bg-[#e5e7eb] text-gray-800 after:rotate-180 after:-left-5 after:border-[#e5e7eb]" : "bg-[#646464] text-white ml-auto after:right-[-20px] after:border-[#646464]"
+          } after:border-[10px] after:top-4 after:border-t-transparent after:border-b-transparent after:border-r-transparent after:absolute rounded-2xl rounded-se-[3px]`}
       >
-        <small className="flex">{isLeft ? "Admin" : user.name} ({moment(message.created_at).format("hh:mm A")})</small>
-        <div className="flex flex-col items-start mt-3">
-          {message.message}
+        <small className="flex font-semibold">{isLeft ? "Admin" : user.name} ({moment(message.created_at).format("hh:mm A")})</small>
+        <div className={`flex flex-col items-start ${hasMedia && !hasRealMessage ? 'mt-1' : 'mt-3'} whitespace-pre-line`} style={{ wordBreak: 'normal', overflowWrap: 'anywhere', hyphens: 'none' }}>
+          {hasRealMessage && linkifyText(message.message, isLeft)}
           {message.file_type === "webm" ?
-            <audio controls className="w-full mt-3">
+            <audio controls className={`w-full ${hasRealMessage ? 'mt-3' : 'mt-1'}`}>
               <source src={message.file_url}></source>
             </audio>
-            : message.type === "image" ? <img className="mt-3" src={message.file_url} /> : message.type === "pdf" ? <a href={message.file_url} target="_blank" className="inline-flex items-center p-2 rounded-md bg-black/20 flex-col mt-3">
-              <i className="fas fa-file fa-3x"></i>
-              <span className="mt-1 uppercase">
-                {message.type}</span>
-              <small>Open File</small>
-            </a> : ""}
+            : message.type === "video" ?
+              <video controls className={`w-full rounded-lg max-h-[300px] ${hasRealMessage ? 'mt-3' : 'mt-1'}`}>
+                <source src={message.file_url} type="video/mp4" />
+                <source src={message.file_url} type="video/webm" />
+                <source src={message.file_url} type="video/ogg" />
+                Your browser does not support the video tag.
+              </video>
+              : message.type === "image" ? <img className={`rounded-lg ${hasRealMessage ? 'mt-3' : 'mt-1'}`} src={message.file_url} alt="Attachment" /> : message.type === "pdf" ? <a href={message.file_url} target="_blank" rel="noopener noreferrer" className={`inline-flex items-center p-2 rounded-md bg-black/20 flex-col ${hasRealMessage ? 'mt-3' : 'mt-1'}`}>
+                <i className="fas fa-file fa-3x"></i>
+                <span className="mt-1 uppercase">
+                  {message.type}</span>
+                <small>Open File</small>
+              </a> : ""}
         </div>
       </div>
     </div>
@@ -167,9 +212,19 @@ const Chat = () => {
             <>
               <DateSeparator date={date} />
               <div className="flex flex-col gap-4 p-3">
-                {gamePostings.map(message => (
-                  <ChatBubble user={user} message={message} isLeft={!message.is_mine} key={message.id} />
-                ))}
+                {gamePostings.map(message => {
+                  // Admin messages: user_id is null OR is_system_message is true => LEFT side
+                  // User messages: user_id matches current user => RIGHT side
+                  const isAdminMessage = message.user_id === null || message.is_system_message === true;
+                  return (
+                    <ChatBubble
+                      user={user}
+                      message={message}
+                      isLeft={isAdminMessage}
+                      key={message.id}
+                    />
+                  );
+                })}
               </div>
             </>
           ))}
@@ -211,7 +266,7 @@ const Chat = () => {
             className="w-6 h-6"
           >
             <path
-             strokeLinecap="round"
+              strokeLinecap="round"
               strokeLinejoin="round"
               d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5"
             />

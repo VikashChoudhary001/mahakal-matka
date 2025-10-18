@@ -274,11 +274,11 @@ const Home = () => {
 
                 {/* <Suspense fallback={<div>Loading...</div>}> */}
                 {token && (
-                    <Modal isOpen={isOpen} toggle={toggle}>
+                    <Modal isOpen={isOpen} toggle={toggle} zIndex={30} closeOnBackdrop={false}>
                         <div className='font-semibold relative text-black bg-white rounded-xl'>
                             <img src={Logo} className="w-20 h-20 absolute left-1/2 z-9 -top-10 border-4 border-white rounded-full -translate-x-1/2" />
                             <div className='flex justify-end p-3'>
-                                <button onClick={toggle}>
+                                <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggle(); }}>
                                     <svg
                                         xmlns='http://www.w3.org/2000/svg'
                                         fill='none'
@@ -397,11 +397,11 @@ const Home = () => {
 
 
                 {token && (
-                    <Modal isOpen={isOpen} toggle={toggle}>
+                    <Modal isOpen={isOpen} toggle={toggle} zIndex={30} closeOnBackdrop={false}>
                         <div className='font-semibold relative text-black bg-white rounded-xl'>
                             <img src={Logo} className="w-20 h-20 absolute left-1/2 z-9 -top-10 border-4 border-white rounded-full -translate-x-1/2" />
                             <div className='flex justify-end p-3'>
-                                <button onClick={toggle}>
+                                <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggle(); }}>
                                     <svg
                                         xmlns='http://www.w3.org/2000/svg'
                                         fill='none'
@@ -444,13 +444,15 @@ const Home = () => {
                     <Modal
                         isOpen={openLoginModal}
                         toggle={() => setOpenLoginModal(false)}
+                        zIndex={40}
+                        closeOnBackdrop={false}
                         className="custom-modal"
                         centered
                     >
                         <div className="font-semibold text-white bg-primary " style={{ width: "400px", maxWidth: "90vw" }}>
                             <div className="flex justify-between p-3 border-b border-white">
                                 <h4>Need Login</h4>
-                                <button onClick={() => setOpenLoginModal(false)}>
+                                <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpenLoginModal(false); }}>
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
                                         fill="none"

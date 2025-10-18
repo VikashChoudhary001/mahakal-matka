@@ -1,16 +1,23 @@
 import { Fragment, useRef } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 
-export default function Modal({ children, isOpen = false, toggle }) {
+export default function Modal({ children, isOpen = false, toggle, zIndex = 10, closeOnBackdrop = true }) {
   const cancelButtonRef = useRef(null);
+
+  const handleClose = () => {
+    if (closeOnBackdrop) {
+      toggle();
+    }
+  };
 
   return (
     <Transition.Root show={isOpen} as={Fragment}>
       <Dialog
         as="div"
-        className="relative z-10"
+        className="relative"
+        style={{ zIndex: zIndex }}
         initialFocus={cancelButtonRef}
-        onClose={toggle}
+        onClose={handleClose}
       >
         <Transition.Child
           as="div"  // Changed from Fragment to 'div' to allow passthrough of props

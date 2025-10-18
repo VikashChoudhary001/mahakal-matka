@@ -10,6 +10,39 @@ import { setAppData, setReadNotifications } from "../store/features/appData/appD
 import { getUserBalance } from "../repository/BalanceRepository";
 import { ShowEveryThing } from "../credentials";
 
+// Function to convert URLs in text to clickable links while preserving line breaks
+const linkifyText = (text) => {
+    if (!text) return null;
+
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    const parts = text.split(urlRegex);
+
+    return parts.map((part, index) => {
+        if (part.match(urlRegex)) {
+            return (
+                <a
+                    key={index}
+                    href={part}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 underline hover:text-blue-800 break-all"
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    {part}
+                </a>
+            );
+        }
+        // Split by newlines and map to preserve line breaks
+        const lines = part.split('\n');
+        return lines.map((line, lineIndex) => (
+            <React.Fragment key={`${index}-${lineIndex}`}>
+                {line}
+                {lineIndex < lines.length - 1 && '\n'}
+            </React.Fragment>
+        ));
+    });
+};
+
 const Header = ({ toggleSideBar }) => {
     const navigate = useNavigate();
     let location = useLocation();
@@ -28,11 +61,11 @@ const Header = ({ toggleSideBar }) => {
         }
     }, [])
 
-    useEffect(()=>{
-        if(location.pathname==="/wallet"){
+    useEffect(() => {
+        if (location.pathname === "/wallet") {
             refreshBalance();
         }
-    },[location])
+    }, [location])
 
     const getCurrentRouteHeading = () => {
         let currentRoute = routes[0].children.find(
@@ -51,7 +84,12 @@ const Header = ({ toggleSideBar }) => {
         }
     };
 
-    const handleCloseNotificationModal = () => {
+    const handleCloseNotificationModal = (e) => {
+        // Prevent event from bubbling to parent modals
+        if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
         setOpenNotificationModal(false)
         dispatch(setReadNotifications(appData?.notification_count));
         localStorage.setItem(
@@ -65,12 +103,14 @@ const Header = ({ toggleSideBar }) => {
         let userBalance = await getUserBalance();
         if (userBalance?.data?.error === false) {
             dispatch(setAppData(
-                { 
-                    appData: initialAppData?.appData, 
-                    user: { ...initialAppData?.user, 
-                            balance: userBalance?.data?.response?.balance ,
-                            withdrawable_balance: userBalance?.data?.response?.withdrawable_balance 
-                        } }));
+                {
+                    appData: initialAppData?.appData,
+                    user: {
+                        ...initialAppData?.user,
+                        balance: userBalance?.data?.response?.balance,
+                        withdrawable_balance: userBalance?.data?.response?.withdrawable_balance
+                    }
+                }));
         }
 
         setRefreshBalanceLoading(false);
@@ -83,7 +123,7 @@ const Header = ({ toggleSideBar }) => {
     const isAuthenticated = Boolean(localStorage.getItem("authToken"));
     let showResultsOnly = appData?.show_results_only || 0;
 
-    if(ShowEveryThing){
+    if (ShowEveryThing) {
         showResultsOnly = 0;
     }
 
@@ -205,6 +245,8 @@ const Header = ({ toggleSideBar }) => {
                     <Modal
                         isOpen={openNotificationModal}
                         toggle={handleCloseNotificationModal}
+                        zIndex={40}
+                        closeOnBackdrop={false}
                         className="custom-modal"
                         centered
                     >
@@ -225,8 +267,14 @@ const Header = ({ toggleSideBar }) => {
                                 </button>
                             </div>
                             <div className="py-2 pb-3 px-1">
-                                <div className="p-3 pb-1 text-md text-black">
-                                    {appData?.last_notification?.description}
+                                <div
+                                    className="notification-content p-3 pb-1 text-md text-black max-h-[60vh] overflow-y-scroll whitespace-pre-line break-words"
+                                    style={{
+                                        scrollbarWidth: 'thin',
+                                        scrollbarColor: '#ca8a04 #e5e7eb'
+                                    }}
+                                >
+                                    {linkifyText(appData?.last_notification?.description)}
                                 </div>
                                 <div className="p-3 pt-1 text-gray-700">
                                     {appData?.last_notification?.created_at?.length > 0
@@ -242,13 +290,15 @@ const Header = ({ toggleSideBar }) => {
             <Modal
                 isOpen={openLoginModal}
                 toggle={() => setOpenLoginModal(false)}
+                zIndex={40}
+                closeOnBackdrop={false}
                 className="custom-modal"
                 centered
             >
                 <div className="font-semibold text-white bg-white " style={{ width: "400px", maxWidth: "90vw" }}>
                     <div className="flex justify-between p-3 border-b border-white bg-primary">
                         <h4>Need Login</h4>
-                        <button onClick={() => setOpenLoginModal(false)} className="outline-none">
+                        <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpenLoginModal(false); }} className="outline-none">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"

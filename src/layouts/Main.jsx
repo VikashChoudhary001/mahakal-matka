@@ -27,7 +27,7 @@ const Main = () => {
   useEffect(() => {
     let token = localStorage.getItem("authToken");
     if (token == null) navigate("/");
-  },[]); 
+  }, []);
   const toggleExitModal = () => {
     setExitModal(prevState => !prevState)
   }
@@ -42,9 +42,9 @@ const Main = () => {
     }
   }, [navigationType])
 
-  let showResultsOnly = appData?.show_results_only || 0; 
-  if(ShowEveryThing){
-      showResultsOnly = 0;
+  let showResultsOnly = appData?.show_results_only || 0;
+  if (ShowEveryThing) {
+    showResultsOnly = 0;
   }
 
   return (
@@ -52,9 +52,9 @@ const Main = () => {
       <Header toggleSideBar={toggleSideBar} />
       <Sidebar toggleSideBar={toggleSideBar} />
       {
-        !showResultsOnly?
-        <FloatingMenu />  
-        :null
+        !showResultsOnly ?
+          <FloatingMenu />
+          : null
       }
       <div className="h-[calc(100dvh-56px)] bg-primary/5 pb-12 overflow-auto main-wrapper">
         <Outlet />

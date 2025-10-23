@@ -8,6 +8,7 @@ import AppDetails from './views/AppDetails';
 import History from './views/History';
 import BonusReport from './views/BonusReport';
 import ResultHistory from './views/ResultHistory';
+import FreeGift from './views/FreeGift';
 import TermsAndConditions from './views/TermsAndConditions';
 import GamePosting from './views/GamePosting';
 import Default from './layouts/Default';
@@ -123,6 +124,15 @@ export const routes = [
 					</ProtectedRoute>
 				),
 				name: 'Result History',
+			},
+			{
+				path: '/free-gift',
+				element: (
+					<ProtectedRoute>
+						<FreeGift />
+					</ProtectedRoute>
+				),
+				name: 'Get Free Bonus',
 			},
 			{
 				path: '/terms-and-condition',

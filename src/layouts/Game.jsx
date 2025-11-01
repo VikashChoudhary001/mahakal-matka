@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import Time from "../components/Time";
 
@@ -9,12 +9,20 @@ const Game = () => {
   let bidType = params.get("bidType");
   let gameType = params.get("gameType");
   let gameName = params.get("gameName");
+  const scrollContainerRef = useRef(null);
 
 
   useEffect(() => {
     let token = localStorage.getItem("authToken");
     if (token == null) navigate("/");
   }, [navigate]);
+
+  useEffect(() => {
+    // Auto-scroll down slightly when page loads to fix header overlap
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTop = 1;
+    }
+  }, [location.pathname]); // Re-run when route changes
 
   return (
     <div className="font-poppins bg-primary/5 overflow-hidden relative max-w-[480px] w-full mx-auto h-[100vh]">
@@ -44,7 +52,7 @@ const Game = () => {
         <div id="gameEndTimer" className="flex flex-col items-center ml-auto text-xs">
         </div>
       </div>
-      <div className="h-[calc(100vh-45px)] overflow-auto main-wrapper">
+      <div ref={scrollContainerRef} className="h-[calc(100vh-45px)] overflow-auto main-wrapper">
         <Outlet />
       </div>
     </div>

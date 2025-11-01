@@ -15,9 +15,12 @@ import Default from './layouts/Default';
 import Wallet from './views/Wallet';
 
 import SingleDigits from './views/SingleDigits'
+import SingleDigitBulk from './views/SingleDigitBulk'
 import JodiDigits from './views/JodiDigits'
 import SinglePana from './views/SinglePana'
+import SinglePanaBulk from './views/SinglePanaBulk'
 import DualPana from './views/DualPana'
+import DoublePanaBulk from './views/DoublePanaBulk'
 import TripalPana from './views/TripalPana'
 import HalfSangam from './views/HalfSangam'
 import FullSangam from './views/FullSangam'
@@ -253,6 +256,15 @@ export const routes = [
 				name: 'Single Digits',
 			},
 			{
+				path: '/general-sub-games/single-digit-bulk',
+				element: (
+					<ProtectedRoute>
+						<SingleDigitBulk />
+					</ProtectedRoute>
+				),
+				name: 'Single Digit Bulk',
+			},
+			{
 				path: '/general-sub-games/jodi-digits',
 				element: (
 					<ProtectedRoute>
@@ -271,6 +283,15 @@ export const routes = [
 				name: 'Single Pana',
 			},
 			{
+				path: '/general-sub-games/single-pana-bulk',
+				element: (
+					<ProtectedRoute>
+						<SinglePanaBulk />
+					</ProtectedRoute>
+				),
+				name: 'Single Pana Bulk',
+			},
+			{
 				path: '/general-sub-games/double-pana',
 				element: (
 					<ProtectedRoute>
@@ -278,6 +299,15 @@ export const routes = [
 					</ProtectedRoute>
 				),
 				name: 'Dual Pana',
+			},
+			{
+				path: '/general-sub-games/double-pana-bulk',
+				element: (
+					<ProtectedRoute>
+						<DoublePanaBulk />
+					</ProtectedRoute>
+				),
+				name: 'Double Pana Bulk',
 			},
 			{
 				path: '/general-sub-games/tripal-pana',

@@ -136,12 +136,12 @@ const Submit_Bet_Popup = ({ show, data, onClose, onSubmitted = () => { } }) => {
     return (
         <>
             {loading && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
                     <BeatLoader color={"#fff"} />
                 </div>
             )}
             {show && !loading && !notEnoughPoints && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
                     <div className="bg-[#eeeeee] w-full max-w-md mx-4 rounded-lg h-[90vh] overflow-auto">
                         <div className='w-full text-center bg-primary p-1'>
                             <h2 className="text-lg text-[#fff] font-normal">{gameType} - {new Date().toLocaleDateString('en-GB')}</h2>
@@ -202,7 +202,7 @@ const Submit_Bet_Popup = ({ show, data, onClose, onSubmitted = () => { } }) => {
                 </div>
             )}
             {success !== null && (
-                <div className="w-full fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center px-4">
+                <div className="w-full fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center px-4 z-50">
                     <div className="bg-white p-6 rounded-2xl text-center w-full max-w-[400px]">
                         {
                             success ?
@@ -240,7 +240,7 @@ const Submit_Bet_Popup = ({ show, data, onClose, onSubmitted = () => { } }) => {
                 </div>
             )}
             {notEnoughPoints && (
-                <div className="w-full fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center px-4">
+                <div className="w-full fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center px-4 z-50">
                     <div className="bg-white p-6 rounded-2xl text-center w-full max-w-[400px]">
                         <img src={Warning} alt="" className='w-24 h-16 m-auto' />
                         <h2 className="text-xl mb-4 mt-8">You don't have enough points for this bet.</h2>

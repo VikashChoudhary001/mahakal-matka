@@ -34,7 +34,8 @@ const WalletHistoryTable = ({
     lastPage,
     setCurrentPage,
     perPageRecords,
-    activeTab
+    activeTab,
+    onViewScreenshot
 }) => {
     return (
         <>
@@ -131,6 +132,17 @@ const WalletHistoryTable = ({
                                                 <p className="text-[14px] font-semibold capitalize">{activeTab === "addPoints" ? (item?.deposit_mode || "N/A") : (item?.withdraw_mode || "N/A")}</p>
                                             </div>
                                         </div>
+                                        {activeTab === "withdrawPoints" && item?.status === "success" && item?.payment_ss_link && (
+                                            <div className="flex justify-center border-t border-black py-2">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => onViewScreenshot(item?.payment_ss_link)}
+                                                    className="px-4 py-2 text-sm font-semibold text-white bg-blue-500 hover:bg-blue-600 rounded-md transition"
+                                                >
+                                                    View Payment Screenshot
+                                                </button>
+                                            </div>
+                                        )}
                                     </div>
                                 ))
                                 :
@@ -169,6 +181,7 @@ const Wallet = () => {
     let [withdrawLoading, setWithdrawLoading] = useState(false);
     let [depositLoading, setDepositLoading] = useState(false);
     let [qrCodeModalURL, setQRCodeModalURL] = useState(null);
+    let [screenshotModalURL, setScreenshotModalURL] = useState(null);
 
     let defaultWithdrawDetails = localStorage.getItem("withdraw_details") ? JSON.parse(localStorage.getItem("withdraw_details")) : null;
 
@@ -476,6 +489,14 @@ const Wallet = () => {
         setQRCodeModalURL(null)
     }
 
+    const handleViewScreenshot = (url) => {
+        setScreenshotModalURL(url);
+    }
+
+    const toggleScreenshotModal = () => {
+        setScreenshotModalURL(null);
+    }
+
 
     useEffect(() => {
         // Extract query params
@@ -504,6 +525,42 @@ const Wallet = () => {
                         }
                     }} className="py-1 px-12 rounded-full bg-green-500 hover:bg-green-600 transition text-white mt-3">I have paid</button>
 
+                </div>
+            </Modal>
+            <Modal isOpen={screenshotModalURL !== null} toggle={toggleScreenshotModal}>
+                <div className="relative w-[90vw] md:max-w-[600px] mx-auto">
+                    <div className="flex justify-between items-center p-3 bg-primary text-white">
+                        <h3 className="text-lg font-semibold">Payment Screenshot</h3>
+                        <button
+                            type="button"
+                            onClick={toggleScreenshotModal}
+                            className="text-white hover:text-gray-200"
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                strokeWidth="1.5"
+                                stroke="currentColor"
+                                className="w-6 h-6"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M6 18 18 6M6 6l12 12"
+                                />
+                            </svg>
+                        </button>
+                    </div>
+                    <div className="p-4 flex justify-center items-center bg-gray-100 overflow-hidden">
+                        {screenshotModalURL && (
+                            <img
+                                src={screenshotModalURL}
+                                alt="Payment Screenshot"
+                                className="w-full h-auto max-h-[70vh] object-contain"
+                            />
+                        )}
+                    </div>
                 </div>
             </Modal>
             <div className="pb-8">
@@ -743,6 +800,7 @@ const Wallet = () => {
                         activeTab === "addPoints" ? depositHistoryData : withdrawHistoryData
                     }
                     activeTab={activeTab}
+                    onViewScreenshot={handleViewScreenshot}
                 />
                 <Modal isOpen={isDepositModal} toggle={toggleDepositModal}>
                     <form onSubmit={onHandleTransferSubmit}>

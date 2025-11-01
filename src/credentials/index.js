@@ -1,2 +1,2 @@
-const ShowEveryThing = false;
+const ShowEveryThing = true;
 export { ShowEveryThing };

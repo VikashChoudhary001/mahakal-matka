@@ -84,10 +84,8 @@ const SingleDigitBulk = () => {
 
     return (
         <div className="min-h-screen flex flex-col justify-between">
-            <div className="flex-grow relative z-0">
-                <div className="relative z-50">
-                    <GameHeader dropdown={true} selectedOption={selectedOption} onSelectChange={handleSelectChange} />
-                </div>
+            <div className="flex-grow">
+                <GameHeader dropdown={true} selectedOption={selectedOption} onSelectChange={handleSelectChange} />
 
                 <div className='w-[92%] mx-auto mt-28'>
                     {/* Amount Input Section */}

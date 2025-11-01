@@ -8,6 +8,7 @@ const Game = () => {
   let params = new URLSearchParams(location.search);
   let bidType = params.get("bidType");
   let gameType = params.get("gameType");
+  let gameName = params.get("gameName");
 
 
   useEffect(() => {
@@ -20,11 +21,11 @@ const Game = () => {
       <div className="h-[45px] bg-primary flex items-center text-white p-3">
         <div className="flex items-center">
           <button onClick={() => navigate(-1)}>
-            <svg 
+            <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
-              strokeWidth="1.5" 
+              strokeWidth="1.5"
               stroke="currentColor"
               className="w-6 h-6"
             >
@@ -37,7 +38,7 @@ const Game = () => {
           </button>
           <span className="mx-auto ml-2 font-bold text-lg uppercase leading-6" id="gameName">
             {gameType}
-            {bidType && `, ${bidType}`}
+            {gameName && `, ${gameName}`}
           </span>
         </div>
         <div id="gameEndTimer" className="flex flex-col items-center ml-auto text-xs">

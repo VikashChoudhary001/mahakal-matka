@@ -54,8 +54,8 @@ const GameHeader = ({ dropdown, selectedOption, onSelectChange }) => {
   const formattedDate = `${day}/${month}/${year}`;
 
   return (
-    <div className='pt-2 bg-[#f2fafc] fixed top-[45px] left-0 right-0 w-[480px] max-w-full mx-auto'>
-    
+    <div className='pt-2 bg-[#f2fafc] fixed top-[45px] left-0 right-0 w-[480px] max-w-full mx-auto z-40'>
+
       <div className='w-[92%] rounded-lg text-[22px] p-1 m-auto my-0 text-center bg-white shadow-lg border-t border-black/30 font-semibold text-[#fff] flex justify-center items-center gap-0'>
         <img src={Gold_Coin} alt="Balance" className="w-[25px] h-[25px] object-cover cursor-auto " />
         <p className='text-[16px] text-black'> Balance: {user?.balance}</p>

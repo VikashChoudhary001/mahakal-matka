@@ -10,16 +10,16 @@ import triplePannaImg from '../assets/imgs/ic_triplepana.webp';
 import { toast } from 'react-toastify';
 
 const gameTypes = [
-    { name: 'Single Digit', path: '/general-sub-games/single-digits', card_img: singleDigitImg, bidType: 'Single Digit' },
-    { name: 'Single Digit Bulk', path: '/general-sub-games/single-digit-bulk', card_img: singleDigitImg, bidType: 'Single Digit' },
-    { name: 'Jodi Digit', path: '/general-sub-games/jodi-digits', card_img: jodiDigitImg, openGame: true, bidType: 'Jodi Digits' },
-    { name: 'Single Pana', path: '/general-sub-games/single-pana', card_img: singlePannaImg, bidType: 'Single Pana' },
-    { name: 'Single Pana Bulk', path: '/general-sub-games/single-pana-bulk', card_img: singlePannaImg, bidType: 'Single Pana' },
-    { name: 'Double Pana', path: '/general-sub-games/double-pana', card_img: doublePannaImg, bidType: 'Double Pana' },
-    { name: 'Double Pana Bulk', path: '/general-sub-games/double-pana-bulk', card_img: doublePannaImg, bidType: 'Double Pana' },
-    { name: 'Triple Pana', path: '/general-sub-games/tripal-pana', card_img: triplePannaImg, bidType: 'Triple Pana' },
-    { name: 'Half Sangam', path: '/general-sub-games/half-sangam', card_img: p_hs, openGame: true, bidType: 'Half Sangam' },
-    { name: 'Full Sangam', path: '/general-sub-games/full-sangam', card_img: p_fs, openGame: true, bidType: 'Full Sangam' },
+    { name: 'Single Digit', path: '/general-sub-games/single-digits', card_img: singleDigitImg, bidType: 'Single Digit', color: '#9C27B0' },
+    { name: 'Single Digit Bulk', path: '/general-sub-games/single-digit-bulk', card_img: singleDigitImg, bidType: 'Single Digit', color: '#2196F3' },
+    { name: 'Jodi Digit', path: '/general-sub-games/jodi-digits', card_img: jodiDigitImg, openGame: true, bidType: 'Jodi Digits', color: '#00BCD4' },
+    { name: 'Single Pana', path: '/general-sub-games/single-pana', card_img: singlePannaImg, bidType: 'Single Pana', color: '#4CAF50' },
+    { name: 'Single Pana Bulk', path: '/general-sub-games/single-pana-bulk', card_img: singlePannaImg, bidType: 'Single Pana', color: '#00BCD4' },
+    { name: 'Double Pana', path: '/general-sub-games/double-pana', card_img: doublePannaImg, bidType: 'Double Pana', color: '#9C27B0' },
+    { name: 'Double Pana Bulk', path: '/general-sub-games/double-pana-bulk', card_img: doublePannaImg, bidType: 'Double Pana', color: '#2196F3' },
+    { name: 'Triple Pana', path: '/general-sub-games/tripal-pana', card_img: triplePannaImg, bidType: 'Triple Pana', color: '#FF9800' },
+    { name: 'Half Sangam', path: '/general-sub-games/half-sangam', card_img: p_hs, openGame: true, bidType: 'Half Sangam', color: '#E91E63' },
+    { name: 'Full Sangam', path: '/general-sub-games/full-sangam', card_img: p_fs, openGame: true, bidType: 'Full Sangam', color: '#4CAF50' },
 ];
 
 const GeneralSubGames = () => {
@@ -39,24 +39,23 @@ const GeneralSubGames = () => {
 
     return (
         <div>
-            <div className="grid grid-cols-2 p-3 px-4">
+            <div className="grid grid-cols-2 gap-4 p-4">
                 {gameTypes.map((game, index) => (
-                    <div className='p-2'>
-                        <Link
-                            key={index}
-                            to={{
-                                pathname: game.path,
-                                search: `?gameType=${gameType}&tabType=${tabType}&market_id=${market_id}&bidType=${game.bidType || game.name}`
-                            }}
-                            onClick={(e) => checkGameAvailability(e, game)}
-                            className="flex flex-col items-center p-3 gap-3 bg-white shadow-lg rounded-lg"
-                        >
-                            <div className='mx-auto w-[70%] min-w-[50px] pb-5 mb-3 overflow-hidden border-b-2 border-[#ffd500]'>
-                                <img src={game.card_img} alt={game.name} className='w-full block' />
-                            </div>
-                            <span className='textcenter font-semibold text-sm mb-2'>{game.name}</span>
-                        </Link>
-                    </div>
+                    <Link
+                        key={index}
+                        to={{
+                            pathname: game.path,
+                            search: `?gameType=${gameType}&tabType=${tabType}&market_id=${market_id}&bidType=${game.bidType || game.name}&gameName=${game.name}`
+                        }}
+                        onClick={(e) => checkGameAvailability(e, game)}
+                        className="flex flex-col items-center py-6 px-4 bg-white shadow-md rounded-lg"
+                    >
+                        <div className='w-20 h-20 mb-3 flex items-center justify-center'>
+                            <img src={game.card_img} alt={game.name} className='w-full h-full object-contain' />
+                        </div>
+                        <div className='w-full h-[3px] mb-2' style={{ backgroundColor: game.color }}></div>
+                        <span className='text-center font-semibold text-sm leading-tight'>{game.name}</span>
+                    </Link>
                 ))}
             </div>
             <br />

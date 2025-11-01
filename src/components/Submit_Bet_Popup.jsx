@@ -151,13 +151,19 @@ const Submit_Bet_Popup = ({ show, data, onClose, onSubmitted = () => { } }) => {
                                 <p className="py-1 border-none font-semibold">Digit</p>
                                 <p className="py-1 border-none font-semibold">Balance</p>
                                 <p className="py-1 border-none font-semibold">Type</p>
+                                {data.some(item => item.gameType) && (
+                                    <p className="py-1 border-none font-semibold">Game</p>
+                                )}
                             </div>
                             <div className='h-[calc(100vh-420px)] overflow-scroll'>
-                                {data.map(({ pair, value, type }, index) => (
+                                {data.map(({ pair, value, type, gameType }, index) => (
                                     <div key={index} className="w-full flex justify-between items-center text-center text-[14px] bg-white my-1 px-1">
                                         <div className="py-2 border-none">{pair}</div>
                                         <div className="py-2 border-none">{value}</div>
                                         <div className="py-2 border-none">{type || "null"}</div>
+                                        {data.some(item => item.gameType) && (
+                                            <div className="py-2 border-none font-semibold text-blue-600">{gameType || "-"}</div>
+                                        )}
                                     </div>
                                 ))}
                             </div>

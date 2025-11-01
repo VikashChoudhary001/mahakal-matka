@@ -22,6 +22,7 @@ import SinglePanaBulk from './views/SinglePanaBulk'
 import DualPana from './views/DualPana'
 import DoublePanaBulk from './views/DoublePanaBulk'
 import TripalPana from './views/TripalPana'
+import SPDPTPBoard from './views/SPDPTPBoard'
 import HalfSangam from './views/HalfSangam'
 import FullSangam from './views/FullSangam'
 
@@ -317,6 +318,15 @@ export const routes = [
 					</ProtectedRoute>
 				),
 				name: 'Triple Pana',
+			},
+			{
+				path: '/general-sub-games/sp-dp-tp-board',
+				element: (
+					<ProtectedRoute>
+						<SPDPTPBoard />
+					</ProtectedRoute>
+				),
+				name: 'SP DP TP Board',
 			},
 			{
 				path: '/general-sub-games/half-sangam',

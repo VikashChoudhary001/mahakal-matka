@@ -18,6 +18,7 @@ const gameTypes = [
     { name: 'Double Pana', path: '/general-sub-games/double-pana', card_img: doublePannaImg, bidType: 'Double Pana', color: '#9C27B0' },
     { name: 'Double Pana Bulk', path: '/general-sub-games/double-pana-bulk', card_img: doublePannaImg, bidType: 'Double Pana', color: '#2196F3' },
     { name: 'Triple Pana', path: '/general-sub-games/tripal-pana', card_img: triplePannaImg, bidType: 'Triple Pana', color: '#FF9800' },
+    { name: 'SP, DP, TP Board', path: '/general-sub-games/sp-dp-tp-board', card_img: triplePannaImg, bidType: 'SP DP TP', color: '#673AB7' },
     { name: 'Half Sangam', path: '/general-sub-games/half-sangam', card_img: p_hs, openGame: true, bidType: 'Half Sangam', color: '#E91E63' },
     { name: 'Full Sangam', path: '/general-sub-games/full-sangam', card_img: p_fs, openGame: true, bidType: 'Full Sangam', color: '#4CAF50' },
 ];

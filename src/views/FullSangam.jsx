@@ -138,99 +138,121 @@ const FullSangam = () => {
     type: ''  // Assuming 'FullSangam' as a fixed type for this component
   }));
 
+  const totalBids = formattedData.length;
+  const totalPoints = formattedData.reduce((sum, item) => sum + parseInt(item.value || 0), 0);
+
   return (
-    <div>
-      <div className='w-[92%] rounded-lg text-[22px] p-1 m-auto my-2 text-center bg-[#e4ae39] font-semibold text-[#fff] flex justify-center items-center gap-0'>
-        <img src={Gold_Coin} alt="Balance" className="w-[25px] h-[25px] object-cover cursor-auto" />
-        <p className='text-[16px]'> Balance: {user?.balance}</p>
-      </div>
+    <div className="min-h-screen flex flex-col justify-between">
+      <div className="flex-grow">
+        <div className='w-[92%] rounded-lg text-[22px] p-1 m-auto my-2 text-center bg-[#e4ae39] font-semibold text-[#fff] flex justify-center items-center gap-0'>
+          <img src={Gold_Coin} alt="Balance" className="w-[25px] h-[25px] object-cover cursor-auto" />
+          <p className='text-[16px]'> Balance: {user?.balance}</p>
+        </div>
 
-      <div className="flex justify-center py-2 px-1">
-        <div className="w-full flex p-1 bg-white rounded-lg shadow-sm">
-          <div className="w-full rounded-sm shadow-sm flex justify-center items-center gap-2 px-1">
-            <div className="flex flex-col w-full">
-              <label className="text-md font-semibold">Pana</label>
-              <input
-                type="number"
-                id="pana1"
-                required
-                className="w-full p-1 mt-1 border rounded border-black/40 outline-0 focus:border-primary"
-                placeholder=""
-                onChange={handlePanaInputChange}
-              />
-            </div>
-            <div className="flex flex-col w-full">
-              <label className="text-md font-semibold">Pana</label>
-              <input
-                type="number"
-                id="pana2"
-                required
-                className="w-full p-1 mt-1 border rounded border-black/40 outline-0 focus:border-primary"
-                placeholder=""
-                onChange={handlePanaInputChange}
-              />
+        <div className="flex justify-center py-2 px-1">
+          <div className="w-full flex p-1 bg-white rounded-lg shadow-sm">
+            <div className="w-full rounded-sm shadow-sm flex justify-center items-center gap-2 px-1">
+              <div className="flex flex-col w-full">
+                <label className="text-md font-semibold">Pana</label>
+                <input
+                  type="number"
+                  id="pana1"
+                  required
+                  className="w-full p-1 mt-1 border rounded border-black/40 outline-0 focus:border-primary"
+                  placeholder=""
+                  onChange={handlePanaInputChange}
+                />
+              </div>
+              <div className="flex flex-col w-full">
+                <label className="text-md font-semibold">Pana</label>
+                <input
+                  type="number"
+                  id="pana2"
+                  required
+                  className="w-full p-1 mt-1 border rounded border-black/40 outline-0 focus:border-primary"
+                  placeholder=""
+                  onChange={handlePanaInputChange}
+                />
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div className="flex justify-center bg-blue-gray-100 py-2 mx-auto px-1">
-        <div className="w-full bg-white rounded-lg shadow-sm flex justify-center items-center gap-2 p-1 px-2">
-          <div className="flex flex-col w-full">
-            <label className="text-md font-semibold">Amount</label>
-            <input
-              type="number"
-              id="amount"
-              required
-              className="w-full p-1 mt-1 border rounded border-black/40 outline-0 focus:border-primary"
-              placeholder=""
-            />
-          </div>
-          <div className="w-full relative bg-white rounded-sm shadow-sm">
-            <button
-              type="button"
-              id="submit"
-              className="w-full h-[33px] bg-[#e4ae39] text-white font-sans font-medium py-1 shadow-sm mt-7 rounded"
-              onClick={handleAddRow}
-            >
-              Add
-            </button>
+        <div className="flex justify-center bg-blue-gray-100 py-2 mx-auto px-1">
+          <div className="w-full bg-white rounded-lg shadow-sm flex justify-center items-center gap-2 p-1 px-2">
+            <div className="flex flex-col w-full">
+              <label className="text-md font-semibold">Amount</label>
+              <input
+                type="number"
+                id="amount"
+                required
+                className="w-full p-1 mt-1 border rounded border-black/40 outline-0 focus:border-primary"
+                placeholder=""
+              />
+            </div>
+            <div className="w-full relative bg-white rounded-sm shadow-sm">
+              <button
+                type="button"
+                id="submit"
+                className="w-full h-[33px] bg-[#e4ae39] text-white font-sans font-medium py-1 shadow-sm mt-7 rounded"
+                onClick={handleAddRow}
+              >
+                Add
+              </button>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="border-t border-gray-300">
-        <div className="text-center">
-          <table className="min-w-full bg-white">
-            <thead>
-              <tr className="bg-[#0098c7] text-[#fff] w-full flex justify-between items-center py-1 text-[13px]">
-                <th className="py-2">Open Pana</th>
-                <th className="py-2">Close Pana</th>
-                <th className="py-2">Amount</th>
-                <th className="py-2">Del</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((row, index) => (
-                <tr key={index} className="w-full flex justify-between items-center py-2 px-2 text-md">
-                  <td className="py-1 bg-[#ff2d2d] border-none text-[#fff]">{row.pana1}</td>
-                  <td className="py-1 bg-[#4deb4b] border-none text-[#fff]">{row.pana2}</td>
-                  <td className="py-1 bg-[#a83dbf] border-none text-[#fff]">{row.amount}</td>
-                  <td className="py-1 border-none bg-[#fff]">
-                    <button onClick={() => handleDeleteRow(index)}>
-                      <FaTrash color="#ff2d2d" />
-                    </button>
-                  </td>
+        <div className="border-t border-gray-300 pb-20">
+          <div className="text-center">
+            <table className="min-w-full bg-white">
+              <thead>
+                <tr className="bg-[#0098c7] text-[#fff] w-full flex justify-between items-center py-1 text-[13px]">
+                  <th className="py-2">Open Pana</th>
+                  <th className="py-2">Close Pana</th>
+                  <th className="py-2">Amount</th>
+                  <th className="py-2">Del</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {rows.map((row, index) => (
+                  <tr key={index} className="w-full flex justify-between items-center py-2 px-2 text-md">
+                    <td className="py-1 bg-[#ff2d2d] border-none text-[#fff]">{row.pana1}</td>
+                    <td className="py-1 bg-[#4deb4b] border-none text-[#fff]">{row.pana2}</td>
+                    <td className="py-1 bg-[#a83dbf] border-none text-[#fff]">{row.amount}</td>
+                    <td className="py-1 border-none bg-[#fff]">
+                      <button onClick={() => handleDeleteRow(index)}>
+                        <FaTrash color="#ff2d2d" />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
 
-      <div className='max-w-[400px] m-auto mt-4 fixed bottom-0 left-0 right-0 p-4'>
-        <button className='w-full p-3 bg-[#e4ae39] text-white rounded' onClick={handleSubmit}>Submit</button>
+      {/* Bottom Summary and Continue Button */}
+      <div className='w-[480px] max-w-full mx-auto fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200 z-10'>
+        <div className='px-4 py-3'>
+          <div className='flex justify-between items-center mb-2'>
+            <span className='text-sm text-gray-600'>
+              <span className='font-bold text-gray-800'>{totalBids}</span> Bids
+            </span>
+            <span className='text-sm text-gray-600'>
+              <span className='font-bold text-gray-800'>{totalPoints}</span> Points
+            </span>
+          </div>
+          <button
+            className='w-full p-2.5 bg-[#e4ae39] text-white rounded font-semibold shadow hover:bg-[#d49d2d] transition-colors'
+            onClick={handleSubmit}
+          >
+            Continue
+          </button>
+        </div>
       </div>
+
       <Popup show={showPopup} data={formattedData} onClose={closePopup} onSubmitted={() => {
         setRows([])
       }} />

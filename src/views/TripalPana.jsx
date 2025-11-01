@@ -69,6 +69,9 @@ const TriplePana = () => {
     }))
     .filter(item => item.value !== 'N/A');
 
+  const totalBids = dataToShow.length;
+  const totalPoints = dataToShow.reduce((sum, item) => sum + parseInt(item.value || 0), 0);
+
   return (
     <div className="min-h-screen flex flex-col justify-between">
       <div className="flex-grow">
@@ -87,12 +90,30 @@ const TriplePana = () => {
               />
             </div>
           ))}
-          <br /><br /><br /><br />
+          <br /><br /><br />
         </div>
       </div>
-      <div className='max-w-[400px] m-auto mt-4 fixed bottom-0 left-0 right-0 p-4'>
-        <button className='w-full p-3 bg-[#e4ae39] text-white rounded' onClick={handleSubmit}>Submit</button>
+
+      {/* Bottom Summary and Continue Button */}
+      <div className='w-[480px] max-w-full mx-auto fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200 z-10'>
+        <div className='px-4 py-3'>
+          <div className='flex justify-between items-center mb-2'>
+            <span className='text-sm text-gray-600'>
+              <span className='font-bold text-gray-800'>{totalBids}</span> Bids
+            </span>
+            <span className='text-sm text-gray-600'>
+              <span className='font-bold text-gray-800'>{totalPoints}</span> Points
+            </span>
+          </div>
+          <button
+            className='w-full p-2.5 bg-[#e4ae39] text-white rounded font-semibold shadow hover:bg-[#d49d2d] transition-colors'
+            onClick={handleSubmit}
+          >
+            Continue
+          </button>
+        </div>
       </div>
+
       <Popup show={showPopup} data={dataToShow} onClose={closePopup} onSubmitted={() => {
         setInputValues({})
       }} />

@@ -75,7 +75,7 @@ const SingleDigits = () => {
                 type="number"
                 className='border p-2 text-[14px] w-full border-none bg-slate-200 h-[40px] text-center outline-none'
                 maxLength="10"
-                placeholder="Enter number"
+                placeholder="Enter Amount"
                 onChange={(e) => handleInputChange(e, index)}
                 value={inputValues[index]}
               />

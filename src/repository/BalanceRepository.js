@@ -3,6 +3,7 @@ import Repository from "./Repository";
 function withdrawBalance(payload) {
 	let queryStringArray = [];
 	if (payload.mode === 'upi') {
+		queryStringArray.push(`upi_name=${payload.upiName}`);
 		queryStringArray.push(`upi_id=${payload.upiId}`);
 	} else if (payload.mode === 'bank') {
 		queryStringArray.push(`bank_name=${payload.bankName}`);
@@ -19,16 +20,16 @@ function withdrawBalance(payload) {
 }
 
 function depositBalance(payload) {
-  return Repository.post(
-    `/upi-payment-url?amount=${payload.amount}`
-  );
+	return Repository.post(
+		`/upi-payment-url?amount=${payload.amount}`
+	);
 }
 
 function depositBalancePayFromUpi(payload) {
-    return Repository.post(
-      `/pay-from-upi-payment-url?amount=${payload.amount}`
-    );
-  }
+	return Repository.post(
+		`/pay-from-upi-payment-url?amount=${payload.amount}`
+	);
+}
 
 function depositBalanceQRCode(payload) {
 	return Repository.post(

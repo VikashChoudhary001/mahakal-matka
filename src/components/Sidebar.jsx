@@ -328,7 +328,7 @@ const Sidebar = ({ toggleSideBar }) => {
               {/* <InstallButton /> */}
             </div>
           </div>
-          <div className="h-[calc(100vh-172px)] overflow-auto bg-orange">
+          <div className="h-[calc(100vh-172px)] overflow-auto bg-orange pb-12">
             {links.map((link, idx) =>
               link.onClick ? (
                 <a

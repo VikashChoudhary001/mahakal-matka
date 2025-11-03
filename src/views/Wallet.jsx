@@ -198,8 +198,8 @@ const Wallet = () => {
     const [accountIFSCCode, setAccountIFSCCode] = useState(defaultWithdrawDetails?.account_ifsc_code || "");
 
 
-    let [depositAmount, setDepositAmount] = useState();
-    let [withdrawAmount, setWithdrawAmount] = useState();
+    let [depositAmount, setDepositAmount] = useState("");
+    let [withdrawAmount, setWithdrawAmount] = useState("");
 
     let [perPageRecords, setPerPageRecords] = useState(10);
 
@@ -431,8 +431,9 @@ const Wallet = () => {
                 amount: withdrawAmount,
             };
             if (method === "upi") {
+                let upiName = e.target["upi_name"].value;
                 let upiId = e.target["upi_id"].value;
-                payload = { ...payload, upiId };
+                payload = { ...payload, upiName, upiId };
 
             } else if (method === "bank") {
                 let bankName = e.target["bank_name"].value;
@@ -693,10 +694,22 @@ const Wallet = () => {
                                     <input
                                         className="px-2 py-1 mt-1 text-black border rounded h-9 border-black/30"
                                         type="text"
+                                        placeholder="UPI Name"
+                                        name="upi_name"
+                                        id="upi_name"
+                                        key={"upi_name"}
+                                        defaultValue={defaultWithdrawDetails?.upi_name || ""}
+                                        required
+                                    />
+                                </div>
+                                <div className="flex flex-col">
+                                    <input
+                                        className="px-2 py-1 mt-1 text-black border rounded h-9 border-black/30"
+                                        type="text"
                                         placeholder="UPI id"
                                         name="upi_id"
                                         id="upi_id"
-                                        key={"upi"}
+                                        key={"upi_id"}
                                         defaultValue={defaultWithdrawDetails?.upi_id || ""}
                                         required
                                     />
@@ -774,9 +787,13 @@ const Wallet = () => {
 
                 {
                     appData?.invite_system_enable ?
-                        <div className="py-2 text-center">
-                            <button onClick={() => navigate("/invite-and-earn")} className="underline text-primary blinkText text-sm px-2">
-                                {`${appData?.invite_percentage_bet}% Bet कमीशन पाएं Invite करके।`}
+                        <div className="text-center py-1">
+                            <button
+                                onClick={() => navigate("/invite-and-earn")}
+                                className="text-primary font-bold text-sm blinkText hover:text-blue-700 transition-colors"
+                                style={{ fontFamily: 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif' }}
+                            >
+                                🎁 {`${appData?.invite_percentage_bet}% Bet कमीशन पाएं Invite करके`} 🔥
                             </button>
                         </div>
                         : null

@@ -25,6 +25,17 @@ const Help = () => {
             : null
         }
         {
+          appData?.telegram_chat_link && appData?.telegram_chat_link.trim() !== "" ?
+            <a href={appData?.telegram_chat_link} className="shadow-md rounded-lg w-1/2 h-[50px] flex items-center justify-center gap-2 p-2 border-[3px] border-[#fff] bg-gradient-to-r from-[#667eea] to-[#764ba2] hover:shadow-xl transition-shadow duration-300">
+              <i className="fab fa-telegram text-white border-2 border-white rounded-full p-1" style={{ fontSize: "22px" }}></i>
+              <div className="flex flex-col leading-tight">
+                <span className="text-white text-[14px] font-extrabold">Chat on</span>
+                <span className="text-white text-[14px] font-extrabold">Telegram</span>
+              </div>
+            </a>
+            : null
+        }
+        {
           appData?.telegram_enable ?
             <a href={appData?.telegram_link} className="shadow-md rounded-lg w-1/2 h-[50px] flex items-center justify-center gap-2 p-2 border-[3px] border-[#fff] bg-[#2eb9d8] hover:shadow-xl transition-shadow duration-300">
               <i className="fab fa-telegram " style={{ fontSize: "20px" }}></i>

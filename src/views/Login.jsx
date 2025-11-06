@@ -411,11 +411,11 @@ const Login = () => {
             </div>
 
             {/* Support Section */}
-            {(appData?.whatsapp_enable || appData?.telegram_enable) && (
+            {(!!appData?.whatsapp_enable || (appData?.telegram_chat_link && appData?.telegram_chat_link.trim() !== "")) && (
                 <div className="mt-5 text-center">
                     <p className="text-white text-sm mb-3">For any Problem, Contact us</p>
                     <div className="flex justify-center items-center gap-3">
-                        {appData?.whatsapp_enable && (
+                        {!!appData?.whatsapp_enable && (
                             <a
                                 href={appData?.whatsapp_number}
                                 className="inline-flex items-center gap-1 px-4 py-2.5 rounded-full bg-[#2ed838] text-white text-sm font-semibold hover:bg-[#25c230] transition-colors duration-200 shadow-sm"
@@ -424,12 +424,12 @@ const Login = () => {
                                 <span>WhatsApp</span>
                             </a>
                         )}
-                        {appData?.telegram_enable && !appData?.whatsapp_enable && (
+                        {appData?.telegram_chat_link && appData?.telegram_chat_link.trim() !== "" && (
                             <a
-                                href={appData?.telegram_link}
-                                className="inline-flex items-center gap-1 px-4 py-2.5 rounded-full bg-[#2eb9d8] text-white text-sm font-semibold hover:bg-[#26a5c4] transition-colors duration-200 shadow-sm"
+                                href={appData?.telegram_chat_link}
+                                className="inline-flex items-center gap-1 px-4 py-2.5 rounded-full bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white text-sm font-semibold hover:shadow-lg transition-all duration-200 shadow-sm"
                             >
-                                <i className="fab fa-telegram" style={{ fontSize: "15px" }}></i>
+                                <i className="fab fa-telegram text-white" style={{ fontSize: "18px" }}></i>
                                 <span>Telegram</span>
                             </a>
                         )}

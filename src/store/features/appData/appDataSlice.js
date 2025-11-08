@@ -13,10 +13,12 @@ export const appDataSlice = createSlice({
     appData: {
       enable_desawar: null,
       enable_desawar_only: null,
+      withdraw_open_time: '10:00:00',
+      withdraw_close_time: '22:00:00',
     },
     readNotifications: localStorage.getItem("readNotifications") || 0,
-    status: 'idle', 
-    error: null 
+    status: 'idle',
+    error: null
   },
   reducers: {
     setAppData: (state, action) => {
@@ -36,10 +38,13 @@ export const appDataSlice = createSlice({
       })
       .addCase(fetchAppData.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        const { enable_desawar, enable_desawar_only } = action.payload;
+        const { enable_desawar, enable_desawar_only, withdraw_open_time, withdraw_close_time } = action.payload;
         state.appData = {
+          ...action.payload,
           enable_desawar,
           enable_desawar_only,
+          withdraw_open_time: withdraw_open_time || '10:00:00',
+          withdraw_close_time: withdraw_close_time || '22:00:00',
         };
       })
       .addCase(fetchAppData.rejected, (state, action) => {

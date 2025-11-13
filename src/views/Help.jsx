@@ -38,7 +38,10 @@ const Help = () => {
             <p class="text-gray-700 mb-3">Support hours have ended</p>
             <p class="text-gray-600 mb-1">कृपया अगले दिन संपर्क करें</p>
             <p class="text-gray-500 mb-3">Please contact us tomorrow</p>
-            <p class="text-sm text-gray-500">Support Hours: ${appData?.withdraw_open_time?.slice(0, 5)} - ${appData?.withdraw_close_time?.slice(0, 5)}</p>
+            <p class="text-sm text-gray-500 mb-4">Support Hours: ${appData?.withdraw_open_time?.slice(0, 5)} - ${appData?.withdraw_close_time?.slice(0, 5)}</p>
+            <button onclick="document.querySelector('.dialog-close-btn').click()" class="bg-gray-600 hover:bg-gray-700 text-white px-8 py-2 rounded-lg font-semibold transition-colors">
+              Close
+            </button>
           </div>
         `
       });
@@ -58,7 +61,10 @@ const Help = () => {
             <p class="text-gray-700 mb-3">Support hours have ended</p>
             <p class="text-gray-600 mb-1">कृपया अगले दिन संपर्क करें</p>
             <p class="text-gray-500 mb-3">Please contact us tomorrow</p>
-            <p class="text-sm text-gray-500">Support Hours: ${appData?.withdraw_open_time?.slice(0, 5)} - ${appData?.withdraw_close_time?.slice(0, 5)}</p>
+            <p class="text-sm text-gray-500 mb-4">Support Hours: ${appData?.withdraw_open_time?.slice(0, 5)} - ${appData?.withdraw_close_time?.slice(0, 5)}</p>
+            <button onclick="document.querySelector('.dialog-close-btn').click()" class="bg-gray-600 hover:bg-gray-700 text-white px-8 py-2 rounded-lg font-semibold transition-colors">
+              Close
+            </button>
           </div>
         `
       });
@@ -66,21 +72,28 @@ const Help = () => {
     } else {
       e.preventDefault();
       setDialogMessage({
-        title: "टेलीग्राम चैट सूचना | Telegram Chat Notice",
+        title: "Telegram Chat Notice",
         content: `
-          <div class="text-center">
-            <p class="text-orange-600 font-bold mb-3">⚠️ कृपया ध्यान दें</p>
-            <p class="text-gray-700 mb-4">टेलीग्राम चैट में जवाब मिलने में समय लग सकता है।</p>
-            <p class="text-gray-600 mb-4">Telegram chat replies may take longer.</p>
-            <p class="text-green-600 font-semibold mb-2">तुरंत जवाब के लिए | For Quick Response:</p>
-            <p class="text-gray-700">कृपया Withdrawal या Deposit Chat बटन का उपयोग करें</p>
-            <p class="text-gray-600 mb-4">Please use Withdrawal or Deposit Chat buttons</p>
-            <button onclick="document.querySelector('.dialog-close-btn').click()" class="bg-orange text-white px-6 py-2 rounded-md mt-2 mr-2">
-              वापस जाएं | Go Back
-            </button>
-            <a href="${appData?.telegram_chat_link}" class="inline-block bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white px-6 py-2 rounded-md mt-2">
-              फिर भी जारी रखें | Continue Anyway
-            </a>
+          <div class="text-center px-2">
+            <div class="mb-4">
+              <div class="inline-flex items-center justify-center w-16 h-16 bg-orange-100 rounded-full mb-3">
+                <i class="fas fa-clock text-orange-500 text-2xl"></i>
+              </div>
+              <p class="text-gray-700 text-base mb-2">Telegram chat replies may take longer.</p>
+              <p class="text-sm text-gray-500">टेलीग्राम चैट में जवाब मिलने में समय लग सकता है।</p>
+            </div>
+            <div class="bg-green-50 border border-green-200 rounded-lg p-3 mb-4">
+              <p class="text-green-700 font-semibold text-sm mb-1">For Quick Response:</p>
+              <p class="text-gray-600 text-xs">Use Withdrawal or Deposit Chat buttons</p>
+            </div>
+            <div class="flex gap-2 justify-center">
+              <button onclick="document.querySelector('.dialog-close-btn').click()" class="flex-1 bg-gray-500 hover:bg-gray-600 text-white px-4 py-2.5 rounded-lg font-medium transition-colors">
+                Go Back
+              </button>
+              <a href="${appData?.telegram_chat_link}" class="flex-1 bg-gradient-to-r from-[#667eea] to-[#764ba2] hover:from-[#5568d3] hover:to-[#6a3f91] text-white px-4 py-2.5 rounded-lg font-medium transition-all text-center">
+                Continue
+              </a>
+            </div>
           </div>
         `
       });
@@ -100,15 +113,12 @@ const Help = () => {
             <div className="p-6">
               <div dangerouslySetInnerHTML={{ __html: dialogMessage.content }}></div>
             </div>
-            <div className="p-4 bg-gray-50 text-center">
-              <button
-                onClick={() => setShowDialog(false)}
-                className="dialog-close-btn bg-gray-600 hover:bg-gray-700 text-white px-8 py-2 rounded-md font-semibold transition-colors duration-200"
-              >
-                बंद करें | Close
-              </button>
-            </div>
           </div>
+          {/* Hidden button for onclick handlers to reference */}
+          <button
+            onClick={() => setShowDialog(false)}
+            className="dialog-close-btn hidden"
+          />
         </div>
       )}
 

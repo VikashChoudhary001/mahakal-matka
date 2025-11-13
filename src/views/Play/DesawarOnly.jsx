@@ -18,10 +18,7 @@ const DesawarOnly = ({ tabBorderColor }) => {
   const [authModalOpen, setAuthModalOpen] = useState(false); // State for authentication modal
   const [openLoginModal, setOpenLoginModal] = useState(false);
   let { appData } = useSelector((state) => state.appData.appData);
-  let showResultsOnly = appData?.show_results_only || 0;
-  if (ShowEveryThing) {
-    showResultsOnly = 0;
-  }
+  let showResultsOnly = !ShowEveryThing;
 
   const token = localStorage.getItem("authToken");
 

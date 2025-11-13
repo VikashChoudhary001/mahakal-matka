@@ -26,10 +26,7 @@ const KalyanAndDesawar = ({
   const [selectedTab, setSelectedTab] = useState(() => {
     return localStorage.getItem("selectedTab") || "general";
   });
-  let showResultsOnly = appData?.show_results_only || 0;
-  if (ShowEveryThing) {
-    showResultsOnly = 0;
-  }
+  let showResultsOnly = !ShowEveryThing;
 
   const navigate = useNavigate();
   const [authModalOpen, setAuthModalOpen] = useState(false); // State for authentication modal

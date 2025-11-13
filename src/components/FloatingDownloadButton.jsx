@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { FaDownload } from 'react-icons/fa';
 import { useDownload } from '../hooks/useDownload';
 import { useSelector } from 'react-redux';
-import { ShowEveryThing } from '../credentials';
 
 const FloatingDownloadButton = ({
     onDownloadComplete = null,
@@ -31,7 +30,7 @@ const FloatingDownloadButton = ({
 
     const handleDownloadClick = async () => {
         if (appData?.app_update_link?.length > 0) {
-            const downloadUrl = ShowEveryThing ? "https://api.mahakalmatka.com/download2" : appData?.app_update_link;
+            const downloadUrl = appData?.app_update_link;
             const result = await downloadFile(downloadUrl, 'MahakalMatka.apk');
 
             if (result.success && onDownloadComplete) {

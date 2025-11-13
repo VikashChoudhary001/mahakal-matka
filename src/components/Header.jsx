@@ -121,11 +121,7 @@ const Header = ({ toggleSideBar }) => {
     const currentUser = user?.phone ? user : storedUser;
 
     const isAuthenticated = Boolean(localStorage.getItem("authToken"));
-    let showResultsOnly = appData?.show_results_only || 0;
-
-    if (ShowEveryThing) {
-        showResultsOnly = 0;
-    }
+    let showResultsOnly = !ShowEveryThing;
 
     return (
         <>

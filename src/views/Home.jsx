@@ -325,10 +325,7 @@ const Home = () => {
         );
     }
 
-    let showResultsOnly = appData?.show_results_only || 0;
-    if (ShowEveryThing) {
-        showResultsOnly = 0;
-    }
+    let showResultsOnly = !ShowEveryThing;
 
     return (
         <>
